@@ -72,23 +72,26 @@ export default function CurrentWeather() {
 
   const weatherIcon = weather.weather[0]?.icon || '01d';
   const weatherDescription = weather.weather[0]?.description || '';
-  const temperature = Math.round(weather.main.temp);
-  const feelsLike = Math.round(weather.main.feels_like);
-  const humidity = weather.main.humidity;
-  const windSpeed = Math.round(weather.wind.speed * 3.6); // m/s to km/h
-  const pressure = weather.main.pressure;
-  const visibility = (weather.visibility / 1000).toFixed(1); // meters to km
+  const temperature = Math.round(weather.temp);
+  const feelsLike = Math.round(weather.feels_like);
+  const humidity = weather.humidity;
+  const windSpeed = Math.round(weather.wind_speed * 3.6); // m/s to km/h
+  const pressure = weather.pressure;
+  const visibility = weather.visibility ? (weather.visibility / 1000).toFixed(1) : 'N/A'; // meters to km
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-8">
       <div className="bg-gradient-to-br from-blue-500 to-blue-700 dark:from-blue-600 dark:to-blue-800 rounded-3xl shadow-xl p-8 text-white">
         {/* Location */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-1">{weather.name}</h1>
-          <p className="text-blue-100 text-sm">
-            {location?.city && location.city !== weather.name ? `${location.city}, ` : ''}
-            {weather.sys.country}
-          </p>
+          <h1 className="text-3xl font-bold mb-1">
+            {location?.city || 'Konumunuz'}
+          </h1>
+          {location?.country && (
+            <p className="text-blue-100 text-sm">
+              {location.country}
+            </p>
+          )}
         </div>
 
         {/* Main Weather Info */}
@@ -126,16 +129,9 @@ export default function CurrentWeather() {
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
               <div className="text-sm text-blue-100 mb-1">Görüş</div>
-              <div className="text-2xl font-semibold">{visibility} km</div>
+              <div className="text-2xl font-semibold">{visibility} {visibility !== 'N/A' ? 'km' : ''}</div>
             </div>
           </div>
-        </div>
-
-        {/* Min/Max Temp */}
-        <div className="flex items-center justify-center gap-4 text-blue-100">
-          <span>Min: {Math.round(weather.main.temp_min)}°</span>
-          <span>•</span>
-          <span>Max: {Math.round(weather.main.temp_max)}°</span>
         </div>
       </div>
     </div>
