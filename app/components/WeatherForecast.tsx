@@ -87,30 +87,38 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
                   e.currentTarget.style.backgroundColor = 'rgba(44, 44, 44, 0.15)';
                 }}
               >
-                <div className="flex flex-col sm:grid sm:grid-cols-[auto_auto_1fr_auto] items-center justify-items-center gap-2 sm:gap-3 md:gap-4">
-                  <div className="text-center w-full sm:w-auto sm:min-w-[70px] md:min-w-[80px]">
-                    <div className="text-xs sm:text-sm font-bold mb-0.5" style={{ color: '#2C2C2C', opacity: 0.9 }}>{dayName}</div>
-                    <div className="text-xs" style={{ color: '#2C2C2C', opacity: 0.7 }}>
-                      {date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3 md:gap-4">
+                  <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+                    <div className="text-center min-w-[60px] sm:min-w-[70px] md:min-w-[80px]">
+                      <div className="text-xs sm:text-sm font-bold mb-0.5" style={{ color: '#2C2C2C', opacity: 0.9 }}>{dayName}</div>
+                      <div className="text-xs" style={{ color: '#2C2C2C', opacity: 0.7 }}>
+                        {date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
+                      </div>
                     </div>
-                  </div>
-                  
-                  <img
-                    src={`https://openweathermap.org/img/wn/${day.weather.icon}@2x.png`}
-                    alt={day.weather.description}
-                    className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 drop-shadow-lg"
-                  />
-                  
-                  <div className="text-center w-full">
-                    <div className="text-base sm:text-lg md:text-xl lg:text-2xl font-black mb-0.5" style={{ color: '#2C2C2C' }}>
-                      {day.temp_max}° / {day.temp_min}°
-                    </div>
-                    <div className="text-xs sm:text-sm capitalize truncate" style={{ color: '#2C2C2C', opacity: 0.8 }}>
-                      {day.weather.description}
+                    
+                    <img
+                      src={`https://openweathermap.org/img/wn/${day.weather.icon}@2x.png`}
+                      alt={day.weather.description}
+                      className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 drop-shadow-lg"
+                    />
+                    
+                    <div className="text-center">
+                      <div className="text-base sm:text-lg md:text-xl lg:text-2xl font-black mb-0.5" style={{ color: '#2C2C2C' }}>
+                        {day.temp_max}° / {day.temp_min}°
+                      </div>
+                      <div className="text-xs sm:text-sm capitalize truncate" style={{ color: '#2C2C2C', opacity: 0.8 }}>
+                        {day.weather.description}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 text-xs sm:text-sm w-full sm:w-auto" style={{ color: '#2C2C2C', opacity: 0.8 }}>
+                  <div className="flex items-center gap-2 sm:gap-3 md:gap-4 text-xs sm:text-sm" style={{ color: '#2C2C2C', opacity: 0.8 }}>
+                    {day.pop > 0 && (
+                      <div className="text-center min-w-[40px] sm:min-w-[45px] md:min-w-[50px]">
+                        <div className="text-xs mb-0.5" style={{ color: '#2C2C2C', opacity: 0.6 }}>Yağış</div>
+                        <div className="font-bold">{Math.round(day.pop * 100)}%</div>
+                      </div>
+                    )}
                     <div className="text-center min-w-[40px] sm:min-w-[45px] md:min-w-[50px]">
                       <div className="text-xs mb-0.5" style={{ color: '#2C2C2C', opacity: 0.6 }}>Nem</div>
                       <div className="font-bold">{day.humidity}%</div>
@@ -118,19 +126,6 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
                     <div className="text-center min-w-[45px] sm:min-w-[50px] md:min-w-[55px]">
                       <div className="text-xs mb-0.5" style={{ color: '#2C2C2C', opacity: 0.6 }}>Rüzgar</div>
                       <div className="font-bold">{Math.round(day.wind_speed * 3.6)} km/h</div>
-                    </div>
-                    <div className="text-center min-w-[40px] sm:min-w-[45px] md:min-w-[50px]">
-                      {day.pop > 0 ? (
-                        <>
-                          <div className="text-xs mb-0.5" style={{ color: '#2C2C2C', opacity: 0.6 }}>Yağış</div>
-                          <div className="font-bold">{Math.round(day.pop * 100)}%</div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="text-xs mb-0.5 opacity-0">Yağış</div>
-                          <div className="font-bold opacity-0">-</div>
-                        </>
-                      )}
                     </div>
                   </div>
                 </div>
