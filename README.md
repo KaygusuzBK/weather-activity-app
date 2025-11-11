@@ -2,6 +2,19 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Environment Variables
+
+1. `.env.example` dosyasını `.env.local` olarak kopyalayın:
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. [OpenWeatherMap](https://openweathermap.org/api) sitesinden ücretsiz API key alın
+
+3. `.env.local` dosyasındaki `NEXT_PUBLIC_OPENWEATHER_API_KEY` değerini kendi API key'inizle değiştirin
+
+### Development
+
 First, run the development server:
 
 ```bash
