@@ -135,7 +135,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-2 sm:gap-3 justify-items-center">
+        <div className="grid grid-cols-2 gap-2 sm:gap-2.5 md:gap-3 justify-items-center">
           <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
               <Droplets className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#809A6F' }} />

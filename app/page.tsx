@@ -67,7 +67,7 @@ export default function Home() {
         </div>
 
         {/* Current Weather and Forecast Side by Side - Takes remaining space */}
-        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-2.5 md:gap-3">
           <CurrentWeather city={selectedCity} location={location} />
           <WeatherForecast city={selectedCity} location={location} />
         </div>
