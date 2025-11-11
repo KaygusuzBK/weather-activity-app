@@ -81,7 +81,11 @@ export default function CitySearch({ onCitySelect }: CitySearchProps) {
   return (
     <div ref={searchRef} className="relative w-full max-w-md mx-auto">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: '#809A6F' }} />
+        <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+          <AnimatedIcon hover pulse>
+            <FiSearch className="w-5 h-5" style={{ color: '#809A6F' }} />
+          </AnimatedIcon>
+        </div>
         <input
           type="text"
           value={query}
