@@ -53,6 +53,53 @@ class WeatherAPI {
   }
 
   /**
+   * Şehir adına göre arama yapar (Geocoding API - Direct API Call)
+   */
+  async searchCity(query: string): Promise<Array<{ name: string; country: string; lat: number; lon: number; state?: string }>> {
+    if (!this.apiKey) {
+      throw new Error('OpenWeatherMap API key is not configured');
+    }
+
+    if (!query || query.length < 2) {
+      return [];
+    }
+
+    // OpenWeatherMap Geocoding API
+    const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(query)}&limit=10&appid=${this.apiKey}`;
+    
+    try {
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.message || `API hatası: ${response.status} ${response.statusText}`
+        );
+      }
+      
+      const data = await response.json();
+      
+      // Geocoding API response formatı
+      if (Array.isArray(data)) {
+        return data.map((item: any) => ({
+          name: item.name,
+          country: item.country,
+          lat: item.lat,
+          lon: item.lon,
+          state: item.state,
+        }));
+      }
+      
+      return [];
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Şehir araması yapılamadı');
+    }
+  }
+
+  /**
    * 5 günlük 3 saatlik tahmin getirir ve 7 günlük günlük tahmine dönüştürür
    */
   async getForecast(lat: number, lon: number): Promise<DailyForecast[]> {

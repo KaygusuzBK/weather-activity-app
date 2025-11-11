@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import type { CurrentWeather } from '../types/weather';
 import { weatherAPI } from '../lib/weather-api';
 import type { City } from '../data/popular-cities';
-import { Droplets, Wind, Gauge, Eye, MapPin } from 'lucide-react';
+import { Droplets, Wind, Gauge, Eye, MapPin, Heart } from 'lucide-react';
+import { addFavorite, removeFavorite, isFavorite } from '../lib/storage';
 
 interface CurrentWeatherProps {
   city: City | null;
@@ -77,16 +78,39 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
 
       <div className="relative z-10 h-full flex flex-col">
         {/* Location */}
-        <div className="mb-6 flex items-center gap-2">
-          <MapPin className="w-5 h-5" style={{ color: '#D5D8B5' }} />
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-black drop-shadow-lg" style={{ color: '#D5D8B5' }}>
-              {cityName}
-            </h2>
-            {countryName && (
-              <p className="text-sm" style={{ color: '#D5D8B5', opacity: 0.8 }}>{countryName}</p>
-            )}
+        <div className="mb-6 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <MapPin className="w-5 h-5" style={{ color: '#D5D8B5' }} />
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-black drop-shadow-lg" style={{ color: '#D5D8B5' }}>
+                {cityName}
+              </h2>
+              {countryName && (
+                <p className="text-sm" style={{ color: '#D5D8B5', opacity: 0.8 }}>{countryName}</p>
+              )}
+            </div>
           </div>
+          {city && (
+            <button
+              onClick={() => {
+                if (isFavorite(city)) {
+                  removeFavorite(city);
+                } else {
+                  addFavorite(city);
+                }
+                // Dispatch custom event for same-tab updates
+                window.dispatchEvent(new Event('favoritesUpdated'));
+              }}
+              className="p-2 rounded-full hover:bg-opacity-20 transition-all"
+              style={{ backgroundColor: 'rgba(213, 216, 181, 0.1)' }}
+            >
+              <Heart
+                className="w-6 h-6 transition-all"
+                style={{ color: '#D5D8B5' }}
+                fill={isFavorite(city) ? '#D5D8B5' : 'none'}
+              />
+            </button>
+          )}
         </div>
 
         {/* Main Temperature */}
