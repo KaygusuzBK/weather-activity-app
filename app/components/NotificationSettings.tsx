@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Bell, BellOff, Settings } from 'lucide-react';
+import { FiBell, FiBellOff } from 'react-icons/fi';
+import { IoNotifications, IoNotificationsOutline } from 'react-icons/io5';
 import { useNotifications } from '../hooks/useNotifications';
+import AnimatedIcon from './ui/animated-icon';
 
 export default function NotificationSettings() {
   const [mounted, setMounted] = useState(false);
@@ -39,11 +41,13 @@ export default function NotificationSettings() {
           }}
           title={settings.enabled ? 'Bildirimleri Kapat' : 'Bildirimleri Aç'}
         >
-          {settings.enabled ? (
-            <Bell className="w-5 h-5" />
-          ) : (
-            <BellOff className="w-5 h-5" />
-          )}
+          <AnimatedIcon hover pulse={settings.enabled}>
+            {settings.enabled ? (
+              <IoNotifications className="w-5 h-5" />
+            ) : (
+              <IoNotificationsOutline className="w-5 h-5" />
+            )}
+          </AnimatedIcon>
         </button>
 
         {permission === 'denied' && (

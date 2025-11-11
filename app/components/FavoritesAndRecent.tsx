@@ -1,14 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Heart, Clock, X } from 'lucide-react';
+import { IoHeart, IoHeartOutline } from 'react-icons/io5';
+import { FiClock, FiX } from 'react-icons/fi';
+import { HiLocationMarker } from 'react-icons/hi';
 import type { City } from '../data/popular-cities';
+import AnimatedIcon from './ui/animated-icon';
 import {
   getFavorites,
   getRecentCities,
   addFavorite,
   removeFavorite,
   isFavorite,
+  removeRecentCity,
 } from '../lib/storage';
 
 interface FavoritesAndRecentProps {
@@ -109,7 +113,9 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
             color: activeTab === 'favorites' ? '#D5D8B5' : '#2C2C2C',
           }}
         >
-          <Heart className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1.5" />
+          <AnimatedIcon hover>
+            <IoHeart className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1.5" />
+          </AnimatedIcon>
           Favoriler ({favorites.length})
         </button>
         <button
@@ -120,7 +126,9 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
             color: activeTab === 'recent' ? '#D5D8B5' : '#2C2C2C',
           }}
         >
-          <Clock className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1.5" />
+          <AnimatedIcon hover>
+            <FiClock className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1.5" />
+          </AnimatedIcon>
           Son Görüntülenen ({recentCities.length})
         </button>
       </div>
@@ -141,7 +149,9 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
                 : '#2C2C2C',
             }}
           >
-            <span className="text-base">📍</span>
+            <AnimatedIcon hover pulse>
+              <HiLocationMarker className="w-3 h-3 sm:w-4 sm:h-4" />
+            </AnimatedIcon>
             <span className="font-medium text-xs sm:text-sm">Konumum</span>
           </div>
         )}
@@ -168,10 +178,13 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
                   onClick={(e) => handleToggleFavorite(city, e)}
                   className="ml-0.5 hover:scale-110 transition-transform"
                 >
-                  <Heart
-                    className="w-3 h-3 sm:w-4 sm:h-4"
-                    fill={isFavorite(city) ? 'currentColor' : 'none'}
-                  />
+                  <AnimatedIcon hover scale={isFavorite(city)}>
+                    {isFavorite(city) ? (
+                      <IoHeart className="w-3 h-3 sm:w-4 sm:h-4" />
+                    ) : (
+                      <IoHeartOutline className="w-3 h-3 sm:w-4 sm:h-4" />
+                    )}
+                  </AnimatedIcon>
                 </button>
               </div>
             ))
@@ -203,7 +216,9 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
                   onClick={(e) => handleRemoveRecent(city, e)}
                   className="ml-0.5 hover:scale-110 transition-transform opacity-50 hover:opacity-100"
                 >
-                  <X className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <AnimatedIcon hover>
+                    <FiX className="w-3 h-3 sm:w-4 sm:h-4" />
+                  </AnimatedIcon>
                 </button>
               </div>
             ))

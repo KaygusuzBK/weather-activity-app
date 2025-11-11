@@ -2,8 +2,11 @@
 
 import { useEffect, useRef } from 'react';
 import type { City } from '../data/popular-cities';
-import { Droplets, Wind, Gauge, Eye, MapPin, Heart } from 'lucide-react';
+import { FiDroplet, FiWind, FiGauge, FiEye, FiMapPin, FiHeart } from 'react-icons/fi';
+import { HiLocationMarker } from 'react-icons/hi';
+import { IoHeart, IoHeartOutline } from 'react-icons/io5';
 import { addFavorite, removeFavorite, isFavorite } from '../lib/storage';
+import AnimatedIcon from './ui/animated-icon';
 import ActivityRecommendations from './ActivityRecommendations';
 import { useNotifications } from '../hooks/useNotifications';
 import { useCurrentWeather } from '../hooks/useWeather';
@@ -85,7 +88,9 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
         {/* Location */}
         <div className="mb-2 sm:mb-3 flex items-center justify-center gap-2 relative">
           <div className="flex items-center gap-1.5 sm:gap-2">
-            <MapPin className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#D5D8B5' }} />
+            <AnimatedIcon hover pulse>
+              <HiLocationMarker className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#D5D8B5' }} />
+            </AnimatedIcon>
             <div className="text-center">
               <h2 className="text-lg sm:text-xl md:text-2xl font-black drop-shadow-lg" style={{ color: '#D5D8B5' }}>
                 {cityName}
@@ -110,11 +115,13 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
                 className="p-1.5 sm:p-2 rounded-full hover:bg-opacity-20 transition-all flex-shrink-0"
                 style={{ backgroundColor: 'rgba(213, 216, 181, 0.1)' }}
               >
-                <Heart
-                  className="w-4 h-4 sm:w-5 sm:h-5 transition-all"
-                  style={{ color: '#D5D8B5' }}
-                  fill={isFavorite(city) ? '#D5D8B5' : 'none'}
-                />
+                <AnimatedIcon hover scale={isFavorite(city)}>
+                  {isFavorite(city) ? (
+                    <IoHeart className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: '#D5D8B5' }} />
+                  ) : (
+                    <IoHeartOutline className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: '#D5D8B5' }} />
+                  )}
+                </AnimatedIcon>
               </button>
             )}
           </div>
@@ -146,7 +153,9 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
         <div className="grid grid-cols-2 gap-2 sm:gap-2.5 md:gap-3 justify-items-center">
           <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
-              <Droplets className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
+              <AnimatedIcon hover pulse>
+                <FiDroplet className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
+              </AnimatedIcon>
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Nem</span>
             </div>
             <div className="text-xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{humidity}%</div>
@@ -154,7 +163,9 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
 
           <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
-              <Wind className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
+              <AnimatedIcon hover rotate>
+                <FiWind className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
+              </AnimatedIcon>
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Rüzgar</span>
             </div>
             <div className="text-xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{windSpeed} km/h</div>
@@ -162,7 +173,9 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
 
           <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
-              <Gauge className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#A25B5B' }} />
+              <AnimatedIcon hover>
+                <FiGauge className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#A25B5B' }} />
+              </AnimatedIcon>
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Basınç</span>
             </div>
             <div className="text-xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{pressure} hPa</div>
@@ -170,7 +183,9 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
 
           <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
-              <Eye className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#CC9C75' }} />
+              <AnimatedIcon hover bounce>
+                <FiEye className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#CC9C75' }} />
+              </AnimatedIcon>
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Görüş</span>
             </div>
             <div className="text-xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>

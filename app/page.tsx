@@ -12,7 +12,8 @@ import NotificationSettings from './components/NotificationSettings';
 import { useLocation } from './hooks/useLocation';
 import type { City } from './data/popular-cities';
 import { addRecentCity } from './lib/storage';
-import { MapPin } from 'lucide-react';
+import { HiLocationMarker } from 'react-icons/hi';
+import AnimatedIcon from './components/ui/animated-icon';
 
 export default function Home() {
   const { location, loading: locationLoading, error: locationError } = useLocation();
@@ -53,7 +54,9 @@ export default function Home() {
                 border: '2px solid #809A6F',
               }}
             >
-              <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
+              <AnimatedIcon hover pulse>
+                <HiLocationMarker className="w-4 h-4 sm:w-5 sm:h-5" />
+              </AnimatedIcon>
               <span>Konumum</span>
             </button>
           )}

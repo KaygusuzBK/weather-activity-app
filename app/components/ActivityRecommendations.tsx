@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Lightbulb } from 'lucide-react';
+import { FiChevronDown, FiChevronUp, FiLightbulb } from 'react-icons/fi';
 import type { CurrentWeather } from '../types/weather';
+import AnimatedIcon from './ui/animated-icon';
 import { getActivityRecommendations, type ActivityRecommendation } from '../lib/activity-recommendations';
 
 interface ActivityRecommendationsProps {
@@ -45,16 +46,20 @@ export default function ActivityRecommendations({ weather }: ActivityRecommendat
         }}
       >
         <div className="flex items-center gap-1.5">
-          <Lightbulb className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: '#809A6F' }} />
+          <AnimatedIcon hover pulse>
+            <FiLightbulb className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: '#809A6F' }} />
+          </AnimatedIcon>
           <span className="text-xs font-bold" style={{ color: '#D5D8B5' }}>
             Öneriler
           </span>
         </div>
-        {isExpanded ? (
-          <ChevronUp className="w-3 h-3" style={{ color: '#D5D8B5' }} />
-        ) : (
-          <ChevronDown className="w-3 h-3" style={{ color: '#D5D8B5' }} />
-        )}
+        <AnimatedIcon hover bounce={!isExpanded}>
+          {isExpanded ? (
+            <FiChevronUp className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: '#D5D8B5' }} />
+          ) : (
+            <FiChevronDown className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: '#D5D8B5' }} />
+          )}
+        </AnimatedIcon>
       </button>
 
       <div className={`mt-1.5 space-y-1.5 overflow-y-auto transition-all ${isExpanded ? 'max-h-[200px]' : 'max-h-0'}`}>

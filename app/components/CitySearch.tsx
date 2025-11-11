@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Search, X, MapPin } from 'lucide-react';
+import { FiSearch, FiX } from 'react-icons/fi';
+import { HiLocationMarker } from 'react-icons/hi';
 import { weatherAPI } from '../lib/weather-api';
+import AnimatedIcon from './ui/animated-icon';
 import type { City } from '../data/popular-cities';
 import { addRecentCity } from '../lib/storage';
 
@@ -102,7 +104,9 @@ export default function CitySearch({ onCitySelect }: CitySearchProps) {
             }}
             className="absolute right-3 top-1/2 transform -translate-y-1/2"
           >
-            <X className="w-5 h-5" style={{ color: '#809A6F' }} />
+            <AnimatedIcon hover>
+              <FiX className="w-5 h-5" style={{ color: '#809A6F' }} />
+            </AnimatedIcon>
           </button>
         )}
       </div>
@@ -136,7 +140,9 @@ export default function CitySearch({ onCitySelect }: CitySearchProps) {
                     e.currentTarget.style.backgroundColor = 'rgba(128, 154, 111, 0.1)';
                   }}
                 >
-                  <MapPin className="w-5 h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
+                  <AnimatedIcon hover pulse>
+                    <HiLocationMarker className="w-5 h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
+                  </AnimatedIcon>
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold truncate" style={{ color: '#2C2C2C' }}>
                       {result.name}

@@ -1,8 +1,10 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Share2, Twitter, Facebook, MessageCircle, Link2, Download, X } from 'lucide-react';
+import { FiShare2, FiLink2, FiDownload, FiX } from 'react-icons/fi';
+import { FaTwitter, FaFacebook, FaWhatsapp } from 'react-icons/fa';
 import type { CurrentWeather } from '../types/weather';
+import AnimatedIcon from './ui/animated-icon';
 import type { City } from '../data/popular-cities';
 import {
   shareNative,
@@ -117,7 +119,9 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
         }}
         title="Paylaş"
       >
-        <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
+        <AnimatedIcon hover>
+          <FiShare2 className="w-4 h-4 sm:w-5 sm:h-5" />
+        </AnimatedIcon>
       </button>
 
       {isOpen && (
@@ -135,7 +139,9 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
               className="p-1 rounded hover:bg-opacity-20"
               style={{ color: '#2C2C2C' }}
             >
-              <X className="w-4 h-4" />
+              <AnimatedIcon hover>
+                <FiX className="w-4 h-4" />
+              </AnimatedIcon>
             </button>
           </div>
 
@@ -146,7 +152,9 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
                 className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
                 style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)', color: '#2C2C2C' }}
               >
-                <Share2 className="w-4 h-4" />
+                <AnimatedIcon hover>
+                  <FiShare2 className="w-4 h-4" />
+                </AnimatedIcon>
                 <span className="text-sm">Paylaş (Yerel)</span>
               </button>
             )}
@@ -156,7 +164,9 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
               className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
               style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)', color: '#2C2C2C' }}
             >
-              <Link2 className="w-4 h-4" />
+              <AnimatedIcon hover>
+                <FiLink2 className="w-4 h-4" />
+              </AnimatedIcon>
               <span className="text-sm">{copied ? 'Kopyalandı!' : 'Linki Kopyala'}</span>
             </button>
 
@@ -165,7 +175,9 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
               className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
               style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)', color: '#2C2C2C' }}
             >
-              <Download className="w-4 h-4" />
+              <AnimatedIcon hover>
+                <FiDownload className="w-4 h-4" />
+              </AnimatedIcon>
               <span className="text-sm">Screenshot İndir</span>
             </button>
 
@@ -175,7 +187,9 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
                 className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
                 style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)', color: '#2C2C2C' }}
               >
-                <Twitter className="w-4 h-4" />
+                <AnimatedIcon hover>
+                  <FaTwitter className="w-4 h-4" />
+                </AnimatedIcon>
                 <span className="text-sm">Twitter</span>
               </button>
 
@@ -184,7 +198,9 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
                 className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
                 style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)', color: '#2C2C2C' }}
               >
-                <Facebook className="w-4 h-4" />
+                <AnimatedIcon hover>
+                  <FaFacebook className="w-4 h-4" />
+                </AnimatedIcon>
                 <span className="text-sm">Facebook</span>
               </button>
 
@@ -193,7 +209,9 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
                 className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
                 style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)', color: '#2C2C2C' }}
               >
-                <MessageCircle className="w-4 h-4" />
+                <AnimatedIcon hover>
+                  <FaWhatsapp className="w-4 h-4" />
+                </AnimatedIcon>
                 <span className="text-sm">WhatsApp</span>
               </button>
             </div>

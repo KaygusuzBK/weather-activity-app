@@ -1,7 +1,8 @@
 'use client';
 
-import { AlertCircle, RefreshCw } from 'lucide-react';
+import { FiAlertCircle, FiRefreshCw } from 'react-icons/fi';
 import { getErrorMessage, type AppError } from '../lib/error-handler';
+import AnimatedIcon from './ui/animated-icon';
 
 interface ErrorFallbackProps {
   error: AppError;
@@ -15,7 +16,9 @@ export default function ErrorFallback({ error, onRetry, title = 'Bir Hata Oluşt
   return (
     <div className="flex items-center justify-center h-full min-h-[200px] p-4">
       <div className="text-center max-w-sm">
-        <AlertCircle className="w-12 h-12 mx-auto mb-3" style={{ color: '#A25B5B' }} />
+        <AnimatedIcon hover pulse>
+          <FiAlertCircle className="w-12 h-12 mx-auto mb-3" style={{ color: '#A25B5B' }} />
+        </AnimatedIcon>
         <h3 className="text-lg font-bold mb-2" style={{ color: '#2C2C2C' }}>
           {title}
         </h3>
@@ -31,7 +34,9 @@ export default function ErrorFallback({ error, onRetry, title = 'Bir Hata Oluşt
               color: '#D5D8B5',
             }}
           >
-            <RefreshCw className="w-4 h-4" />
+            <AnimatedIcon hover rotate>
+              <FiRefreshCw className="w-4 h-4" />
+            </AnimatedIcon>
             Tekrar Dene
           </button>
         )}
