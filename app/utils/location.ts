@@ -65,7 +65,7 @@ async function getLocationByIPAPIAlternative(): Promise<LocationCoordinates> {
   const timeoutId = setTimeout(() => controller.abort(), 8000);
 
   try {
-    const response = await fetch('http://ip-api.com/json/?fields=status,message,lat,lon,city,country', {
+    const response = await fetch('https://ip-api.com/json/?fields=status,message,lat,lon,city,country', {
       signal: controller.signal,
       headers: {
         'Accept': 'application/json',
