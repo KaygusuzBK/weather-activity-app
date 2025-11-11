@@ -13,10 +13,12 @@ import {
 
 interface FavoritesAndRecentProps {
   onCitySelect: (city: City) => void;
+  onCurrentLocation?: () => void;
   selectedCity: City | null;
+  showCurrentLocation?: boolean;
 }
 
-export default function FavoritesAndRecent({ onCitySelect, selectedCity }: FavoritesAndRecentProps) {
+export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, selectedCity, showCurrentLocation = false }: FavoritesAndRecentProps) {
   const [favorites, setFavorites] = useState<City[]>([]);
   const [recentCities, setRecentCities] = useState<City[]>([]);
   const [activeTab, setActiveTab] = useState<'favorites' | 'recent'>('favorites');
@@ -101,6 +103,24 @@ export default function FavoritesAndRecent({ onCitySelect, selectedCity }: Favor
 
       {/* Content */}
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+        {showCurrentLocation && onCurrentLocation && (
+          <div
+            onClick={onCurrentLocation}
+            className="flex items-center gap-2 px-4 py-2 rounded-full border-2 cursor-pointer transition-all min-w-fit"
+            style={{
+              backgroundColor: selectedCity === null
+                ? '#809A6F'
+                : 'rgba(213, 216, 181, 0.3)',
+              borderColor: '#809A6F',
+              color: selectedCity === null
+                ? '#D5D8B5'
+                : '#2C2C2C',
+            }}
+          >
+            <span className="text-lg">📍</span>
+            <span className="font-medium">Konumum</span>
+          </div>
+        )}
         {activeTab === 'favorites' ? (
           favorites.length > 0 ? (
             favorites.map((city) => (
