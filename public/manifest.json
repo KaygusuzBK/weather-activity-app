@@ -1,0 +1,21 @@
+{
+  "name": "Weather Activity App",
+  "short_name": "Weather App",
+  "description": "Modern hava durumu uygulaması - aktivite önerileri ve bildirimlerle",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#D5D8B5",
+  "theme_color": "#809A6F",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["weather", "productivity"],
+  "screenshots": [],
+  "shortcuts": []
+}
+

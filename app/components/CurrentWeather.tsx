@@ -1,11 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import type { CurrentWeather } from '../types/weather';
 import { weatherAPI } from '../lib/weather-api';
 import type { City } from '../data/popular-cities';
 import { Droplets, Wind, Gauge, Eye, MapPin, Heart } from 'lucide-react';
 import { addFavorite, removeFavorite, isFavorite } from '../lib/storage';
+import ActivityRecommendations from './ActivityRecommendations';
+import { useNotifications } from '../hooks/useNotifications';
 
 interface CurrentWeatherProps {
   city: City | null;
@@ -16,12 +18,23 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
   const [weather, setWeather] = useState<CurrentWeather | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const previousWeatherRef = useRef<CurrentWeather | null>(null);
+  const { checkWeatherAlerts } = useNotifications();
 
   useEffect(() => {
     if (city || location) {
       fetchWeather();
     }
   }, [city, location]);
+
+  useEffect(() => {
+    if (weather && previousWeatherRef.current) {
+      checkWeatherAlerts(weather, previousWeatherRef.current);
+    }
+    if (weather) {
+      previousWeatherRef.current = weather;
+    }
+  }, [weather, checkWeatherAlerts]);
 
   const fetchWeather = async () => {
     const lat = city?.lat || location?.latitude;
@@ -170,6 +183,9 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
             </div>
           </div>
         </div>
+
+        {/* Activity Recommendations */}
+        <ActivityRecommendations weather={weather} />
       </div>
     </div>
   );

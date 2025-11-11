@@ -6,6 +6,7 @@ import WeatherForecast from './components/WeatherForecast';
 import CitiesMarquee from './components/CitiesMarquee';
 import CitySearch from './components/CitySearch';
 import FavoritesAndRecent from './components/FavoritesAndRecent';
+import NotificationSettings from './components/NotificationSettings';
 import { useLocation } from './hooks/useLocation';
 import type { City } from './data/popular-cities';
 import { addRecentCity } from './lib/storage';
@@ -72,6 +73,9 @@ export default function Home() {
           <WeatherForecast city={selectedCity} location={location} />
         </div>
       </div>
+
+      {/* Notification Settings Button */}
+      <NotificationSettings />
     </div>
   );
 }
