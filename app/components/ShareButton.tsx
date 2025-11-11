@@ -24,7 +24,7 @@ interface ShareButtonProps {
   weather: CurrentWeather | null;
   city: City | null;
   location?: { latitude: number; longitude: number; city?: string } | null;
-  elementRef?: React.RefObject<HTMLElement>;
+  elementRef?: React.RefObject<HTMLElement | null>;
 }
 
 export default function ShareButton({ weather, city, location, elementRef }: ShareButtonProps) {

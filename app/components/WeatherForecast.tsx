@@ -39,7 +39,7 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
     );
   }
 
-  if (!forecast || forecast.length === 0) {
+  if (!forecast || !Array.isArray(forecast) || forecast.length === 0) {
     return null;
   }
 

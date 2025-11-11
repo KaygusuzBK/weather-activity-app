@@ -28,73 +28,68 @@ export default function AnimatedIcon({
   bounce = false,
   scale = false,
 }: AnimatedIconProps) {
-  const baseVariants = {
+  const variants: any = {
     initial: { scale: 1 },
     hover: hover
       ? {
           scale: 1.1,
-          transition: { duration: 0.2, ease: 'easeOut' },
+          transition: { duration: 0.2, ease: 'easeOut' as const },
         }
       : {},
   };
 
-  const pulseVariants = pulse
-    ? {
-        animate: {
-          scale: [1, 1.1, 1],
-          transition: {
-            duration: 2,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          },
-        },
-      }
-    : {};
+  if (pulse) {
+    variants.animate = {
+      scale: [1, 1.1, 1],
+      transition: {
+        duration: 2,
+        repeat: Infinity,
+        ease: 'easeInOut' as const,
+      },
+    };
+  }
 
-  const rotateVariants = rotate
-    ? {
-        animate: {
-          rotate: [0, 360],
-          transition: {
-            duration: 3,
-            repeat: Infinity,
-            ease: 'linear',
-          },
-        },
-      }
-    : {};
+  if (rotate) {
+    variants.animate = {
+      ...variants.animate,
+      rotate: [0, 360],
+      transition: {
+        duration: 3,
+        repeat: Infinity,
+        ease: 'linear' as const,
+      },
+    };
+  }
 
-  const bounceVariants = bounce
-    ? {
-        animate: {
-          y: [0, -8, 0],
-          transition: {
-            duration: 1.5,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          },
-        },
-      }
-    : {};
+  if (bounce) {
+    variants.animate = {
+      ...variants.animate,
+      y: [0, -8, 0],
+      transition: {
+        duration: 1.5,
+        repeat: Infinity,
+        ease: 'easeInOut' as const,
+      },
+    };
+  }
 
-  const scaleVariants = scale
-    ? {
-        animate: {
-          scale: [1, 1.15, 1],
-          transition: {
-            duration: 2,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          },
-        },
-      }
-    : {};
+  if (scale) {
+    variants.animate = {
+      ...variants.animate,
+      scale: [1, 1.15, 1],
+      transition: {
+        duration: 2,
+        repeat: Infinity,
+        ease: 'easeInOut' as const,
+      },
+    };
+  }
 
   return (
     <motion.div
       className={className}
       style={style}
-      variants={{ ...baseVariants, ...pulseVariants, ...rotateVariants, ...bounceVariants, ...scaleVariants }}
+      variants={variants}
       initial="initial"
       whileHover="hover"
       animate={pulse || rotate || bounce || scale ? 'animate' : 'initial'}

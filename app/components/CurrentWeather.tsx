@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import type { City } from '../data/popular-cities';
-import { FiDroplet, FiWind, FiGauge, FiEye, FiMapPin, FiHeart } from 'react-icons/fi';
+import { FiDroplet, FiWind, FiActivity, FiEye } from 'react-icons/fi';
 import { HiLocationMarker } from 'react-icons/hi';
 import { IoHeart, IoHeartOutline } from 'react-icons/io5';
 import { addFavorite, removeFavorite, isFavorite } from '../lib/storage';
@@ -174,7 +174,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
           <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
               <AnimatedIcon hover>
-                <FiGauge className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#A25B5B' }} />
+                <FiActivity className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#A25B5B' }} />
               </AnimatedIcon>
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Basınç</span>
             </div>

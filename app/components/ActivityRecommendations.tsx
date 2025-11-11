@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { FiChevronDown, FiChevronUp, FiLightbulb } from 'react-icons/fi';
+import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { HiLightBulb } from 'react-icons/hi';
 import type { CurrentWeather } from '../types/weather';
 import AnimatedIcon from './ui/animated-icon';
 import { getActivityRecommendations, type ActivityRecommendation } from '../lib/activity-recommendations';
@@ -47,7 +48,7 @@ export default function ActivityRecommendations({ weather }: ActivityRecommendat
       >
         <div className="flex items-center gap-1.5">
           <AnimatedIcon hover pulse>
-            <FiLightbulb className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: '#809A6F' }} />
+            <HiLightBulb className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: '#809A6F' }} />
           </AnimatedIcon>
           <span className="text-xs font-bold" style={{ color: '#D5D8B5' }}>
             Öneriler

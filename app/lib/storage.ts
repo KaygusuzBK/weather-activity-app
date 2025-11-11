@@ -96,3 +96,19 @@ export function addRecentCity(city: City): void {
   }
 }
 
+/**
+ * Son görüntülenen şehir çıkarır
+ */
+export function removeRecentCity(city: City): void {
+  if (typeof window === 'undefined') return;
+  
+  try {
+    const recent = getRecentCities().filter(
+      c => !(c.name === city.name && c.country === city.country)
+    );
+    localStorage.setItem(RECENT_CITIES_KEY, JSON.stringify(recent));
+  } catch (error) {
+    console.error('Son görüntülenen şehir silinemedi:', error);
+  }
+}
+
