@@ -67,7 +67,7 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
           5 Günlük Tahmin
         </h2>
         
-        <div className="flex-1 flex flex-col gap-1.5 sm:gap-2 overflow-y-auto min-h-0">
+        <div className="flex-1 flex flex-col justify-center gap-1.5 sm:gap-2 overflow-y-auto min-h-0">
           {forecast.map((day, index) => {
             const date = new Date(day.date);
             const dayName = index === 0 ? 'Yarın' : dayNames[date.getDay()];
@@ -88,7 +88,7 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
                 }}
               >
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4">
-                  <div className="text-center min-w-[60px] sm:min-w-[70px] flex-shrink-0">
+                  <div className="text-center w-[70px] sm:w-[80px] flex-shrink-0">
                     <div className="text-xs sm:text-sm font-bold mb-0.5" style={{ color: '#2C2C2C', opacity: 0.9 }}>{dayName}</div>
                     <div className="text-xs" style={{ color: '#2C2C2C', opacity: 0.7 }}>
                       {date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
@@ -101,29 +101,31 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
                     className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 drop-shadow-lg flex-shrink-0"
                   />
                   
-                  <div className="text-center flex-1 min-w-0">
+                  <div className="text-center w-[120px] sm:w-[140px] md:w-[160px] flex-shrink-0">
                     <div className="text-lg sm:text-xl md:text-2xl font-black mb-0.5" style={{ color: '#2C2C2C' }}>
                       {day.temp_max}° / {day.temp_min}°
                     </div>
-                    <div className="text-xs sm:text-sm capitalize" style={{ color: '#2C2C2C', opacity: 0.8 }}>
+                    <div className="text-xs sm:text-sm capitalize truncate" style={{ color: '#2C2C2C', opacity: 0.8 }}>
                       {day.weather.description}
                     </div>
                   </div>
 
                   <div className="flex items-center justify-center gap-3 sm:gap-4 md:gap-5 text-xs sm:text-sm flex-shrink-0" style={{ color: '#2C2C2C', opacity: 0.8 }}>
-                    <div className="text-center">
+                    <div className="text-center w-[45px] sm:w-[50px]">
                       <div className="text-xs mb-0.5" style={{ color: '#2C2C2C', opacity: 0.6 }}>Nem</div>
                       <div className="font-bold">{day.humidity}%</div>
                     </div>
-                    <div className="text-center">
+                    <div className="text-center w-[50px] sm:w-[55px]">
                       <div className="text-xs mb-0.5" style={{ color: '#2C2C2C', opacity: 0.6 }}>Rüzgar</div>
                       <div className="font-bold">{Math.round(day.wind_speed * 3.6)} km/h</div>
                     </div>
-                    {day.pop > 0 && (
-                      <div className="text-center">
+                    {day.pop > 0 ? (
+                      <div className="text-center w-[45px] sm:w-[50px]">
                         <div className="text-xs mb-0.5" style={{ color: '#2C2C2C', opacity: 0.6 }}>Yağış</div>
                         <div className="font-bold">{Math.round(day.pop * 100)}%</div>
                       </div>
+                    ) : (
+                      <div className="text-center w-[45px] sm:w-[50px]"></div>
                     )}
                   </div>
                 </div>
