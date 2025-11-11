@@ -34,8 +34,8 @@ export default function Home() {
       {/* Main Content - Flex container to fill remaining space */}
       <div className="flex-1 overflow-hidden flex flex-col max-w-7xl mx-auto w-full px-2 sm:px-4 lg:px-6 py-2 sm:py-3">
         {/* Search Bar and Current Location Button */}
-        <div className="mb-2 sm:mb-3 flex flex-col sm:flex-row gap-2 items-center flex-shrink-0">
-          <div className="flex-1 w-full">
+        <div className="mb-2 sm:mb-3 flex flex-col sm:flex-row gap-2 items-center justify-center flex-shrink-0">
+          <div className="flex-1 w-full max-w-md">
             <CitySearch onCitySelect={handleCitySelect} />
           </div>
           {location && (
@@ -57,7 +57,7 @@ export default function Home() {
         </div>
 
         {/* Favorites and Recent */}
-        <div className="flex-shrink-0 mb-2 sm:mb-3">
+        <div className="flex-shrink-0 mb-2 sm:mb-3 flex justify-center">
           <FavoritesAndRecent 
             onCitySelect={handleCitySelect} 
             onCurrentLocation={handleCurrentLocation}

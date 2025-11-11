@@ -78,15 +78,15 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
 
       <div className="relative z-10 h-full flex flex-col">
         {/* Location */}
-        <div className="mb-2 sm:mb-3 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
+        <div className="mb-2 sm:mb-3 flex items-center justify-center gap-2 relative">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <MapPin className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#D5D8B5' }} />
-            <div className="min-w-0">
-              <h2 className="text-lg sm:text-xl md:text-2xl font-black drop-shadow-lg truncate" style={{ color: '#D5D8B5' }}>
+            <div className="text-center">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-black drop-shadow-lg" style={{ color: '#D5D8B5' }}>
                 {cityName}
               </h2>
               {countryName && (
-                <p className="text-xs sm:text-sm truncate" style={{ color: '#D5D8B5', opacity: 0.8 }}>{countryName}</p>
+                <p className="text-xs sm:text-sm" style={{ color: '#D5D8B5', opacity: 0.8 }}>{countryName}</p>
               )}
             </div>
           </div>
@@ -100,7 +100,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
                 }
                 window.dispatchEvent(new Event('favoritesUpdated'));
               }}
-              className="p-1.5 sm:p-2 rounded-full hover:bg-opacity-20 transition-all flex-shrink-0"
+              className="absolute right-0 p-1.5 sm:p-2 rounded-full hover:bg-opacity-20 transition-all flex-shrink-0"
               style={{ backgroundColor: 'rgba(213, 216, 181, 0.1)' }}
             >
               <Heart
@@ -113,8 +113,8 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
         </div>
 
         {/* Main Temperature */}
-        <div className="flex-1 flex flex-col justify-center items-center sm:items-start mb-3 sm:mb-4 min-h-0">
-          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3">
+        <div className="flex-1 flex flex-col justify-center items-center mb-3 sm:mb-4 min-h-0">
+          <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3">
             <img
               src={`https://openweathermap.org/img/wn/${weatherIcon}@4x.png`}
               alt={weatherDescription}
@@ -135,37 +135,37 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-2 sm:gap-3">
-          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 justify-items-center">
+          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
               <Droplets className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Nem</span>
             </div>
-            <div className="text-xl sm:text-2xl md:text-3xl font-black" style={{ color: '#D5D8B5' }}>{humidity}%</div>
+            <div className="text-xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{humidity}%</div>
           </div>
 
-          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
               <Wind className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Rüzgar</span>
             </div>
-            <div className="text-xl sm:text-2xl md:text-3xl font-black" style={{ color: '#D5D8B5' }}>{windSpeed} km/h</div>
+            <div className="text-xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{windSpeed} km/h</div>
           </div>
 
-          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
               <Gauge className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#A25B5B' }} />
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Basınç</span>
             </div>
-            <div className="text-xl sm:text-2xl md:text-3xl font-black" style={{ color: '#D5D8B5' }}>{pressure} hPa</div>
+            <div className="text-xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{pressure} hPa</div>
           </div>
 
-          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
               <Eye className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#CC9C75' }} />
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Görüş</span>
             </div>
-            <div className="text-xl sm:text-2xl md:text-3xl font-black" style={{ color: '#D5D8B5' }}>
+            <div className="text-xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>
               {visibility} {visibility !== 'N/A' ? 'km' : ''}
             </div>
           </div>

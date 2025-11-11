@@ -63,7 +63,7 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
       </div>
 
       <div className="relative z-10 h-full flex flex-col min-h-0">
-        <h2 className="text-lg sm:text-xl md:text-2xl font-black mb-2 sm:mb-3 drop-shadow-lg flex-shrink-0" style={{ color: '#2C2C2C' }}>
+        <h2 className="text-lg sm:text-xl md:text-2xl font-black mb-2 sm:mb-3 drop-shadow-lg flex-shrink-0 text-center" style={{ color: '#2C2C2C' }}>
           5 Günlük Tahmin
         </h2>
         
@@ -87,32 +87,30 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
                   e.currentTarget.style.backgroundColor = 'rgba(44, 44, 44, 0.15)';
                 }}
               >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                    <div className="text-center min-w-[60px] sm:min-w-[70px] flex-shrink-0">
-                      <div className="text-xs sm:text-sm font-bold mb-0.5" style={{ color: '#2C2C2C', opacity: 0.9 }}>{dayName}</div>
-                      <div className="text-xs" style={{ color: '#2C2C2C', opacity: 0.7 }}>
-                        {date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
-                      </div>
+                <div className="flex items-center justify-center gap-2 sm:gap-3">
+                  <div className="text-center min-w-[60px] sm:min-w-[70px] flex-shrink-0">
+                    <div className="text-xs sm:text-sm font-bold mb-0.5" style={{ color: '#2C2C2C', opacity: 0.9 }}>{dayName}</div>
+                    <div className="text-xs" style={{ color: '#2C2C2C', opacity: 0.7 }}>
+                      {date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
                     </div>
-                    
-                    <img
-                      src={`https://openweathermap.org/img/wn/${day.weather.icon}@2x.png`}
-                      alt={day.weather.description}
-                      className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 drop-shadow-lg flex-shrink-0"
-                    />
-                    
-                    <div className="flex-1 min-w-0">
-                      <div className="text-lg sm:text-xl md:text-2xl font-black mb-0.5" style={{ color: '#2C2C2C' }}>
-                        {day.temp_max}° / {day.temp_min}°
-                      </div>
-                      <div className="text-xs sm:text-sm capitalize truncate" style={{ color: '#2C2C2C', opacity: 0.8 }}>
-                        {day.weather.description}
-                      </div>
+                  </div>
+                  
+                  <img
+                    src={`https://openweathermap.org/img/wn/${day.weather.icon}@2x.png`}
+                    alt={day.weather.description}
+                    className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 drop-shadow-lg flex-shrink-0"
+                  />
+                  
+                  <div className="text-center flex-1 min-w-0">
+                    <div className="text-lg sm:text-xl md:text-2xl font-black mb-0.5" style={{ color: '#2C2C2C' }}>
+                      {day.temp_max}° / {day.temp_min}°
+                    </div>
+                    <div className="text-xs sm:text-sm capitalize" style={{ color: '#2C2C2C', opacity: 0.8 }}>
+                      {day.weather.description}
                     </div>
                   </div>
 
-                  <div className="hidden md:flex items-center gap-2 sm:gap-3 text-xs sm:text-sm flex-shrink-0" style={{ color: '#2C2C2C', opacity: 0.8 }}>
+                  <div className="hidden md:flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm flex-shrink-0" style={{ color: '#2C2C2C', opacity: 0.8 }}>
                     <div className="text-center">
                       <div className="text-xs mb-0.5" style={{ color: '#2C2C2C', opacity: 0.6 }}>Nem</div>
                       <div className="font-bold">{day.humidity}%</div>

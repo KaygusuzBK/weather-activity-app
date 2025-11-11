@@ -76,7 +76,7 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
   return (
     <div className="w-full">
       {/* Tabs */}
-      <div className="flex gap-2 mb-2">
+      <div className="flex gap-2 mb-2 justify-center">
         <button
           onClick={() => setActiveTab('favorites')}
           className="px-3 py-1.5 rounded-full font-medium transition-all text-xs sm:text-sm"
