@@ -69,7 +69,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
   const countryName = city?.country || weather.sys.country || location?.country || '';
 
   return (
-    <div className="h-full rounded-3xl p-6 sm:p-8 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #809A6F, #A25B5B)' }}>
+    <div className="h-full rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-5 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #809A6F, #A25B5B)' }}>
       {/* Animated background pattern */}
       <div className="absolute inset-0 opacity-15">
         <div className="absolute top-0 left-0 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#CC9C75' }}></div>
@@ -78,15 +78,15 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
 
       <div className="relative z-10 h-full flex flex-col">
         {/* Location */}
-        <div className="mb-6 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <MapPin className="w-5 h-5" style={{ color: '#D5D8B5' }} />
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-black drop-shadow-lg" style={{ color: '#D5D8B5' }}>
+        <div className="mb-2 sm:mb-3 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
+            <MapPin className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#D5D8B5' }} />
+            <div className="min-w-0">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-black drop-shadow-lg truncate" style={{ color: '#D5D8B5' }}>
                 {cityName}
               </h2>
               {countryName && (
-                <p className="text-sm" style={{ color: '#D5D8B5', opacity: 0.8 }}>{countryName}</p>
+                <p className="text-xs sm:text-sm truncate" style={{ color: '#D5D8B5', opacity: 0.8 }}>{countryName}</p>
               )}
             </div>
           </div>
@@ -98,14 +98,13 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
                 } else {
                   addFavorite(city);
                 }
-                // Dispatch custom event for same-tab updates
                 window.dispatchEvent(new Event('favoritesUpdated'));
               }}
-              className="p-2 rounded-full hover:bg-opacity-20 transition-all"
+              className="p-1.5 sm:p-2 rounded-full hover:bg-opacity-20 transition-all flex-shrink-0"
               style={{ backgroundColor: 'rgba(213, 216, 181, 0.1)' }}
             >
               <Heart
-                className="w-6 h-6 transition-all"
+                className="w-4 h-4 sm:w-5 sm:h-5 transition-all"
                 style={{ color: '#D5D8B5' }}
                 fill={isFavorite(city) ? '#D5D8B5' : 'none'}
               />
@@ -114,21 +113,21 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
         </div>
 
         {/* Main Temperature */}
-        <div className="flex-1 flex flex-col justify-center items-center sm:items-start mb-6">
-          <div className="flex items-center gap-4 mb-4">
+        <div className="flex-1 flex flex-col justify-center items-center sm:items-start mb-3 sm:mb-4 min-h-0">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3">
             <img
               src={`https://openweathermap.org/img/wn/${weatherIcon}@4x.png`}
               alt={weatherDescription}
-              className="w-24 h-24 sm:w-32 sm:h-32 drop-shadow-2xl"
+              className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 drop-shadow-2xl flex-shrink-0"
             />
             <div>
-              <div className="text-7xl sm:text-8xl md:text-9xl font-black drop-shadow-2xl mb-2" style={{ color: '#D5D8B5' }}>
+              <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black drop-shadow-2xl mb-1" style={{ color: '#D5D8B5' }}>
                 {temperature}°
               </div>
-              <div className="text-xl sm:text-2xl font-bold capitalize" style={{ color: '#D5D8B5', opacity: 0.9 }}>
+              <div className="text-sm sm:text-base md:text-lg font-bold capitalize" style={{ color: '#D5D8B5', opacity: 0.9 }}>
                 {weatherDescription}
               </div>
-              <div className="text-sm mt-1" style={{ color: '#D5D8B5', opacity: 0.7 }}>
+              <div className="text-xs sm:text-sm mt-0.5" style={{ color: '#D5D8B5', opacity: 0.7 }}>
                 Hissedilen: {feelsLike}°
               </div>
             </div>
@@ -136,37 +135,37 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="rounded-2xl p-4 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center gap-2 mb-2">
-              <Droplets className="w-5 h-5" style={{ color: '#809A6F' }} />
-              <span className="text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Nem</span>
+        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+              <Droplets className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
+              <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Nem</span>
             </div>
-            <div className="text-3xl font-black" style={{ color: '#D5D8B5' }}>{humidity}%</div>
+            <div className="text-xl sm:text-2xl md:text-3xl font-black" style={{ color: '#D5D8B5' }}>{humidity}%</div>
           </div>
 
-          <div className="rounded-2xl p-4 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center gap-2 mb-2">
-              <Wind className="w-5 h-5" style={{ color: '#809A6F' }} />
-              <span className="text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Rüzgar</span>
+          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+              <Wind className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
+              <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Rüzgar</span>
             </div>
-            <div className="text-3xl font-black" style={{ color: '#D5D8B5' }}>{windSpeed} km/h</div>
+            <div className="text-xl sm:text-2xl md:text-3xl font-black" style={{ color: '#D5D8B5' }}>{windSpeed} km/h</div>
           </div>
 
-          <div className="rounded-2xl p-4 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center gap-2 mb-2">
-              <Gauge className="w-5 h-5" style={{ color: '#A25B5B' }} />
-              <span className="text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Basınç</span>
+          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+              <Gauge className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#A25B5B' }} />
+              <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Basınç</span>
             </div>
-            <div className="text-3xl font-black" style={{ color: '#D5D8B5' }}>{pressure} hPa</div>
+            <div className="text-xl sm:text-2xl md:text-3xl font-black" style={{ color: '#D5D8B5' }}>{pressure} hPa</div>
           </div>
 
-          <div className="rounded-2xl p-4 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center gap-2 mb-2">
-              <Eye className="w-5 h-5" style={{ color: '#CC9C75' }} />
-              <span className="text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Görüş</span>
+          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+              <Eye className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#CC9C75' }} />
+              <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Görüş</span>
             </div>
-            <div className="text-3xl font-black" style={{ color: '#D5D8B5' }}>
+            <div className="text-xl sm:text-2xl md:text-3xl font-black" style={{ color: '#D5D8B5' }}>
               {visibility} {visibility !== 'N/A' ? 'km' : ''}
             </div>
           </div>

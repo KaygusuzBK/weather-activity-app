@@ -25,21 +25,23 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#D5D8B5' }}>
+    <div className="h-screen overflow-hidden flex flex-col" style={{ backgroundColor: '#D5D8B5' }}>
       {/* Top Marquee Bar */}
-      <CitiesMarquee />
+      <div className="flex-shrink-0">
+        <CitiesMarquee />
+      </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      {/* Main Content - Flex container to fill remaining space */}
+      <div className="flex-1 overflow-hidden flex flex-col max-w-7xl mx-auto w-full px-2 sm:px-4 lg:px-6 py-2 sm:py-3">
         {/* Search Bar and Current Location Button */}
-        <div className="mb-6 flex flex-col sm:flex-row gap-4 items-center">
+        <div className="mb-2 sm:mb-3 flex flex-col sm:flex-row gap-2 items-center flex-shrink-0">
           <div className="flex-1 w-full">
             <CitySearch onCitySelect={handleCitySelect} />
           </div>
           {location && (
             <button
               onClick={handleCurrentLocation}
-              className={`px-6 py-3 rounded-full font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
+              className={`px-4 py-2 sm:px-6 sm:py-2.5 rounded-full font-medium transition-all flex items-center gap-2 whitespace-nowrap text-sm sm:text-base flex-shrink-0 ${
                 selectedCity === null ? 'shadow-lg scale-105' : ''
               }`}
               style={{
@@ -48,22 +50,24 @@ export default function Home() {
                 border: '2px solid #809A6F',
               }}
             >
-              <MapPin className="w-5 h-5" />
+              <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
               <span>Konumum</span>
             </button>
           )}
         </div>
 
         {/* Favorites and Recent */}
-        <FavoritesAndRecent 
-          onCitySelect={handleCitySelect} 
-          onCurrentLocation={handleCurrentLocation}
-          selectedCity={selectedCity}
-          showCurrentLocation={!!location}
-        />
+        <div className="flex-shrink-0 mb-2 sm:mb-3">
+          <FavoritesAndRecent 
+            onCitySelect={handleCitySelect} 
+            onCurrentLocation={handleCurrentLocation}
+            selectedCity={selectedCity}
+            showCurrentLocation={!!location}
+          />
+        </div>
 
-        {/* Current Weather and Forecast Side by Side */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 min-h-[600px]">
+        {/* Current Weather and Forecast Side by Side - Takes remaining space */}
+        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
           <CurrentWeather city={selectedCity} location={location} />
           <WeatherForecast city={selectedCity} location={location} />
         </div>

@@ -86,7 +86,7 @@ export default function CitySearch({ onCitySelect }: CitySearchProps) {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.length >= 2 && setShowResults(true)}
           placeholder="Şehir ara..."
-          className="w-full pl-10 pr-10 py-3 rounded-full border-2 focus:outline-none focus:ring-2 transition-all"
+          className="w-full pl-10 pr-10 py-2 sm:py-2.5 rounded-full border-2 focus:outline-none focus:ring-2 transition-all text-sm sm:text-base"
           style={{
             backgroundColor: 'rgba(213, 216, 181, 0.3)',
             borderColor: '#809A6F',

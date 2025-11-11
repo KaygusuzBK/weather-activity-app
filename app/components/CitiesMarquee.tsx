@@ -37,7 +37,7 @@ export default function CitiesMarquee() {
   const duplicatedCities = [...citiesWeather, ...citiesWeather];
 
   return (
-    <div className="w-full py-3 sm:py-4 overflow-hidden relative" style={{ background: 'linear-gradient(to right, #809A6F, #A25B5B, #CC9C75)' }}>
+    <div className="w-full py-2 sm:py-2.5 overflow-hidden relative" style={{ background: 'linear-gradient(to right, #809A6F, #A25B5B, #CC9C75)' }}>
       <div className="flex animate-scroll gap-4 sm:gap-6 md:gap-8 whitespace-nowrap">
         {duplicatedCities.map((item, index) => (
           <div
@@ -47,9 +47,9 @@ export default function CitiesMarquee() {
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(213, 216, 181, 0.3)'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(213, 216, 181, 0.2)'}
           >
-            <span className="text-xl sm:text-2xl">{item.city.emoji}</span>
+            <span className="text-lg sm:text-xl">{item.city.emoji}</span>
             <div className="flex flex-col">
-              <span className="font-bold text-xs sm:text-sm" style={{ color: '#2C2C2C' }}>{item.city.name}</span>
+              <span className="font-bold text-xs" style={{ color: '#2C2C2C' }}>{item.city.name}</span>
               {item.weather ? (
                 <span className="text-xs" style={{ color: '#2C2C2C', opacity: 0.8 }}>
                   {Math.round(item.weather.main.temp)}°C
@@ -62,7 +62,7 @@ export default function CitiesMarquee() {
               <img
                 src={`https://openweathermap.org/img/wn/${item.weather.weather[0]?.icon}.png`}
                 alt={item.weather.weather[0]?.description}
-                className="w-6 h-6 sm:w-8 sm:h-8"
+                className="w-5 h-5 sm:w-6 sm:h-6"
               />
             )}
           </div>
