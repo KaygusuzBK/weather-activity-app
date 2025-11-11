@@ -43,7 +43,7 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
   if (loading) {
     return (
       <div className="h-full flex items-center justify-center min-h-[400px]">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-pink-300 border-t-purple-500"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-4" style={{ borderColor: '#CC9C75', borderTopColor: '#809A6F' }}></div>
       </div>
     );
   }
@@ -55,15 +55,15 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
   const dayNames = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
 
   return (
-    <div className="h-full bg-gradient-to-br from-blue-500 via-cyan-500 to-teal-500 rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+    <div className="h-full rounded-3xl p-6 sm:p-8 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #CC9C75, #D5D8B5)' }}>
       {/* Animated background pattern */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-0 right-0 w-72 h-72 bg-pink-400 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-purple-400 rounded-full blur-3xl"></div>
+      <div className="absolute inset-0 opacity-15">
+        <div className="absolute top-0 right-0 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#809A6F' }}></div>
+        <div className="absolute bottom-0 left-0 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#A25B5B' }}></div>
       </div>
 
       <div className="relative z-10 h-full flex flex-col">
-        <h2 className="text-2xl sm:text-3xl font-black text-white mb-6 drop-shadow-lg">
+        <h2 className="text-2xl sm:text-3xl font-black mb-6 drop-shadow-lg" style={{ color: '#2C2C2C' }}>
           5 Günlük Tahmin
         </h2>
         
@@ -75,13 +75,23 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
             return (
               <div
                 key={day.date}
-                className="bg-white/20 backdrop-blur-md rounded-2xl p-4 border border-white/30 hover:bg-white/30 transition-all duration-300"
+                className="rounded-2xl p-4 border backdrop-blur-md transition-all duration-300"
+                style={{ 
+                  backgroundColor: 'rgba(44, 44, 44, 0.15)', 
+                  borderColor: 'rgba(44, 44, 44, 0.2)' 
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(44, 44, 44, 0.25)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(44, 44, 44, 0.15)';
+                }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4 flex-1">
                     <div className="text-center min-w-[80px]">
-                      <div className="text-sm font-bold text-white/90 mb-1">{dayName}</div>
-                      <div className="text-xs text-white/70">
+                      <div className="text-sm font-bold mb-1" style={{ color: '#2C2C2C', opacity: 0.9 }}>{dayName}</div>
+                      <div className="text-xs" style={{ color: '#2C2C2C', opacity: 0.7 }}>
                         {date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
                       </div>
                     </div>
@@ -93,27 +103,27 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
                     />
                     
                     <div className="flex-1">
-                      <div className="text-2xl sm:text-3xl font-black text-white mb-1">
+                      <div className="text-2xl sm:text-3xl font-black mb-1" style={{ color: '#2C2C2C' }}>
                         {day.temp_max}° / {day.temp_min}°
                       </div>
-                      <div className="text-sm text-white/80 capitalize">
+                      <div className="text-sm capitalize" style={{ color: '#2C2C2C', opacity: 0.8 }}>
                         {day.weather.description}
                       </div>
                     </div>
                   </div>
 
-                  <div className="hidden sm:flex items-center gap-4 text-white/80 text-sm">
+                  <div className="hidden sm:flex items-center gap-4 text-sm" style={{ color: '#2C2C2C', opacity: 0.8 }}>
                     <div className="text-center">
-                      <div className="text-xs text-white/60 mb-1">Nem</div>
+                      <div className="text-xs mb-1" style={{ color: '#2C2C2C', opacity: 0.6 }}>Nem</div>
                       <div className="font-bold">{day.humidity}%</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-xs text-white/60 mb-1">Rüzgar</div>
+                      <div className="text-xs mb-1" style={{ color: '#2C2C2C', opacity: 0.6 }}>Rüzgar</div>
                       <div className="font-bold">{Math.round(day.wind_speed * 3.6)} km/h</div>
                     </div>
                     {day.pop > 0 && (
                       <div className="text-center">
-                        <div className="text-xs text-white/60 mb-1">Yağış</div>
+                        <div className="text-xs mb-1" style={{ color: '#2C2C2C', opacity: 0.6 }}>Yağış</div>
                         <div className="font-bold">{Math.round(day.pop * 100)}%</div>
                       </div>
                     )}

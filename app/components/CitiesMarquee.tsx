@@ -37,22 +37,25 @@ export default function CitiesMarquee() {
   const duplicatedCities = [...citiesWeather, ...citiesWeather];
 
   return (
-    <div className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 py-3 sm:py-4 overflow-hidden relative">
+    <div className="w-full py-3 sm:py-4 overflow-hidden relative" style={{ background: 'linear-gradient(to right, #809A6F, #A25B5B, #CC9C75)' }}>
       <div className="flex animate-scroll gap-4 sm:gap-6 md:gap-8 whitespace-nowrap">
         {duplicatedCities.map((item, index) => (
           <div
             key={`${item.city.name}-${index}`}
-            className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 min-w-fit hover:bg-white/20 transition-colors"
+            className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-full border min-w-fit transition-colors"
+            style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', backdropFilter: 'blur(8px)', borderColor: 'rgba(213, 216, 181, 0.3)' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(213, 216, 181, 0.3)'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(213, 216, 181, 0.2)'}
           >
             <span className="text-xl sm:text-2xl">{item.city.emoji}</span>
             <div className="flex flex-col">
-              <span className="text-white font-bold text-xs sm:text-sm">{item.city.name}</span>
+              <span className="font-bold text-xs sm:text-sm" style={{ color: '#2C2C2C' }}>{item.city.name}</span>
               {item.weather ? (
-                <span className="text-white/80 text-xs">
+                <span className="text-xs" style={{ color: '#2C2C2C', opacity: 0.8 }}>
                   {Math.round(item.weather.main.temp)}°C
                 </span>
               ) : (
-                <span className="text-white/50 text-xs">...</span>
+                <span className="text-xs" style={{ color: '#2C2C2C', opacity: 0.5 }}>...</span>
               )}
             </div>
             {item.weather && (

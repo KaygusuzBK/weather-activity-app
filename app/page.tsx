@@ -12,7 +12,7 @@ export default function Home() {
   const [selectedCity, setSelectedCity] = useState<City | null>(null);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen" style={{ backgroundColor: '#D5D8B5' }}>
       {/* Top Marquee Bar */}
       <CitiesMarquee />
 

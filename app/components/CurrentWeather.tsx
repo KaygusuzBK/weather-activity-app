@@ -45,8 +45,8 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
     return (
       <div className="flex items-center justify-center h-full min-h-[400px]">
         <div className="text-center">
-          <div className="mb-4 h-16 w-16 animate-spin rounded-full border-4 border-pink-300 border-t-purple-500 mx-auto"></div>
-          <p className="text-zinc-400">Yükleniyor...</p>
+          <div className="mb-4 h-16 w-16 animate-spin rounded-full border-4 mx-auto" style={{ borderColor: '#A25B5B', borderTopColor: '#809A6F' }}></div>
+          <p style={{ color: '#2C2C2C' }}>Yükleniyor...</p>
         </div>
       </div>
     );
@@ -68,23 +68,23 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
   const countryName = city?.country || weather.sys.country || location?.country || '';
 
   return (
-    <div className="h-full bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+    <div className="h-full rounded-3xl p-6 sm:p-8 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #809A6F, #A25B5B)' }}>
       {/* Animated background pattern */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute top-0 left-0 w-72 h-72 bg-yellow-400 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-72 h-72 bg-cyan-400 rounded-full blur-3xl"></div>
+      <div className="absolute inset-0 opacity-15">
+        <div className="absolute top-0 left-0 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#CC9C75' }}></div>
+        <div className="absolute bottom-0 right-0 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#D5D8B5' }}></div>
       </div>
 
       <div className="relative z-10 h-full flex flex-col">
         {/* Location */}
         <div className="mb-6 flex items-center gap-2">
-          <MapPin className="w-5 h-5 text-white" />
+          <MapPin className="w-5 h-5" style={{ color: '#D5D8B5' }} />
           <div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white drop-shadow-lg">
+            <h2 className="text-2xl sm:text-3xl font-black drop-shadow-lg" style={{ color: '#D5D8B5' }}>
               {cityName}
             </h2>
             {countryName && (
-              <p className="text-white/80 text-sm">{countryName}</p>
+              <p className="text-sm" style={{ color: '#D5D8B5', opacity: 0.8 }}>{countryName}</p>
             )}
           </div>
         </div>
@@ -98,13 +98,13 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
               className="w-24 h-24 sm:w-32 sm:h-32 drop-shadow-2xl"
             />
             <div>
-              <div className="text-7xl sm:text-8xl md:text-9xl font-black text-white drop-shadow-2xl mb-2">
+              <div className="text-7xl sm:text-8xl md:text-9xl font-black drop-shadow-2xl mb-2" style={{ color: '#D5D8B5' }}>
                 {temperature}°
               </div>
-              <div className="text-xl sm:text-2xl font-bold text-white/90 capitalize">
+              <div className="text-xl sm:text-2xl font-bold capitalize" style={{ color: '#D5D8B5', opacity: 0.9 }}>
                 {weatherDescription}
               </div>
-              <div className="text-sm text-white/70 mt-1">
+              <div className="text-sm mt-1" style={{ color: '#D5D8B5', opacity: 0.7 }}>
                 Hissedilen: {feelsLike}°
               </div>
             </div>
@@ -113,36 +113,36 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white/20 backdrop-blur-md rounded-2xl p-4 border border-white/30">
+          <div className="rounded-2xl p-4 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center gap-2 mb-2">
-              <Droplets className="w-5 h-5 text-cyan-300" />
-              <span className="text-white/80 text-sm font-medium">Nem</span>
+              <Droplets className="w-5 h-5" style={{ color: '#809A6F' }} />
+              <span className="text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Nem</span>
             </div>
-            <div className="text-3xl font-black text-white">{humidity}%</div>
+            <div className="text-3xl font-black" style={{ color: '#D5D8B5' }}>{humidity}%</div>
           </div>
 
-          <div className="bg-white/20 backdrop-blur-md rounded-2xl p-4 border border-white/30">
+          <div className="rounded-2xl p-4 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center gap-2 mb-2">
-              <Wind className="w-5 h-5 text-green-300" />
-              <span className="text-white/80 text-sm font-medium">Rüzgar</span>
+              <Wind className="w-5 h-5" style={{ color: '#809A6F' }} />
+              <span className="text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Rüzgar</span>
             </div>
-            <div className="text-3xl font-black text-white">{windSpeed} km/h</div>
+            <div className="text-3xl font-black" style={{ color: '#D5D8B5' }}>{windSpeed} km/h</div>
           </div>
 
-          <div className="bg-white/20 backdrop-blur-md rounded-2xl p-4 border border-white/30">
+          <div className="rounded-2xl p-4 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center gap-2 mb-2">
-              <Gauge className="w-5 h-5 text-purple-300" />
-              <span className="text-white/80 text-sm font-medium">Basınç</span>
+              <Gauge className="w-5 h-5" style={{ color: '#A25B5B' }} />
+              <span className="text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Basınç</span>
             </div>
-            <div className="text-3xl font-black text-white">{pressure} hPa</div>
+            <div className="text-3xl font-black" style={{ color: '#D5D8B5' }}>{pressure} hPa</div>
           </div>
 
-          <div className="bg-white/20 backdrop-blur-md rounded-2xl p-4 border border-white/30">
+          <div className="rounded-2xl p-4 border backdrop-blur-md" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center gap-2 mb-2">
-              <Eye className="w-5 h-5 text-yellow-300" />
-              <span className="text-white/80 text-sm font-medium">Görüş</span>
+              <Eye className="w-5 h-5" style={{ color: '#CC9C75' }} />
+              <span className="text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Görüş</span>
             </div>
-            <div className="text-3xl font-black text-white">
+            <div className="text-3xl font-black" style={{ color: '#D5D8B5' }}>
               {visibility} {visibility !== 'N/A' ? 'km' : ''}
             </div>
           </div>
