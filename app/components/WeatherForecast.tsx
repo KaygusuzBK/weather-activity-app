@@ -87,7 +87,7 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
                   e.currentTarget.style.backgroundColor = 'rgba(44, 44, 44, 0.15)';
                 }}
               >
-                <div className="flex items-center justify-center gap-2 sm:gap-3">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 md:gap-4">
                   <div className="text-center min-w-[60px] sm:min-w-[70px] flex-shrink-0">
                     <div className="text-xs sm:text-sm font-bold mb-0.5" style={{ color: '#2C2C2C', opacity: 0.9 }}>{dayName}</div>
                     <div className="text-xs" style={{ color: '#2C2C2C', opacity: 0.7 }}>
@@ -110,7 +110,7 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
                     </div>
                   </div>
 
-                  <div className="hidden md:flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm flex-shrink-0" style={{ color: '#2C2C2C', opacity: 0.8 }}>
+                  <div className="flex items-center justify-center gap-3 sm:gap-4 md:gap-5 text-xs sm:text-sm flex-shrink-0" style={{ color: '#2C2C2C', opacity: 0.8 }}>
                     <div className="text-center">
                       <div className="text-xs mb-0.5" style={{ color: '#2C2C2C', opacity: 0.6 }}>Nem</div>
                       <div className="font-bold">{day.humidity}%</div>
