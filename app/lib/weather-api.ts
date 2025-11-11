@@ -112,10 +112,10 @@ class WeatherAPI {
     const dailyForecasts: DailyForecast[] = [];
     const sortedDates = Array.from(dailyMap.keys()).sort();
     
-    // Bugünü atla, yarın başla (7 günlük tahmin için)
+    // Bugünü atla, yarın başla (5 günlük tahmin için)
     const today = new Date().toISOString().split('T')[0];
     const startIndex = sortedDates.indexOf(today) + 1;
-    const datesToProcess = sortedDates.slice(startIndex, startIndex + 7);
+    const datesToProcess = sortedDates.slice(startIndex, startIndex + 5);
 
     datesToProcess.forEach((dateKey) => {
       const dayData = dailyMap.get(dateKey)!;

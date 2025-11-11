@@ -88,7 +88,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
   const countryName = city?.country || weather.sys.country || location?.country || '';
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
       <MagicCard className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 p-1">
         <BorderBeam size={300} duration={15} colorFrom="#3b82f6" colorTo="#ec4899" />
         <Particles
@@ -98,40 +98,40 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
           color="#ffffff"
           size={0.4}
         />
-        <div className="relative z-10 bg-zinc-900/80 backdrop-blur-xl rounded-3xl p-8 md:p-12">
+        <div className="relative z-10 bg-zinc-900/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12">
           {/* Location Header */}
-          <div className="mb-8 flex items-center gap-3">
-            <MapPin className="w-6 h-6 text-blue-400" />
-            <div>
+          <div className="mb-4 sm:mb-6 md:mb-8 flex items-center gap-2 sm:gap-3">
+            <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-blue-400 flex-shrink-0" />
+            <div className="min-w-0">
               <AnimatedGradientText>
-                <h1 className="text-3xl md:text-4xl font-bold text-white">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white truncate">
                   {cityName}
                 </h1>
               </AnimatedGradientText>
               {countryName && (
-                <p className="text-zinc-400 text-sm mt-1">{countryName}</p>
+                <p className="text-zinc-400 text-xs sm:text-sm mt-1">{countryName}</p>
               )}
             </div>
           </div>
 
           {/* Main Weather Display */}
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-4 sm:mb-6 md:mb-8">
             {/* Temperature Section */}
             <div className="flex flex-col items-center md:items-start">
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 mb-4">
                 <img
                   src={`https://openweathermap.org/img/wn/${weatherIcon}@4x.png`}
                   alt={weatherDescription}
-                  className="w-32 h-32 drop-shadow-2xl"
+                  className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 drop-shadow-2xl"
                 />
-                <div>
-                  <div className="text-8xl font-bold text-white mb-2">
+                <div className="text-center md:text-left">
+                  <div className="text-6xl sm:text-7xl md:text-8xl font-bold text-white mb-1 sm:mb-2">
                     {temperature}°
                   </div>
-                  <div className="text-xl text-zinc-300 capitalize">
+                  <div className="text-lg sm:text-xl text-zinc-300 capitalize">
                     {weatherDescription}
                   </div>
-                  <div className="text-sm text-zinc-400 mt-1">
+                  <div className="text-xs sm:text-sm text-zinc-400 mt-1">
                     Hissedilen: {feelsLike}°
                   </div>
                 </div>
@@ -139,37 +139,37 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
             </div>
 
             {/* Weather Stats Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              <MagicCard className="bg-zinc-800/50 backdrop-blur-sm p-4 border border-zinc-700/50">
-                <div className="flex items-center gap-3 mb-2">
-                  <Droplets className="w-5 h-5 text-blue-400" />
-                  <span className="text-sm text-zinc-400">Nem</span>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+              <MagicCard className="bg-zinc-800/50 backdrop-blur-sm p-3 sm:p-4 border border-zinc-700/50">
+                <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                  <Droplets className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 flex-shrink-0" />
+                  <span className="text-xs sm:text-sm text-zinc-400">Nem</span>
                 </div>
-                <div className="text-3xl font-bold text-white">{humidity}%</div>
+                <div className="text-2xl sm:text-3xl font-bold text-white">{humidity}%</div>
               </MagicCard>
 
-              <MagicCard className="bg-zinc-800/50 backdrop-blur-sm p-4 border border-zinc-700/50">
-                <div className="flex items-center gap-3 mb-2">
-                  <Wind className="w-5 h-5 text-green-400" />
-                  <span className="text-sm text-zinc-400">Rüzgar</span>
+              <MagicCard className="bg-zinc-800/50 backdrop-blur-sm p-3 sm:p-4 border border-zinc-700/50">
+                <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                  <Wind className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" />
+                  <span className="text-xs sm:text-sm text-zinc-400">Rüzgar</span>
                 </div>
-                <div className="text-3xl font-bold text-white">{windSpeed} km/h</div>
+                <div className="text-2xl sm:text-3xl font-bold text-white">{windSpeed} km/h</div>
               </MagicCard>
 
-              <MagicCard className="bg-zinc-800/50 backdrop-blur-sm p-4 border border-zinc-700/50">
-                <div className="flex items-center gap-3 mb-2">
-                  <Gauge className="w-5 h-5 text-purple-400" />
-                  <span className="text-sm text-zinc-400">Basınç</span>
+              <MagicCard className="bg-zinc-800/50 backdrop-blur-sm p-3 sm:p-4 border border-zinc-700/50">
+                <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                  <Gauge className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 flex-shrink-0" />
+                  <span className="text-xs sm:text-sm text-zinc-400">Basınç</span>
                 </div>
-                <div className="text-3xl font-bold text-white">{pressure} hPa</div>
+                <div className="text-2xl sm:text-3xl font-bold text-white">{pressure} hPa</div>
               </MagicCard>
 
-              <MagicCard className="bg-zinc-800/50 backdrop-blur-sm p-4 border border-zinc-700/50">
-                <div className="flex items-center gap-3 mb-2">
-                  <Eye className="w-5 h-5 text-yellow-400" />
-                  <span className="text-sm text-zinc-400">Görüş</span>
+              <MagicCard className="bg-zinc-800/50 backdrop-blur-sm p-3 sm:p-4 border border-zinc-700/50">
+                <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                  <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 flex-shrink-0" />
+                  <span className="text-xs sm:text-sm text-zinc-400">Görüş</span>
                 </div>
-                <div className="text-3xl font-bold text-white">
+                <div className="text-2xl sm:text-3xl font-bold text-white">
                   {visibility} {visibility !== 'N/A' ? 'km' : ''}
                 </div>
               </MagicCard>
