@@ -9,6 +9,7 @@ import { useNotifications } from '../hooks/useNotifications';
 import { useCurrentWeather } from '../hooks/useWeather';
 import CurrentWeatherSkeleton from './CurrentWeatherSkeleton';
 import ErrorFallback from './ErrorFallback';
+import ShareButton from './ShareButton';
 import { normalizeError } from '../lib/error-handler';
 
 interface CurrentWeatherProps {
