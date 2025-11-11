@@ -1,6 +1,6 @@
-import type { OneCallResponse, CurrentWeather, DailyForecast } from '../types/weather';
+import type { CurrentWeather, WeatherForecast, DailyForecast } from '../types/weather';
 
-const API_BASE_URL = 'https://api.openweathermap.org/data/3.0';
+const API_BASE_URL = 'https://api.openweathermap.org/data/2.5';
 const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
 
 if (!API_KEY) {
@@ -8,7 +8,8 @@ if (!API_KEY) {
 }
 
 /**
- * OpenWeatherMap One Call API 3.0 client
+ * OpenWeatherMap API client (Free Plan)
+ * Uses Current Weather API and 5 Day / 3 Hour Forecast API
  */
 class WeatherAPI {
   private baseUrl: string;
@@ -20,19 +21,17 @@ class WeatherAPI {
   }
 
   /**
-   * One Call API ile hem mevcut hava durumunu hem de 7 günlük tahmini getirir
-   * exclude parametresi ile sadece ihtiyacımız olan verileri alıyoruz (minutely, hourly, alerts hariç)
+   * Mevcut hava durumunu getirir
    */
-  async getWeatherData(
+  async getCurrentWeather(
     lat: number,
     lon: number
-  ): Promise<OneCallResponse> {
+  ): Promise<CurrentWeather> {
     if (!this.apiKey) {
       throw new Error('OpenWeatherMap API key is not configured');
     }
 
-    // exclude=minutely,hourly,alerts - sadece current ve daily verilerini alıyoruz
-    const url = `${this.baseUrl}/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&appid=${this.apiKey}&units=metric&lang=tr`;
+    const url = `${this.baseUrl}/weather?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=metric&lang=tr`;
     
     try {
       const response = await fetch(url);
@@ -54,40 +53,97 @@ class WeatherAPI {
   }
 
   /**
-   * Mevcut hava durumunu getirir
+   * 5 günlük 3 saatlik tahmin getirir ve 7 günlük günlük tahmine dönüştürür
    */
-  async getCurrentWeather(
-    lat: number,
-    lon: number
-  ): Promise<CurrentWeather> {
-    const data = await this.getWeatherData(lat, lon);
-    return data.current;
+  async getForecast(lat: number, lon: number): Promise<DailyForecast[]> {
+    if (!this.apiKey) {
+      throw new Error('OpenWeatherMap API key is not configured');
+    }
+
+    const url = `${this.baseUrl}/forecast?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=metric&lang=tr`;
+    
+    try {
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.message || `API hatası: ${response.status} ${response.statusText}`
+        );
+      }
+      
+      const data: WeatherForecast = await response.json();
+      
+      // 3 saatlik tahminleri günlük tahminlere dönüştür
+      return this.convertToDailyForecast(data);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Hava durumu tahmini alınamadı');
+    }
   }
 
   /**
-   * 7 günlük günlük tahmin getirir
+   * 3 saatlik tahminleri günlük tahminlere dönüştürür
+   * Her gün için en yüksek ve en düşük sıcaklıkları, en çok görünen hava durumunu alır
    */
-  async getForecast(lat: number, lon: number): Promise<DailyForecast[]> {
-    const data = await this.getWeatherData(lat, lon);
-    
-    // One Call API zaten günlük tahminleri veriyor, sadece formatlamamız gerekiyor
+  private convertToDailyForecast(data: WeatherForecast): DailyForecast[] {
+    const dailyMap = new Map<string, {
+      temps: number[];
+      items: typeof data.list;
+    }>();
+
+    // Tarihe göre grupla
+    data.list.forEach((item) => {
+      const date = new Date(item.dt * 1000);
+      const dateKey = date.toISOString().split('T')[0]; // YYYY-MM-DD formatı
+      
+      if (!dailyMap.has(dateKey)) {
+        dailyMap.set(dateKey, { temps: [], items: [] });
+      }
+      
+      const dayData = dailyMap.get(dateKey)!;
+      dayData.temps.push(item.main.temp);
+      dayData.items.push(item);
+    });
+
+    // Her gün için en uygun veriyi seç (genellikle öğlen saatleri)
     const dailyForecasts: DailyForecast[] = [];
-    const dayNames = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+    const sortedDates = Array.from(dailyMap.keys()).sort();
     
-    // İlk gün bugün, yarın başlayarak 7 gün alıyoruz
-    data.daily.slice(1, 8).forEach((day) => {
-      const date = new Date(day.dt * 1000);
-      const dateKey = date.toISOString().split('T')[0];
+    // Bugünü atla, yarın başla (7 günlük tahmin için)
+    const today = new Date().toISOString().split('T')[0];
+    const startIndex = sortedDates.indexOf(today) + 1;
+    const datesToProcess = sortedDates.slice(startIndex, startIndex + 7);
+
+    datesToProcess.forEach((dateKey) => {
+      const dayData = dailyMap.get(dateKey)!;
+      if (!dayData || dayData.items.length === 0) return;
+
+      // En yüksek ve en düşük sıcaklıkları bul
+      const temps = dayData.items.map(item => item.main.temp);
+      const tempMin = Math.min(...temps);
+      const tempMax = Math.max(...temps);
+
+      // Öğlen saatlerindeki (12:00-15:00 arası) veriyi tercih et
+      const noonItem = dayData.items.find(item => {
+        const hour = new Date(item.dt * 1000).getHours();
+        return hour >= 12 && hour <= 15;
+      }) || dayData.items[Math.floor(dayData.items.length / 2)];
+
+      const date = new Date(dateKey);
+      const dayNames = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
       
       dailyForecasts.push({
         date: dateKey,
         day: dayNames[date.getDay()],
-        temp_min: Math.round(day.temp.min),
-        temp_max: Math.round(day.temp.max),
-        weather: day.weather[0],
-        humidity: day.humidity,
-        wind_speed: day.wind_speed,
-        pop: day.pop,
+        temp_min: Math.round(tempMin),
+        temp_max: Math.round(tempMax),
+        weather: noonItem.weather[0],
+        humidity: noonItem.main.humidity,
+        wind_speed: noonItem.wind.speed,
+        pop: Math.max(...dayData.items.map(item => item.pop || 0)),
       });
     });
 

@@ -78,14 +78,14 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
 
   const weatherIcon = weather.weather[0]?.icon || '01d';
   const weatherDescription = weather.weather[0]?.description || '';
-  const temperature = Math.round(weather.temp);
-  const feelsLike = Math.round(weather.feels_like);
-  const humidity = weather.humidity;
-  const windSpeed = Math.round(weather.wind_speed * 3.6);
-  const pressure = weather.pressure;
-  const visibility = weather.visibility ? (weather.visibility / 1000).toFixed(1) : 'N/A';
-  const cityName = city?.name || location?.city || 'Konumunuz';
-  const countryName = city?.country || location?.country || '';
+  const temperature = Math.round(weather.main.temp);
+  const feelsLike = Math.round(weather.main.feels_like);
+  const humidity = weather.main.humidity;
+  const windSpeed = Math.round(weather.wind.speed * 3.6); // m/s to km/h
+  const pressure = weather.main.pressure;
+  const visibility = weather.visibility ? (weather.visibility / 1000).toFixed(1) : 'N/A'; // meters to km
+  const cityName = city?.name || weather.name || location?.city || 'Konumunuz';
+  const countryName = city?.country || weather.sys.country || location?.country || '';
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8">
