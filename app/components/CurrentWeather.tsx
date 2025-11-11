@@ -1,13 +1,15 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import type { CurrentWeather } from '../types/weather';
-import { weatherAPI } from '../lib/weather-api';
+import { useEffect, useRef } from 'react';
 import type { City } from '../data/popular-cities';
 import { Droplets, Wind, Gauge, Eye, MapPin, Heart } from 'lucide-react';
 import { addFavorite, removeFavorite, isFavorite } from '../lib/storage';
 import ActivityRecommendations from './ActivityRecommendations';
 import { useNotifications } from '../hooks/useNotifications';
+import { useCurrentWeather } from '../hooks/useWeather';
+import CurrentWeatherSkeleton from './CurrentWeatherSkeleton';
+import ErrorFallback from './ErrorFallback';
+import { normalizeError } from '../lib/error-handler';
 
 interface CurrentWeatherProps {
   city: City | null;
@@ -15,17 +17,18 @@ interface CurrentWeatherProps {
 }
 
 export default function CurrentWeather({ city, location }: CurrentWeatherProps) {
-  const [weather, setWeather] = useState<CurrentWeather | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const previousWeatherRef = useRef<CurrentWeather | null>(null);
-  const { checkWeatherAlerts } = useNotifications();
+  const lat = city?.lat || location?.latitude || null;
+  const lon = city?.lon || location?.longitude || null;
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { weather, loading, error, mutate } = useCurrentWeather({
+    lat,
+    lon,
+    enabled: !!(lat && lon),
+  });
 
-  useEffect(() => {
-    if (city || location) {
-      fetchWeather();
-    }
-  }, [city, location]);
+  const previousWeatherRef = useRef(weather);
+  const { checkWeatherAlerts } = useNotifications();
 
   useEffect(() => {
     if (weather && previousWeatherRef.current) {
@@ -36,37 +39,25 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
     }
   }, [weather, checkWeatherAlerts]);
 
-  const fetchWeather = async () => {
-    const lat = city?.lat || location?.latitude;
-    const lon = city?.lon || location?.longitude;
-    
-    if (!lat || !lon) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const data = await weatherAPI.getCurrentWeather(lat, lon);
-      setWeather(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Hava durumu alınamadı');
-    } finally {
-      setLoading(false);
-    }
+  const handleRetry = () => {
+    mutate();
   };
 
-  if (loading) {
+  if (loading && !weather) {
+    return <CurrentWeatherSkeleton />;
+  }
+
+  if (error) {
     return (
-      <div className="flex items-center justify-center h-full min-h-[400px]">
-        <div className="text-center">
-          <div className="mb-4 h-16 w-16 animate-spin rounded-full border-4 mx-auto" style={{ borderColor: '#A25B5B', borderTopColor: '#809A6F' }}></div>
-          <p style={{ color: '#2C2C2C' }}>Yükleniyor...</p>
-        </div>
-      </div>
+      <ErrorFallback
+        error={normalizeError(error)}
+        onRetry={handleRetry}
+        title="Hava Durumu Yüklenemedi"
+      />
     );
   }
 
-  if (error || !weather) {
+  if (!weather) {
     return null;
   }
 
@@ -82,7 +73,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
   const countryName = city?.country || weather.sys.country || location?.country || '';
 
   return (
-    <div className="h-full rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-5 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #809A6F, #A25B5B)' }}>
+    <div ref={containerRef} className="h-full rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-5 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #809A6F, #A25B5B)' }}>
       {/* Animated background pattern */}
       <div className="absolute inset-0 opacity-15">
         <div className="absolute top-0 left-0 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#CC9C75' }}></div>
@@ -103,26 +94,29 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
               )}
             </div>
           </div>
-          {city && (
-            <button
-              onClick={() => {
-                if (isFavorite(city)) {
-                  removeFavorite(city);
-                } else {
-                  addFavorite(city);
-                }
-                window.dispatchEvent(new Event('favoritesUpdated'));
-              }}
-              className="absolute right-0 p-1.5 sm:p-2 rounded-full hover:bg-opacity-20 transition-all flex-shrink-0"
-              style={{ backgroundColor: 'rgba(213, 216, 181, 0.1)' }}
-            >
-              <Heart
-                className="w-4 h-4 sm:w-5 sm:h-5 transition-all"
-                style={{ color: '#D5D8B5' }}
-                fill={isFavorite(city) ? '#D5D8B5' : 'none'}
-              />
-            </button>
-          )}
+          <div className="absolute right-0 flex items-center gap-2">
+            <ShareButton weather={weather} city={city} location={location} elementRef={containerRef} />
+            {city && (
+              <button
+                onClick={() => {
+                  if (isFavorite(city)) {
+                    removeFavorite(city);
+                  } else {
+                    addFavorite(city);
+                  }
+                  window.dispatchEvent(new Event('favoritesUpdated'));
+                }}
+                className="p-1.5 sm:p-2 rounded-full hover:bg-opacity-20 transition-all flex-shrink-0"
+                style={{ backgroundColor: 'rgba(213, 216, 181, 0.1)' }}
+              >
+                <Heart
+                  className="w-4 h-4 sm:w-5 sm:h-5 transition-all"
+                  style={{ color: '#D5D8B5' }}
+                  fill={isFavorite(city) ? '#D5D8B5' : 'none'}
+                />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Main Temperature */}

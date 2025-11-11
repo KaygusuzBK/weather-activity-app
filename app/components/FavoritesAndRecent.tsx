@@ -54,23 +54,47 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
   const handleToggleFavorite = (city: City, e: React.MouseEvent) => {
     e.stopPropagation();
     
-    if (isFavorite(city)) {
-      removeFavorite(city);
-    } else {
-      addFavorite(city);
+    // Optimistic update
+    const wasFavorite = isFavorite(city);
+    const updatedFavorites = wasFavorite
+      ? favorites.filter(c => !(c.name === city.name && c.country === city.country))
+      : [...favorites, city];
+    
+    setFavorites(updatedFavorites);
+    
+    // Actual update
+    try {
+      if (wasFavorite) {
+        removeFavorite(city);
+      } else {
+        addFavorite(city);
+      }
+      loadData();
+    } catch (error) {
+      // Rollback on error
+      loadData();
+      console.error('Favorite toggle error:', error);
     }
-    loadData();
   };
 
   const handleRemoveRecent = (city: City, e: React.MouseEvent) => {
     e.stopPropagation();
+    
+    // Optimistic update
     const updated = recentCities.filter(
       c => !(c.name === city.name && c.country === city.country)
     );
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('weather-app-recent-cities', JSON.stringify(updated));
+    setRecentCities(updated);
+    
+    // Actual update
+    try {
+      removeRecentCity(city);
+      loadData();
+    } catch (error) {
+      // Rollback on error
+      loadData();
+      console.error('Remove recent error:', error);
     }
-    loadData();
   };
 
   return (

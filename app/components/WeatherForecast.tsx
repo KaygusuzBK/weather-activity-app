@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import type { DailyForecast } from '../types/weather';
-import { weatherAPI } from '../lib/weather-api';
 import type { City } from '../data/popular-cities';
+import { useForecast } from '../hooks/useWeather';
+import WeatherForecastSkeleton from './WeatherForecastSkeleton';
+import ErrorFallback from './ErrorFallback';
+import { normalizeError } from '../lib/error-handler';
 
 interface WeatherForecastProps {
   city: City | null;
@@ -11,44 +12,34 @@ interface WeatherForecastProps {
 }
 
 export default function WeatherForecast({ city, location }: WeatherForecastProps) {
-  const [forecast, setForecast] = useState<DailyForecast[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const lat = city?.lat || location?.latitude || null;
+  const lon = city?.lon || location?.longitude || null;
+  
+  const { forecast, loading, error, mutate } = useForecast({
+    lat,
+    lon,
+    enabled: !!(lat && lon),
+  });
 
-  useEffect(() => {
-    if (city || location) {
-      fetchForecast();
-    }
-  }, [city, location]);
-
-  const fetchForecast = async () => {
-    const lat = city?.lat || location?.latitude;
-    const lon = city?.lon || location?.longitude;
-    
-    if (!lat || !lon) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const data = await weatherAPI.getForecast(lat, lon);
-      setForecast(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Hava durumu tahmini alınamadı');
-    } finally {
-      setLoading(false);
-    }
+  const handleRetry = () => {
+    mutate();
   };
 
-  if (loading) {
+  if (loading && !forecast) {
+    return <WeatherForecastSkeleton />;
+  }
+
+  if (error) {
     return (
-      <div className="h-full flex items-center justify-center min-h-[400px]">
-        <div className="h-8 w-8 animate-spin rounded-full border-4" style={{ borderColor: '#CC9C75', borderTopColor: '#809A6F' }}></div>
-      </div>
+      <ErrorFallback
+        error={normalizeError(error)}
+        onRetry={handleRetry}
+        title="Tahmin Yüklenemedi"
+      />
     );
   }
 
-  if (error || forecast.length === 0) {
+  if (!forecast || forecast.length === 0) {
     return null;
   }
 

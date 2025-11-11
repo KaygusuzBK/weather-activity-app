@@ -1,7 +1,10 @@
 import type { CurrentWeather, WeatherForecast, DailyForecast } from '../types/weather';
+import { fetchWithRetry } from './retry';
+import { getCache, setCache } from './cache';
 
 const API_BASE_URL = 'https://api.openweathermap.org/data/2.5';
 const API_KEY = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 if (!API_KEY) {
   console.warn('NEXT_PUBLIC_OPENWEATHER_API_KEY environment variable is not set');
@@ -21,20 +24,37 @@ class WeatherAPI {
   }
 
   /**
-   * Mevcut hava durumunu getirir
+   * Mevcut hava durumunu getirir (retry ve cache ile)
    */
   async getCurrentWeather(
     lat: number,
-    lon: number
+    lon: number,
+    useCache: boolean = true
   ): Promise<CurrentWeather> {
     if (!this.apiKey) {
       throw new Error('OpenWeatherMap API key is not configured');
     }
 
+    const cacheKey = `weather-${lat}-${lon}`;
+
+    // Cache'den kontrol et
+    if (useCache) {
+      const cached = getCache<CurrentWeather>(cacheKey);
+      if (cached) {
+        return cached;
+      }
+    }
+
     const url = `${this.baseUrl}/weather?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=metric&lang=tr`;
     
     try {
-      const response = await fetch(url);
+      const response = await fetchWithRetry(url, {}, {
+        maxRetries: 3,
+        initialDelay: 1000,
+        onRetry: (attempt, error) => {
+          console.log(`Retry attempt ${attempt} for getCurrentWeather:`, error.message);
+        },
+      });
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -43,7 +63,14 @@ class WeatherAPI {
         );
       }
       
-      return await response.json();
+      const data = await response.json();
+      
+      // Cache'e kaydet
+      if (useCache) {
+        setCache(cacheKey, data, CACHE_TTL);
+      }
+      
+      return data;
     } catch (error) {
       if (error instanceof Error) {
         throw error;
@@ -100,17 +127,37 @@ class WeatherAPI {
   }
 
   /**
-   * 5 günlük 3 saatlik tahmin getirir ve 7 günlük günlük tahmine dönüştürür
+   * 5 günlük 3 saatlik tahmin getirir ve günlük tahmine dönüştürür (retry ve cache ile)
    */
-  async getForecast(lat: number, lon: number): Promise<DailyForecast[]> {
+  async getForecast(
+    lat: number,
+    lon: number,
+    useCache: boolean = true
+  ): Promise<DailyForecast[]> {
     if (!this.apiKey) {
       throw new Error('OpenWeatherMap API key is not configured');
+    }
+
+    const cacheKey = `forecast-${lat}-${lon}`;
+
+    // Cache'den kontrol et
+    if (useCache) {
+      const cached = getCache<DailyForecast[]>(cacheKey);
+      if (cached) {
+        return cached;
+      }
     }
 
     const url = `${this.baseUrl}/forecast?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=metric&lang=tr`;
     
     try {
-      const response = await fetch(url);
+      const response = await fetchWithRetry(url, {}, {
+        maxRetries: 3,
+        initialDelay: 1000,
+        onRetry: (attempt, error) => {
+          console.log(`Retry attempt ${attempt} for getForecast:`, error.message);
+        },
+      });
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -122,7 +169,14 @@ class WeatherAPI {
       const data: WeatherForecast = await response.json();
       
       // 3 saatlik tahminleri günlük tahminlere dönüştür
-      return this.convertToDailyForecast(data);
+      const dailyForecast = this.convertToDailyForecast(data);
+      
+      // Cache'e kaydet
+      if (useCache) {
+        setCache(cacheKey, dailyForecast, CACHE_TTL);
+      }
+      
+      return dailyForecast;
     } catch (error) {
       if (error instanceof Error) {
         throw error;
