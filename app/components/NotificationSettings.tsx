@@ -1,10 +1,16 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Bell, BellOff, Settings } from 'lucide-react';
 import { useNotifications } from '../hooks/useNotifications';
 
 export default function NotificationSettings() {
+  const [mounted, setMounted] = useState(false);
   const { permission, settings, requestPermission, updateSettings } = useNotifications();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleToggle = async () => {
     if (!settings.enabled) {
@@ -17,7 +23,7 @@ export default function NotificationSettings() {
     }
   };
 
-  if (typeof window === 'undefined' || !('Notification' in window)) {
+  if (!mounted || typeof window === 'undefined' || !('Notification' in window)) {
     return null;
   }
 

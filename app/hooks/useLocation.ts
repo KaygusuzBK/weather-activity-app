@@ -20,11 +20,16 @@ export function useLocation(): UseLocationReturn {
   const [error, setError] = useState<string | null>(null);
 
   const fetchLocation = async () => {
+    // Client-side kontrolü
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     // Önce Geolocation API'yi dene
-    if (navigator.geolocation) {
+    if (typeof navigator !== 'undefined' && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const coords: LocationCoordinates = {
