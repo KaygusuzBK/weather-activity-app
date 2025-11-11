@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import CurrentWeather from './components/CurrentWeather';
 import WeatherForecast from './components/WeatherForecast';
+import CurrentWeatherSkeleton from './components/CurrentWeatherSkeleton';
+import WeatherForecastSkeleton from './components/WeatherForecastSkeleton';
 import CitiesMarquee from './components/CitiesMarquee';
 import CitySearch from './components/CitySearch';
 import FavoritesAndRecent from './components/FavoritesAndRecent';
@@ -13,7 +15,7 @@ import { addRecentCity } from './lib/storage';
 import { MapPin } from 'lucide-react';
 
 export default function Home() {
-  const { location } = useLocation();
+  const { location, loading: locationLoading, error: locationError } = useLocation();
   const [selectedCity, setSelectedCity] = useState<City | null>(null);
 
   const handleCitySelect = (city: City) => {
@@ -69,8 +71,31 @@ export default function Home() {
 
         {/* Current Weather and Forecast Side by Side - Takes remaining space */}
         <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-2 sm:gap-2.5 md:gap-3">
-          <CurrentWeather city={selectedCity} location={location} />
-          <WeatherForecast city={selectedCity} location={location} />
+          {locationLoading && !selectedCity ? (
+            <>
+              <CurrentWeatherSkeleton />
+              <WeatherForecastSkeleton />
+            </>
+          ) : locationError && !selectedCity && !location ? (
+            <div className="col-span-1 lg:col-span-2 flex items-center justify-center">
+              <div className="text-center p-6 rounded-2xl" style={{ backgroundColor: 'rgba(162, 91, 91, 0.2)' }}>
+                <p className="text-lg font-semibold mb-2" style={{ color: '#A25B5B' }}>
+                  Konum Tespit Edilemedi
+                </p>
+                <p className="text-sm mb-4" style={{ color: '#2C2C2C' }}>
+                  {locationError}
+                </p>
+                <p className="text-xs" style={{ color: '#2C2C2C', opacity: 0.7 }}>
+                  Lütfen bir şehir arayın veya konum izni verin.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              <CurrentWeather city={selectedCity} location={location} />
+              <WeatherForecast city={selectedCity} location={location} />
+            </>
+          )}
         </div>
       </div>
 
