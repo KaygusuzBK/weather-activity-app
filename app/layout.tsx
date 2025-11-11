@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ServiceWorkerRegistration from "./components/ServiceWorkerRegistration";
@@ -19,13 +19,19 @@ export const metadata: Metadata = {
   title: "Hava Durumu",
   description: "Bulunduğunuz konumun hava durumu ve 5 günlük tahmin - Aktivite önerileri ve bildirimlerle",
   manifest: "/manifest.json",
-  themeColor: "#809A6F",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "Hava Durumu",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#809A6F",
 };
 
 export default function RootLayout({

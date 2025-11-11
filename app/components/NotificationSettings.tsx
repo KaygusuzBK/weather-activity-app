@@ -17,7 +17,7 @@ export default function NotificationSettings() {
     }
   };
 
-  if (!('Notification' in window)) {
+  if (typeof window === 'undefined' || !('Notification' in window)) {
     return null;
   }
 
