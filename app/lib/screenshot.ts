@@ -135,6 +135,74 @@ function drawText(
   ctx.restore();
 }
 
+function drawRoundedRect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number
+) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+}
+
+function getStoryTheme(description: string) {
+  const desc = description.toLowerCase();
+
+  if (desc.includes('güneş') || desc.includes('clear') || desc.includes('sun')) {
+    return {
+      gradient: ['#FF9A8B', '#FF6A88', '#FF99AC'],
+      accent: '#FFEFD4',
+      chip: 'rgba(255, 239, 212, 0.2)',
+      shadow: 'rgba(255, 154, 139, 0.35)',
+    };
+  }
+
+  if (desc.includes('yağmur') || desc.includes('rain')) {
+    return {
+      gradient: ['#4158D0', '#C850C0', '#FFCC70'],
+      accent: '#F2F5FF',
+      chip: 'rgba(242, 245, 255, 0.18)',
+      shadow: 'rgba(65, 88, 208, 0.35)',
+    };
+  }
+
+  if (desc.includes('kar') || desc.includes('snow')) {
+    return {
+      gradient: ['#74EBD5', '#ACB6E5', '#F9F9F9'],
+      accent: '#F9FBFF',
+      chip: 'rgba(116, 235, 213, 0.18)',
+      shadow: 'rgba(172, 182, 229, 0.35)',
+    };
+  }
+
+  if (desc.includes('bulut') || desc.includes('cloud')) {
+    return {
+      gradient: ['#89F7FE', '#66A6FF', '#BDD4FF'],
+      accent: '#F5FBFF',
+      chip: 'rgba(137, 247, 254, 0.2)',
+      shadow: 'rgba(102, 166, 255, 0.3)',
+    };
+  }
+
+  return {
+    gradient: ['#809A6F', '#A25B5B', '#CC9C75'],
+    accent: '#F7F8EC',
+    chip: 'rgba(247, 248, 236, 0.18)',
+    shadow: 'rgba(0, 0, 0, 0.3)',
+  };
+}
+
 export async function createInstagramStoryScreenshot(
   data: BaseScreenshotData,
   options?: {
@@ -154,21 +222,36 @@ export async function createInstagramStoryScreenshot(
     throw new Error('Canvas context oluşturulamadı');
   }
 
+  const theme = getStoryTheme(data.description);
+
   // Background gradient
   const gradient = ctx.createLinearGradient(0, 0, width, height);
-  gradient.addColorStop(0, '#809A6F');
-  gradient.addColorStop(0.5, '#A25B5B');
-  gradient.addColorStop(1, '#CC9C75');
+  gradient.addColorStop(0, theme.gradient[0]);
+  gradient.addColorStop(0.5, theme.gradient[1]);
+  gradient.addColorStop(1, theme.gradient[2]);
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
 
-  // Overlay pattern
-  ctx.fillStyle = 'rgba(213, 216, 181, 0.15)';
-  for (let i = -200; i < width + 200; i += 160) {
-    ctx.beginPath();
-    ctx.ellipse(i, height / 2, 220, 620, Math.PI / 4, 0, Math.PI * 2);
-    ctx.fill();
-  }
+  // Overlay gradient shapes
+  const overlay = ctx.createLinearGradient(0, 0, width, height);
+  overlay.addColorStop(0, 'rgba(255, 255, 255, 0.12)');
+  overlay.addColorStop(1, 'rgba(255, 255, 255, 0)');
+  ctx.fillStyle = overlay;
+  ctx.beginPath();
+  ctx.moveTo(0, height * 0.2);
+  ctx.quadraticCurveTo(width * 0.5, height * 0.35, width, height * 0.22);
+  ctx.lineTo(width, 0);
+  ctx.lineTo(0, 0);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.moveTo(0, height);
+  ctx.quadraticCurveTo(width * 0.5, height * 0.78, width, height * 0.9);
+  ctx.lineTo(width, height);
+  ctx.closePath();
+  ctx.fill();
 
   // Capture element screenshot or fallback widget
   let screenshotImage: HTMLImageElement | null = null;
@@ -191,7 +274,7 @@ export async function createInstagramStoryScreenshot(
   }
 
   const maxScreenshotWidth = width - 240;
-  const maxScreenshotHeight = height * 0.55;
+  const maxScreenshotHeight = height * 0.5;
   const scale = Math.min(
     maxScreenshotWidth / screenshotImage.width,
     maxScreenshotHeight / screenshotImage.height
@@ -199,57 +282,67 @@ export async function createInstagramStoryScreenshot(
   const imgWidth = screenshotImage.width * scale;
   const imgHeight = screenshotImage.height * scale;
   const imgX = (width - imgWidth) / 2;
-  const imgY = height * 0.28;
+  const imgY = height * 0.32;
 
-  // Card shadow
+  // Card background with rounded corners
   ctx.save();
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
+  drawRoundedRect(ctx, imgX, imgY, imgWidth, imgHeight, 48);
+  ctx.shadowColor = theme.shadow;
   ctx.shadowBlur = 60;
-  ctx.shadowOffsetY = 30;
+  ctx.shadowOffsetY = 26;
   ctx.fillStyle = 'rgba(0,0,0,0.25)';
-  ctx.fillRect(imgX, imgY, imgWidth, imgHeight);
+  ctx.fill();
   ctx.restore();
 
+  ctx.save();
+  drawRoundedRect(ctx, imgX, imgY, imgWidth, imgHeight, 48);
+  ctx.clip();
   ctx.drawImage(screenshotImage, imgX, imgY, imgWidth, imgHeight);
+  ctx.restore();
 
-  // Add title text
-  drawText(ctx, 'Bugünün Hava Durumu', width / 2, 200, {
+  const heading = 'Bugünün Hava Durumu';
+  drawText(ctx, heading, width / 2, 160, {
     font: '700 72px "Inter", Arial, sans-serif',
-    color: '#F7F8EC',
-    shadow: { color: 'rgba(0, 0, 0, 0.35)', blur: 30, offsetY: 8 },
+    color: theme.accent,
+    shadow: { color: 'rgba(0, 0, 0, 0.25)', blur: 28, offsetY: 8 },
   });
 
-  drawText(ctx, `${data.city}`, width / 2, 320, {
-    font: '600 48px "Inter", Arial, sans-serif',
-    color: '#F7F8EC',
-    shadow: { color: 'rgba(0, 0, 0, 0.3)', blur: 18, offsetY: 6 },
+  const dateFormatter = new Intl.DateTimeFormat('tr-TR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  });
+  drawText(ctx, dateFormatter.format(new Date()), width / 2, 240, {
+    font: '500 40px "Inter", Arial, sans-serif',
+    color: 'rgba(255, 255, 255, 0.8)',
+  });
+
+  drawText(ctx, data.city, width / 2, 310, {
+    font: '700 54px "Inter", Arial, sans-serif',
+    color: theme.accent,
+    shadow: { color: 'rgba(0, 0, 0, 0.25)', blur: 16, offsetY: 6 },
   });
 
   drawText(ctx, `${data.temperature}°C`, width / 2, height - 320, {
-    font: '800 120px "Inter", Arial, sans-serif',
-    color: '#F7F8EC',
-    shadow: { color: 'rgba(0, 0, 0, 0.3)', blur: 20, offsetY: 10 },
+    font: '800 140px "Inter", Arial, sans-serif',
+    color: theme.accent,
+    shadow: { color: 'rgba(0, 0, 0, 0.25)', blur: 16, offsetY: 10 },
   });
 
   drawText(ctx, data.description, width / 2, height - 230, {
-    font: '600 44px "Inter", Arial, sans-serif',
-    color: 'rgba(247, 248, 236, 0.85)',
+    font: '600 48px "Inter", Arial, sans-serif',
+    color: 'rgba(255, 255, 255, 0.85)',
   });
 
   // Weather icon overlay
   try {
     const iconUrl = `https://openweathermap.org/img/wn/${data.icon}@4x.png`;
     const iconImage = await loadImage(iconUrl);
-    const iconSize = 256;
-    ctx.drawImage(iconImage, width / 2 - iconSize / 2, height - 540, iconSize, iconSize);
+    const iconSize = 260;
+    ctx.drawImage(iconImage, width / 2 - iconSize / 2, height - 560, iconSize, iconSize);
   } catch (error) {
     console.warn('Weather icon yüklenemedi:', error);
   }
-
-  drawText(ctx, 'story.weatherapp', width / 2, height - 80, {
-    font: '500 36px "Inter", Arial, sans-serif',
-    color: 'rgba(247, 248, 236, 0.75)',
-  });
 
   return canvas.toDataURL('image/png');
 }
