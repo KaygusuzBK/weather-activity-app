@@ -2,6 +2,7 @@
 
 import type { City } from '../data/popular-cities';
 import { useForecast } from '../hooks/useWeather';
+import { useUnit } from '../contexts/UnitContext';
 import WeatherForecastSkeleton from './WeatherForecastSkeleton';
 import ErrorFallback from './ErrorFallback';
 import { normalizeError } from '../lib/error-handler';
@@ -14,6 +15,15 @@ interface WeatherForecastProps {
 export default function WeatherForecast({ city, location }: WeatherForecastProps) {
   const lat = city?.lat || location?.latitude || null;
   const lon = city?.lon || location?.longitude || null;
+  
+  // Unit context - optional for SSR
+  let formatTemp = (c: number) => `${Math.round(c)}°C`;
+  try {
+    const unitContext = useUnit();
+    formatTemp = unitContext.formatTemp;
+  } catch (e) {
+    // Context not available, use defaults
+  }
   
   const { forecast, loading, error, mutate } = useForecast({
     lat,
@@ -95,7 +105,7 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
                     
                     <div className="text-center">
                       <div className="text-lg sm:text-lg md:text-xl lg:text-2xl font-black mb-0.5" style={{ color: '#2C2C2C' }}>
-                        {day.temp_max}° / {day.temp_min}°
+                        {formatTemp(day.temp_max)} / {formatTemp(day.temp_min)}
                       </div>
                       <div className="text-xs sm:text-sm capitalize truncate max-w-[120px] sm:max-w-none" style={{ color: '#2C2C2C', opacity: 0.8 }}>
                         {day.weather.description}

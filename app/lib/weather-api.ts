@@ -1,4 +1,4 @@
-import type { CurrentWeather, WeatherForecast, DailyForecast } from '../types/weather';
+import type { CurrentWeather, WeatherForecast, DailyForecast, ForecastItem } from '../types/weather';
 import { fetchWithRetry } from './retry';
 import { getCache, setCache } from './cache';
 
@@ -182,6 +182,65 @@ class WeatherAPI {
         throw error;
       }
       throw new Error('Hava durumu tahmini alınamadı');
+    }
+  }
+
+  /**
+   * 24 saatlik saatlik tahmin getirir (3 saatlik forecast'ten ilk 24 saat)
+   */
+  async getHourlyForecast(
+    lat: number,
+    lon: number,
+    useCache: boolean = true
+  ): Promise<ForecastItem[]> {
+    if (!this.apiKey) {
+      throw new Error('OpenWeatherMap API key is not configured');
+    }
+
+    const cacheKey = `hourly-${lat}-${lon}`;
+
+    // Cache'den kontrol et
+    if (useCache) {
+      const cached = getCache<ForecastItem[]>(cacheKey);
+      if (cached) {
+        return cached;
+      }
+    }
+
+    const url = `${this.baseUrl}/forecast?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=metric&lang=tr`;
+    
+    try {
+      const response = await fetchWithRetry(url, {}, {
+        maxRetries: 3,
+        initialDelay: 1000,
+        onRetry: (attempt, error) => {
+          console.log(`Retry attempt ${attempt} for getHourlyForecast:`, error.message);
+        },
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.message || `API hatası: ${response.status} ${response.statusText}`
+        );
+      }
+      
+      const data: WeatherForecast = await response.json();
+      
+      // İlk 8 item = 24 saat (3 saatlik aralıklarla)
+      const hourlyForecast = data.list.slice(0, 8);
+      
+      // Cache'e kaydet
+      if (useCache) {
+        setCache(cacheKey, hourlyForecast, CACHE_TTL);
+      }
+      
+      return hourlyForecast;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Saatlik tahmin alınamadı');
     }
   }
 

@@ -5,11 +5,14 @@ import type { City } from '../data/popular-cities';
 import { FiDroplet, FiWind, FiActivity, FiEye } from 'react-icons/fi';
 import { HiLocationMarker } from 'react-icons/hi';
 import { IoHeart, IoHeartOutline } from 'react-icons/io5';
+import { FiSun, FiSunrise, FiSunset } from 'react-icons/fi';
 import { addFavorite, removeFavorite, isFavorite } from '../lib/storage';
 import AnimatedIcon from './ui/animated-icon';
 import ActivityRecommendations from './ActivityRecommendations';
+import HourlyForecast from './HourlyForecast';
 import { useNotifications } from '../hooks/useNotifications';
 import { useCurrentWeather } from '../hooks/useWeather';
+import { useUnit } from '../contexts/UnitContext';
 import CurrentWeatherSkeleton from './CurrentWeatherSkeleton';
 import ErrorFallback from './ErrorFallback';
 import ShareButton from './ShareButton';
@@ -66,16 +69,37 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
     return null;
   }
 
+  // Unit context - optional for SSR
+  let formatTemp = (c: number) => `${Math.round(c)}°C`;
+  let convertTemp = (c: number) => Math.round(c);
+  try {
+    const unitContext = useUnit();
+    formatTemp = unitContext.formatTemp;
+    convertTemp = unitContext.convertTemp;
+  } catch (e) {
+    // Context not available, use defaults
+  }
   const weatherIcon = weather.weather[0]?.icon || '01d';
   const weatherDescription = weather.weather[0]?.description || '';
-  const temperature = Math.round(weather.main.temp);
-  const feelsLike = Math.round(weather.main.feels_like);
+  const temperature = convertTemp(weather.main.temp);
+  const feelsLike = convertTemp(weather.main.feels_like);
   const humidity = weather.main.humidity;
   const windSpeed = Math.round(weather.wind.speed * 3.6);
   const pressure = weather.main.pressure;
   const visibility = weather.visibility ? (weather.visibility / 1000).toFixed(1) : 'N/A';
   const cityName = city?.name || weather.name || location?.city || 'Konumunuz';
   const countryName = city?.country || weather.sys.country || location?.country || '';
+  
+  // Güneş doğuş/batış saatleri
+  const sunrise = new Date(weather.sys.sunrise * 1000);
+  const sunset = new Date(weather.sys.sunset * 1000);
+  const sunriseTime = sunrise.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+  const sunsetTime = sunset.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+  
+  // Basit UV index hesaplama (güneş yüksekliğine göre)
+  const now = new Date();
+  const hour = now.getHours();
+  const uvIndex = hour >= 10 && hour <= 16 ? Math.min(11, Math.round(5 + (weather.main.temp / 10))) : Math.max(0, Math.round(3 - Math.abs(hour - 13) / 2));
 
   return (
     <div ref={containerRef} className="hidden lg:block rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #809A6F, #A25B5B)' }}>
@@ -151,6 +175,11 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
           </div>
         </div>
 
+        {/* Hourly Forecast */}
+        <div className="mb-4 sm:mb-4 shrink-0">
+          <HourlyForecast city={city} location={location} />
+        </div>
+
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-3 sm:gap-3 md:gap-3 justify-items-center shrink-0 mb-4 sm:mb-4">
           <div className="rounded-xl sm:rounded-2xl p-4 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
@@ -176,22 +205,23 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
           <div className="rounded-xl sm:rounded-2xl p-4 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center justify-center gap-2 sm:gap-2 mb-2">
               <AnimatedIcon hover>
-                <FiActivity className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#A25B5B' }} />
+                <FiSun className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#CC9C75' }} />
               </AnimatedIcon>
-              <span className="text-sm sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Basınç</span>
+              <span className="text-sm sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>UV Index</span>
             </div>
-            <div className="text-2xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{pressure} hPa</div>
+            <div className="text-2xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{uvIndex}</div>
           </div>
 
           <div className="rounded-xl sm:rounded-2xl p-4 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center justify-center gap-2 sm:gap-2 mb-2">
-              <AnimatedIcon hover bounce>
-                <FiEye className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#CC9C75' }} />
+              <AnimatedIcon hover>
+                <FiSunrise className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#CC9C75' }} />
               </AnimatedIcon>
-              <span className="text-sm sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Görüş</span>
+              <span className="text-sm sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Güneş</span>
             </div>
-            <div className="text-2xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>
-              {visibility} {visibility !== 'N/A' ? 'km' : ''}
+            <div className="text-xs sm:text-sm font-black text-center" style={{ color: '#D5D8B5' }}>
+              <div>{sunriseTime}</div>
+              <div className="opacity-0.7">{sunsetTime}</div>
             </div>
           </div>
         </div>

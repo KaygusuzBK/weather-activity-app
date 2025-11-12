@@ -10,6 +10,8 @@ import CitiesMarquee from './components/CitiesMarquee';
 import CitySearch from './components/CitySearch';
 import FavoritesAndRecent from './components/FavoritesAndRecent';
 import NotificationSettings from './components/NotificationSettings';
+import ThemeToggle from './components/ThemeToggle';
+import UnitToggle from './components/UnitToggle';
 import { useLocation } from './hooks/useLocation';
 import type { City } from './data/popular-cities';
 import { popularCities } from './data/popular-cities';
@@ -42,7 +44,7 @@ export default function Home() {
   }, [location, usingDefaultCity]);
 
   return (
-    <div className="h-screen overflow-hidden flex flex-col" style={{ backgroundColor: '#D5D8B5' }}>
+    <div className="h-screen overflow-hidden flex flex-col dark:bg-[#1a1a1a]" style={{ backgroundColor: '#D5D8B5' }}>
       {/* Top Marquee Bar */}
       <div className="flex-shrink-0">
         <CitiesMarquee />
@@ -56,6 +58,12 @@ export default function Home() {
             {/* Search Bar */}
             <div className="flex-1 min-w-0">
               <CitySearch onCitySelect={handleCitySelect} />
+            </div>
+            
+            {/* Toggle Buttons */}
+            <div className="flex items-center gap-2 shrink-0">
+              <UnitToggle />
+              <ThemeToggle />
             </div>
             
             {/* Location Button */}

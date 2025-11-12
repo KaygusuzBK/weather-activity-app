@@ -4,6 +4,8 @@ import "./globals.css";
 import ServiceWorkerRegistration from "./components/ServiceWorkerRegistration";
 import SWRProvider from "./providers/SWRProvider";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import { UnitProvider } from "./contexts/UnitContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,7 +55,11 @@ export default function RootLayout({
         <ServiceWorkerRegistration />
         <ErrorBoundary>
           <SWRProvider>
-            {children}
+            <ThemeProvider>
+              <UnitProvider>
+                {children}
+              </UnitProvider>
+            </ThemeProvider>
           </SWRProvider>
         </ErrorBoundary>
       </body>
