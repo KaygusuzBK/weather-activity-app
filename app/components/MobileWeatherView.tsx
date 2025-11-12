@@ -85,24 +85,26 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
   const forecastArray = Array.isArray(forecast) ? forecast : [];
   const allDays = [today, ...forecastArray].slice(0, 6);
 
+  const weatherIcon = weather.weather[0]?.icon || '01d';
+  const weatherDescription = weather.weather[0]?.description || '';
+  const temperature = Math.round(weather.main.temp);
+  const feelsLike = Math.round(weather.main.feels_like);
+
   return (
     <div ref={containerRef} className="lg:hidden">
-      {/* Location Header */}
-      <div className="mb-4 flex items-center justify-between">
+      {/* Location Header - Compact */}
+      <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <AnimatedIcon hover pulse>
-            <HiLocationMarker className="w-5 h-5 shrink-0" style={{ color: '#809A6F' }} />
+            <HiLocationMarker className="w-4 h-4 shrink-0" style={{ color: '#809A6F' }} />
           </AnimatedIcon>
           <div>
-            <h2 className="text-lg font-black" style={{ color: '#2C2C2C' }}>
+            <h2 className="text-base font-black" style={{ color: '#2C2C2C' }}>
               {cityName}
             </h2>
-            {countryName && (
-              <p className="text-xs" style={{ color: '#2C2C2C', opacity: 0.7 }}>{countryName}</p>
-            )}
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <WeatherAmbience weather={weather} />
           <ShareButton weather={weather} city={city} location={location} elementRef={containerRef} />
           {city && (
@@ -115,14 +117,14 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
                 }
                 window.dispatchEvent(new Event('favoritesUpdated'));
               }}
-              className="p-2 rounded-full hover:bg-opacity-20 transition-all shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="p-1.5 rounded-full hover:bg-opacity-20 transition-all shrink-0 min-w-[36px] min-h-[36px] flex items-center justify-center"
               style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)' }}
             >
               <AnimatedIcon hover scale={isFavorite(city)}>
                 {isFavorite(city) ? (
-                  <IoHeart className="w-5 h-5" style={{ color: '#809A6F' }} />
+                  <IoHeart className="w-4 h-4" style={{ color: '#809A6F' }} />
                 ) : (
-                  <IoHeartOutline className="w-5 h-5" style={{ color: '#809A6F' }} />
+                  <IoHeartOutline className="w-4 h-4" style={{ color: '#809A6F' }} />
                 )}
               </AnimatedIcon>
             </button>
@@ -130,9 +132,9 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
         </div>
       </div>
 
-      {/* 6 Days Horizontal Scroll */}
-      <div className="mb-6 overflow-x-auto pb-2 scrollbar-hide">
-        <div className="flex gap-3 min-w-max">
+      {/* 6 Days Horizontal Scroll - Bigger and More Distinct */}
+      <div className="mb-4 overflow-x-auto pb-3 scrollbar-hide -mx-3 px-3">
+        <div className="flex gap-2.5 min-w-max">
           {allDays.map((day, index) => {
             const date = new Date(day.date);
             const isToday = index === 0;
@@ -141,25 +143,39 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
             return (
               <div
                 key={day.date}
-                className="flex flex-col items-center gap-2 p-3 rounded-2xl min-w-[90px] shrink-0"
+                className={`flex flex-col items-center gap-2.5 p-4 rounded-3xl shrink-0 ${
+                  isToday ? 'min-w-[110px]' : 'min-w-[100px]'
+                }`}
                 style={{
-                  backgroundColor: isToday ? 'rgba(128, 154, 111, 0.2)' : 'rgba(128, 154, 111, 0.1)',
-                  border: isToday ? '2px solid #809A6F' : '1px solid rgba(128, 154, 111, 0.3)',
+                  background: isToday 
+                    ? 'linear-gradient(135deg, #809A6F 0%, #A25B5B 100%)'
+                    : 'linear-gradient(135deg, rgba(128, 154, 111, 0.15) 0%, rgba(162, 91, 91, 0.15) 100%)',
+                  border: isToday ? 'none' : '2px solid rgba(128, 154, 111, 0.3)',
+                  boxShadow: isToday ? '0 4px 12px rgba(128, 154, 111, 0.3)' : 'none',
                 }}
               >
-                <div className="text-xs font-bold" style={{ color: '#2C2C2C', opacity: 0.8 }}>
+                <div 
+                  className={`font-bold ${isToday ? 'text-sm' : 'text-xs'}`}
+                  style={{ color: isToday ? '#D5D8B5' : '#2C2C2C', opacity: isToday ? 1 : 0.8 }}
+                >
                   {dayName}
                 </div>
                 <img
-                  src={`https://openweathermap.org/img/wn/${day.weather.icon}@2x.png`}
+                  src={`https://openweathermap.org/img/wn/${day.weather.icon}@${isToday ? '4x' : '2x'}.png`}
                   alt={day.weather.description}
-                  className="w-12 h-12"
+                  className={isToday ? 'w-16 h-16' : 'w-14 h-14'}
                 />
                 <div className="text-center">
-                  <div className="text-lg font-black" style={{ color: '#2C2C2C' }}>
+                  <div 
+                    className={`font-black ${isToday ? 'text-2xl' : 'text-xl'}`}
+                    style={{ color: isToday ? '#D5D8B5' : '#2C2C2C' }}
+                  >
                     {day.temp_max}°
                   </div>
-                  <div className="text-sm" style={{ color: '#2C2C2C', opacity: 0.7 }}>
+                  <div 
+                    className={isToday ? 'text-sm' : 'text-xs'}
+                    style={{ color: isToday ? '#D5D8B5' : '#2C2C2C', opacity: isToday ? 0.9 : 0.7 }}
+                  >
                     {day.temp_min}°
                   </div>
                 </div>
