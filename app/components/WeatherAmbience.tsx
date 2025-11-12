@@ -6,8 +6,12 @@ import { FiMusic, FiVolumeX } from 'react-icons/fi';
 const STORAGE_KEY = 'weather-ambience-enabled';
 
 const SOUND_LIBRARY: Record<string, { url: string; volume?: number }> = {
+  calm: {
+    url: 'https://cdn.pixabay.com/download/audio/2022/11/15/audio_858608503a.mp3?filename=calm-nature-ambient-125576.mp3',
+    volume: 0.28,
+  },
   rain: {
-    url: 'https://cdn.pixabay.com/download/audio/2022/07/29/audio_10e25f84f4.mp3?filename=relaxing-rain-ambience-113747.mp3',
+    url: 'https://cdn.pixabay.com/download/audio/2024/11/30/audio_792fd26bd8.mp3?filename=rain-270465.mp3',
     volume: 0.45,
   },
   storm: {
@@ -18,20 +22,25 @@ const SOUND_LIBRARY: Record<string, { url: string; volume?: number }> = {
     url: 'https://cdn.pixabay.com/download/audio/2021/09/18/audio_c6c5681a57.mp3?filename=snow-step-chime-6553.mp3',
     volume: 0.35,
   },
+  sunny: {
+    url: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_4a67cf890f.mp3?filename=morning-birds-ambient-20420.mp3',
+    volume: 0.32,
+  },
   wind: {
     url: 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_b67fbecae2.mp3?filename=wind-ambience-6538.mp3',
     volume: 0.3,
   },
 };
 
-function getCondition(weather: CurrentWeather | null): keyof typeof SOUND_LIBRARY | null {
-  if (!weather) return null;
+function getCondition(weather: CurrentWeather | null): keyof typeof SOUND_LIBRARY {
+  if (!weather) return 'calm';
   const main = weather.weather[0]?.main?.toLowerCase() ?? '';
   if (main.includes('storm') || main.includes('thunder')) return 'storm';
   if (main.includes('rain') || main.includes('drizzle')) return 'rain';
   if (main.includes('snow')) return 'snow';
-  if (main.includes('mist') || main.includes('fog') || main.includes('cloud')) return 'wind';
-  return null;
+  if (main.includes('mist') || main.includes('fog') || main.includes('cloud') || main.includes('haze') || main.includes('smoke')) return 'wind';
+  if (main.includes('clear') || main.includes('sun')) return 'sunny';
+  return 'calm';
 }
 
 interface WeatherAmbienceProps {
@@ -39,21 +48,19 @@ interface WeatherAmbienceProps {
 }
 
 export default function WeatherAmbience({ weather }: WeatherAmbienceProps) {
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      return localStorage.getItem(STORAGE_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  });
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const currentCondition = useRef<string | null>(null);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === 'true') {
-      setEnabled(true);
-    }
-  }, []);
-
   const sound = useMemo(() => {
     const condition = getCondition(weather);
-    if (!condition) return null;
     return { condition, ...SOUND_LIBRARY[condition] };
   }, [weather]);
 
@@ -61,15 +68,6 @@ export default function WeatherAmbience({ weather }: WeatherAmbienceProps) {
     if (typeof window === 'undefined') return;
 
     if (!enabled) {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-      currentCondition.current = null;
-      return;
-    }
-
-    if (!sound) {
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
@@ -116,11 +114,11 @@ export default function WeatherAmbience({ weather }: WeatherAmbienceProps) {
       }
 
       if (next) {
-        if (sound && audioRef.current) {
+        if (audioRef.current) {
           audioRef.current.play().catch((error) => {
             console.warn('Ambience playback prevented:', error);
           });
-        } else if (sound && !audioRef.current) {
+        } else if (!audioRef.current) {
           const audio = new Audio(sound.url);
           audio.loop = true;
           audio.volume = sound.volume ?? 0.35;
@@ -141,12 +139,6 @@ export default function WeatherAmbience({ weather }: WeatherAmbienceProps) {
       return next;
     });
   };
-
-  const hasSound = Boolean(sound);
-
-  if (!hasSound) {
-    return null;
-  }
 
   return (
     <button
