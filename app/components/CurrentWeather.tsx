@@ -78,16 +78,16 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
   const countryName = city?.country || weather.sys.country || location?.country || '';
 
   return (
-    <div ref={containerRef} className="h-full rounded-2xl sm:rounded-3xl p-4 sm:p-4 md:p-5 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #809A6F, #A25B5B)' }}>
+    <div ref={containerRef} className="min-h-[600px] sm:h-full rounded-2xl sm:rounded-3xl p-5 sm:p-5 md:p-6 relative overflow-hidden mb-4 sm:mb-0" style={{ background: 'linear-gradient(to bottom right, #809A6F, #A25B5B)' }}>
       {/* Animated background pattern */}
       <div className="absolute inset-0 opacity-15">
         <div className="absolute top-0 left-0 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#CC9C75' }}></div>
         <div className="absolute bottom-0 right-0 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#D5D8B5' }}></div>
       </div>
 
-      <div className="relative z-10 h-full flex flex-col overflow-y-auto">
+      <div className="relative z-10 h-full flex flex-col">
         {/* Location */}
-        <div className="mb-3 sm:mb-4 flex items-center justify-center gap-2 relative flex-shrink-0">
+        <div className="mb-4 sm:mb-4 flex items-center justify-center gap-2 relative shrink-0">
           <div className="flex items-center gap-2 sm:gap-2">
             <AnimatedIcon hover pulse>
               <HiLocationMarker className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#D5D8B5' }} />
@@ -130,8 +130,8 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
         </div>
 
         {/* Main Temperature */}
-        <div className="flex-shrink-0 flex flex-col justify-center items-center mb-4 sm:mb-4">
-          <div className="flex items-center justify-center gap-3 sm:gap-3 md:gap-4 mb-2 sm:mb-3">
+        <div className="shrink-0 flex flex-col justify-center items-center mb-5 sm:mb-5">
+          <div className="flex items-center justify-center gap-3 sm:gap-3 md:gap-4 mb-3 sm:mb-3">
             <img
               src={`https://openweathermap.org/img/wn/${weatherIcon}@4x.png`}
               alt={weatherDescription}
@@ -152,9 +152,9 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-2.5 md:gap-3 justify-items-center flex-shrink-0 mb-3 sm:mb-4">
-          <div className="rounded-xl sm:rounded-2xl p-3 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center justify-center gap-2 sm:gap-2 mb-1.5">
+        <div className="grid grid-cols-2 gap-3 sm:gap-3 md:gap-3 justify-items-center shrink-0 mb-4 sm:mb-4">
+          <div className="rounded-xl sm:rounded-2xl p-4 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center justify-center gap-2 sm:gap-2 mb-2">
               <AnimatedIcon hover pulse>
                 <FiDroplet className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#809A6F' }} />
               </AnimatedIcon>
@@ -163,8 +163,8 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
             <div className="text-2xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{humidity}%</div>
           </div>
 
-          <div className="rounded-xl sm:rounded-2xl p-3 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center justify-center gap-2 sm:gap-2 mb-1.5">
+          <div className="rounded-xl sm:rounded-2xl p-4 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center justify-center gap-2 sm:gap-2 mb-2">
               <AnimatedIcon hover rotate>
                 <FiWind className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#809A6F' }} />
               </AnimatedIcon>
@@ -173,8 +173,8 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
             <div className="text-2xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{windSpeed} km/h</div>
           </div>
 
-          <div className="rounded-xl sm:rounded-2xl p-3 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center justify-center gap-2 sm:gap-2 mb-1.5">
+          <div className="rounded-xl sm:rounded-2xl p-4 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center justify-center gap-2 sm:gap-2 mb-2">
               <AnimatedIcon hover>
                 <FiActivity className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#A25B5B' }} />
               </AnimatedIcon>
@@ -183,8 +183,8 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
             <div className="text-2xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{pressure} hPa</div>
           </div>
 
-          <div className="rounded-xl sm:rounded-2xl p-3 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center justify-center gap-2 sm:gap-2 mb-1.5">
+          <div className="rounded-xl sm:rounded-2xl p-4 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center justify-center gap-2 sm:gap-2 mb-2">
               <AnimatedIcon hover bounce>
                 <FiEye className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#CC9C75' }} />
               </AnimatedIcon>
