@@ -50,8 +50,8 @@ export default function HourlyForecast({ city, location }: HourlyForecastProps) 
   }
 
   return (
-    <div className="mb-4">
-      <h3 className="text-sm font-bold mb-3" style={{ color: '#2C2C2C' }}>
+    <div>
+      <h3 className="text-sm font-bold mb-2" style={{ color: '#2C2C2C' }}>
         24 Saatlik Tahmin
       </h3>
       <div className="overflow-x-auto pb-2 scrollbar-hide -mx-3 px-3">

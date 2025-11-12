@@ -31,9 +31,9 @@ export default function ActivityRecommendations({ weather }: ActivityRecommendat
   if (recommendations.length === 0) return null;
 
   return (
-    <div className="mt-3 sm:mt-3 flex-shrink-0 flex flex-col min-h-0">
+    <div className="flex-shrink-0 flex flex-col min-h-0">
       {/* Başlık */}
-      <div className="flex items-center gap-2 mb-2 sm:mb-2">
+      <div className="flex items-center gap-2 mb-2">
         <AnimatedIcon hover pulse>
           <HiLightBulb className="w-4 h-4 sm:w-4 sm:h-4" style={{ color: '#809A6F' }} />
         </AnimatedIcon>
@@ -43,7 +43,7 @@ export default function ActivityRecommendations({ weather }: ActivityRecommendat
       </div>
 
       {/* Scroll edilebilir öneriler listesi */}
-      <div className="space-y-2 overflow-y-auto max-h-[180px] sm:max-h-[250px] pr-1">
+      <div className="space-y-2 pr-1">
         {recommendations.map((rec, index) => (
           <div
             key={index}

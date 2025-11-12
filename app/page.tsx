@@ -99,7 +99,7 @@ export default function Home() {
         </div>
 
         {/* Mobile View - Only visible on mobile */}
-        <div className="lg:hidden flex-1 min-h-0 pb-4">
+        <div className="lg:hidden flex-1 min-h-0 pb-2">
           {locationLoading && !selectedCity ? (
             <CurrentWeatherSkeleton />
           ) : locationError && !selectedCity && !location ? (

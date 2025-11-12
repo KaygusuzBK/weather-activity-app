@@ -118,7 +118,7 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
   return (
     <div ref={containerRef} className="lg:hidden w-full">
       {/* Location Header - Compact */}
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <AnimatedIcon hover pulse>
             <HiLocationMarker className="w-4 h-4 shrink-0" style={{ color: '#809A6F' }} />
@@ -158,12 +158,12 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
       </div>
 
       {/* Hourly Forecast */}
-      <div className="mb-4">
+      <div className="mb-3">
         <HourlyForecast city={city} location={location} />
       </div>
 
       {/* 6 Days Horizontal Scroll - NO CARDS, just simple items */}
-      <div className="mb-4 overflow-x-auto pb-3 scrollbar-hide -mx-3 px-3">
+      <div className="mb-3 overflow-x-auto pb-2 scrollbar-hide -mx-3 px-3">
         <div className="flex gap-3 min-w-max">
           {allDays.map((day, index) => {
             const date = new Date(day.date);
@@ -213,7 +213,7 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
       </div>
 
       {/* UV Index and Sun Info */}
-      <div className="mb-4 flex gap-2">
+      <div className="mb-3 flex gap-2">
         <div className="flex-1 rounded-xl p-3" style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)' }}>
           <div className="flex items-center gap-2 mb-1">
             <AnimatedIcon hover>
@@ -238,7 +238,9 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
       </div>
 
       {/* Activity Recommendations */}
-      <ActivityRecommendations weather={weather} />
+      <div className="mb-0">
+        <ActivityRecommendations weather={weather} />
+      </div>
     </div>
   );
 }
