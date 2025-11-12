@@ -14,6 +14,7 @@ import CurrentWeatherSkeleton from './CurrentWeatherSkeleton';
 import ErrorFallback from './ErrorFallback';
 import ShareButton from './ShareButton';
 import { normalizeError } from '../lib/error-handler';
+import WeatherAmbience from './WeatherAmbience';
 
 interface CurrentWeatherProps {
   city: City | null;
@@ -101,6 +102,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
             </div>
           </div>
           <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2 pr-0.5">
+            <WeatherAmbience weather={weather} />
             <ShareButton weather={weather} city={city} location={location} elementRef={containerRef} />
             {city && (
               <button

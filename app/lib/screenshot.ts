@@ -165,6 +165,7 @@ function getStoryTheme(description: string) {
       accent: '#FFEFD4',
       chip: 'rgba(255, 239, 212, 0.2)',
       shadow: 'rgba(255, 154, 139, 0.35)',
+      category: 'sunny' as const,
     };
   }
 
@@ -174,6 +175,7 @@ function getStoryTheme(description: string) {
       accent: '#F2F5FF',
       chip: 'rgba(242, 245, 255, 0.18)',
       shadow: 'rgba(65, 88, 208, 0.35)',
+      category: 'rain' as const,
     };
   }
 
@@ -183,6 +185,7 @@ function getStoryTheme(description: string) {
       accent: '#F9FBFF',
       chip: 'rgba(116, 235, 213, 0.18)',
       shadow: 'rgba(172, 182, 229, 0.35)',
+      category: 'snow' as const,
     };
   }
 
@@ -192,6 +195,7 @@ function getStoryTheme(description: string) {
       accent: '#F5FBFF',
       chip: 'rgba(137, 247, 254, 0.2)',
       shadow: 'rgba(102, 166, 255, 0.3)',
+      category: 'cloudy' as const,
     };
   }
 
@@ -200,7 +204,114 @@ function getStoryTheme(description: string) {
     accent: '#F7F8EC',
     chip: 'rgba(247, 248, 236, 0.18)',
     shadow: 'rgba(0, 0, 0, 0.3)',
+    category: 'default' as const,
   };
+}
+
+function createRandom(seed: number) {
+  return () => {
+    const x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+  };
+}
+
+function drawWeatherDecor(ctx: CanvasRenderingContext2D, category: string, width: number, height: number) {
+  const random = createRandom(Math.round(width + height));
+  switch (category) {
+    case 'rain': {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      for (let i = 0; i < 140; i++) {
+        const x = random() * width;
+        const y = random() * height;
+        const length = 80 + random() * 60;
+        ctx.globalAlpha = 0.4 + random() * 0.3;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x - 18, y + length);
+        ctx.stroke();
+      }
+      ctx.restore();
+      break;
+    }
+    case 'snow': {
+      ctx.save();
+      for (let i = 0; i < 120; i++) {
+        const x = random() * width;
+        const y = random() * height;
+        const radius = 6 + random() * 6;
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.5 + random() * 0.4})`;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+      break;
+    }
+    case 'sunny': {
+      ctx.save();
+      const sunX = width * 0.15;
+      const sunY = height * 0.18;
+      const sunRadius = 140;
+      const gradient = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunRadius * 1.6);
+      gradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(sunX, sunY, sunRadius * 1.6, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.65)';
+      ctx.lineWidth = 6;
+      for (let i = 0; i < 12; i++) {
+        const angle = (Math.PI * 2 * i) / 12;
+        const start = sunRadius * 1.1;
+        const end = sunRadius * 1.7;
+        ctx.beginPath();
+        ctx.moveTo(sunX + Math.cos(angle) * start, sunY + Math.sin(angle) * start);
+        ctx.lineTo(sunX + Math.cos(angle) * end, sunY + Math.sin(angle) * end);
+        ctx.stroke();
+      }
+      ctx.restore();
+      break;
+    }
+    case 'cloudy': {
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+      const cloudCount = 6;
+      for (let i = 0; i < cloudCount; i++) {
+        const baseX = random() * width;
+        const baseY = height * (0.15 + random() * 0.2);
+        const size = 180 + random() * 120;
+        for (let j = 0; j < 4; j++) {
+          const offsetX = (random() - 0.5) * size * 0.6;
+          const offsetY = (random() - 0.5) * size * 0.3;
+          ctx.beginPath();
+          ctx.ellipse(baseX + offsetX, baseY + offsetY, size * 0.5, size * 0.35, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.restore();
+      break;
+    }
+    default: {
+      ctx.save();
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+      for (let i = 0; i < 90; i++) {
+        const x = random() * width;
+        const y = random() * height;
+        const widthRect = 60 + random() * 120;
+        const heightRect = 60 + random() * 120;
+        ctx.globalAlpha = 0.08 + random() * 0.08;
+        ctx.beginPath();
+        drawRoundedRect(ctx, x, y, widthRect, heightRect, 24);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
 }
 
 export async function createInstagramStoryScreenshot(
@@ -239,7 +350,7 @@ export async function createInstagramStoryScreenshot(
   ctx.fillStyle = overlay;
   ctx.beginPath();
   ctx.moveTo(0, height * 0.2);
-  ctx.quadraticCurveTo(width * 0.5, height * 0.35, width, height * 0.22);
+  ctx.quadraticCurveTo(width * 0.5, height * 0.35, width, height * 0.18);
   ctx.lineTo(width, 0);
   ctx.lineTo(0, 0);
   ctx.closePath();
@@ -248,10 +359,12 @@ export async function createInstagramStoryScreenshot(
   ctx.beginPath();
   ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
   ctx.moveTo(0, height);
-  ctx.quadraticCurveTo(width * 0.5, height * 0.78, width, height * 0.9);
+  ctx.quadraticCurveTo(width * 0.5, height * 0.82, width, height * 0.92);
   ctx.lineTo(width, height);
   ctx.closePath();
   ctx.fill();
+
+  drawWeatherDecor(ctx, theme.category, width, height);
 
   // Capture element screenshot or fallback widget
   let screenshotImage: HTMLImageElement | null = null;
@@ -324,13 +437,13 @@ export async function createInstagramStoryScreenshot(
   });
 
   drawText(ctx, `${data.temperature}°C`, width / 2, height - 320, {
-    font: '800 140px "Inter", Arial, sans-serif',
+    font: '800 136px "Inter", Arial, sans-serif',
     color: theme.accent,
-    shadow: { color: 'rgba(0, 0, 0, 0.25)', blur: 16, offsetY: 10 },
+    shadow: { color: 'rgba(0, 0, 0, 0.22)', blur: 14, offsetY: 10 },
   });
 
   drawText(ctx, data.description, width / 2, height - 230, {
-    font: '600 48px "Inter", Arial, sans-serif',
+    font: '600 44px "Inter", Arial, sans-serif',
     color: 'rgba(255, 255, 255, 0.85)',
   });
 
@@ -338,8 +451,8 @@ export async function createInstagramStoryScreenshot(
   try {
     const iconUrl = `https://openweathermap.org/img/wn/${data.icon}@4x.png`;
     const iconImage = await loadImage(iconUrl);
-    const iconSize = 260;
-    ctx.drawImage(iconImage, width / 2 - iconSize / 2, height - 560, iconSize, iconSize);
+    const iconSize = 240;
+    ctx.drawImage(iconImage, width / 2 - iconSize / 2, height - 540, iconSize, iconSize);
   } catch (error) {
     console.warn('Weather icon yüklenemedi:', error);
   }
