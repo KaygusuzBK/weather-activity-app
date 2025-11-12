@@ -78,7 +78,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
   const countryName = city?.country || weather.sys.country || location?.country || '';
 
   return (
-    <div ref={containerRef} className="min-h-[600px] sm:h-full rounded-2xl sm:rounded-3xl p-5 sm:p-5 md:p-6 relative overflow-hidden mb-4 sm:mb-0" style={{ background: 'linear-gradient(to bottom right, #809A6F, #A25B5B)' }}>
+    <div ref={containerRef} className="rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #809A6F, #A25B5B)' }}>
       {/* Animated background pattern */}
       <div className="absolute inset-0 opacity-15">
         <div className="absolute top-0 left-0 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#CC9C75' }}></div>
