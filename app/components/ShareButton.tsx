@@ -185,9 +185,8 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
           temperature,
           description: description,
           icon: icon,
-        },
-        {
-          element: elementRef?.current ?? undefined,
+          feelsLike: weather.main.feels_like,
+          humidity: weather.main.humidity,
         }
       );
 

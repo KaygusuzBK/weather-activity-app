@@ -9,6 +9,8 @@ interface BaseScreenshotData {
   temperature: number;
   description: string;
   icon: string;
+  feelsLike?: number;
+  humidity?: number;
 }
 
 function ensureClientEnvironment() {
@@ -316,9 +318,7 @@ function drawWeatherDecor(ctx: CanvasRenderingContext2D, category: string, width
 
 export async function createInstagramStoryScreenshot(
   data: BaseScreenshotData,
-  options?: {
-    element?: HTMLElement | null;
-  }
+  _options?: { element?: HTMLElement | null }
 ): Promise<string> {
   ensureClientEnvironment();
 
@@ -335,7 +335,6 @@ export async function createInstagramStoryScreenshot(
 
   const theme = getStoryTheme(data.description);
 
-  // Background gradient
   const gradient = ctx.createLinearGradient(0, 0, width, height);
   gradient.addColorStop(0, theme.gradient[0]);
   gradient.addColorStop(0.5, theme.gradient[1]);
@@ -343,81 +342,13 @@ export async function createInstagramStoryScreenshot(
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
 
-  // Overlay gradient shapes
-  const overlay = ctx.createLinearGradient(0, 0, width, height);
-  overlay.addColorStop(0, 'rgba(255, 255, 255, 0.12)');
-  overlay.addColorStop(1, 'rgba(255, 255, 255, 0)');
-  ctx.fillStyle = overlay;
-  ctx.beginPath();
-  ctx.moveTo(0, height * 0.2);
-  ctx.quadraticCurveTo(width * 0.5, height * 0.35, width, height * 0.18);
-  ctx.lineTo(width, 0);
-  ctx.lineTo(0, 0);
-  ctx.closePath();
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-  ctx.moveTo(0, height);
-  ctx.quadraticCurveTo(width * 0.5, height * 0.82, width, height * 0.92);
-  ctx.lineTo(width, height);
-  ctx.closePath();
-  ctx.fill();
-
   drawWeatherDecor(ctx, theme.category, width, height);
 
-  // Capture element screenshot or fallback widget
-  let screenshotImage: HTMLImageElement | null = null;
-  if (options?.element) {
-    try {
-      const screenshot = await captureElementScreenshot(options.element, {
-        backgroundColor: '#D5D8B5',
-        scale: 2,
-        quality: 1,
-      });
-      screenshotImage = await loadImage(screenshot);
-    } catch (error) {
-      console.error('Instagram story screenshot capture failed, using fallback.', error);
-    }
-  }
-
-  if (!screenshotImage) {
-    const fallback = createWidgetScreenshot(data, { width: 960, height: 720 });
-    screenshotImage = await loadImage(fallback);
-  }
-
-  const maxScreenshotWidth = width - 240;
-  const maxScreenshotHeight = height * 0.5;
-  const scale = Math.min(
-    maxScreenshotWidth / screenshotImage.width,
-    maxScreenshotHeight / screenshotImage.height
-  );
-  const imgWidth = screenshotImage.width * scale;
-  const imgHeight = screenshotImage.height * scale;
-  const imgX = (width - imgWidth) / 2;
-  const imgY = height * 0.32;
-
-  // Card background with rounded corners
-  ctx.save();
-  drawRoundedRect(ctx, imgX, imgY, imgWidth, imgHeight, 48);
-  ctx.shadowColor = theme.shadow;
-  ctx.shadowBlur = 60;
-  ctx.shadowOffsetY = 26;
-  ctx.fillStyle = 'rgba(0,0,0,0.25)';
-  ctx.fill();
-  ctx.restore();
-
-  ctx.save();
-  drawRoundedRect(ctx, imgX, imgY, imgWidth, imgHeight, 48);
-  ctx.clip();
-  ctx.drawImage(screenshotImage, imgX, imgY, imgWidth, imgHeight);
-  ctx.restore();
-
-  const heading = 'Bugünün Hava Durumu';
-  drawText(ctx, heading, width / 2, 160, {
-    font: '700 72px "Inter", Arial, sans-serif',
+  const topPadding = 180;
+  drawText(ctx, data.city, width / 2, topPadding, {
+    font: '800 88px "Inter", Arial, sans-serif',
     color: theme.accent,
-    shadow: { color: 'rgba(0, 0, 0, 0.25)', blur: 28, offsetY: 8 },
+    shadow: { color: 'rgba(0,0,0,0.18)', blur: 16, offsetY: 8 },
   });
 
   const dateFormatter = new Intl.DateTimeFormat('tr-TR', {
@@ -425,37 +356,96 @@ export async function createInstagramStoryScreenshot(
     day: 'numeric',
     month: 'long',
   });
-  drawText(ctx, dateFormatter.format(new Date()), width / 2, 240, {
-    font: '500 40px "Inter", Arial, sans-serif',
-    color: 'rgba(255, 255, 255, 0.8)',
-  });
-
-  drawText(ctx, data.city, width / 2, 310, {
-    font: '700 54px "Inter", Arial, sans-serif',
-    color: theme.accent,
-    shadow: { color: 'rgba(0, 0, 0, 0.25)', blur: 16, offsetY: 6 },
-  });
-
-  drawText(ctx, `${data.temperature}°C`, width / 2, height - 320, {
-    font: '800 136px "Inter", Arial, sans-serif',
-    color: theme.accent,
-    shadow: { color: 'rgba(0, 0, 0, 0.22)', blur: 14, offsetY: 10 },
-  });
-
-  drawText(ctx, data.description, width / 2, height - 230, {
-    font: '600 44px "Inter", Arial, sans-serif',
+  drawText(ctx, dateFormatter.format(new Date()), width / 2, topPadding + 90, {
+    font: '500 46px "Inter", Arial, sans-serif',
     color: 'rgba(255, 255, 255, 0.85)',
   });
 
-  // Weather icon overlay
+  const iconCircleX = width / 2;
+  const iconCircleY = height * 0.42;
+  const iconCircleRadius = 190;
+
+  ctx.save();
+  const iconGradient = ctx.createRadialGradient(
+    iconCircleX,
+    iconCircleY,
+    iconCircleRadius * 0.3,
+    iconCircleX,
+    iconCircleY,
+    iconCircleRadius
+  );
+  iconGradient.addColorStop(0, 'rgba(255,255,255,0.92)');
+  iconGradient.addColorStop(1, 'rgba(255,255,255,0.2)');
+  ctx.fillStyle = iconGradient;
+  ctx.beginPath();
+  ctx.arc(iconCircleX, iconCircleY, iconCircleRadius, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
   try {
     const iconUrl = `https://openweathermap.org/img/wn/${data.icon}@4x.png`;
     const iconImage = await loadImage(iconUrl);
-    const iconSize = 240;
-    ctx.drawImage(iconImage, width / 2 - iconSize / 2, height - 540, iconSize, iconSize);
+    const iconSize = 220;
+    ctx.drawImage(iconImage, iconCircleX - iconSize / 2, iconCircleY - iconSize / 2, iconSize, iconSize);
   } catch (error) {
     console.warn('Weather icon yüklenemedi:', error);
   }
+
+  drawText(ctx, `${Math.round(data.temperature)}°`, width / 2, height * 0.69, {
+    font: '900 220px "Inter", Arial, sans-serif',
+    color: theme.accent,
+    shadow: { color: 'rgba(0,0,0,0.2)', blur: 24, offsetY: 14 },
+  });
+
+  drawText(ctx, data.description, width / 2, height * 0.78, {
+    font: '400 64px "Inter", Arial, sans-serif',
+    color: 'rgba(255, 255, 255, 0.9)',
+  });
+
+  const cardWidth = width - 220;
+  const cardHeight = 230;
+  const cardX = (width - cardWidth) / 2;
+  const cardY = height - cardHeight - 140;
+
+  ctx.save();
+  drawRoundedRect(ctx, cardX, cardY, cardWidth, cardHeight, 40);
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+  ctx.fill();
+  ctx.restore();
+
+  const labelColor = '#6B7280';
+  const valueColor = '#111827';
+  const dividerX = width / 2;
+  const centerY = cardY + cardHeight / 2;
+
+  drawText(ctx, 'HİSSEDİLEN', cardX + cardWidth * 0.25, cardY + 70, {
+    font: '600 32px "Inter", Arial, sans-serif',
+    color: labelColor,
+  });
+  const feelsLike = data.feelsLike ?? data.temperature;
+  drawText(ctx, `${Math.round(feelsLike)}°`, cardX + cardWidth * 0.25, cardY + 150, {
+    font: '700 68px "Inter", Arial, sans-serif',
+    color: valueColor,
+  });
+
+  drawText(ctx, 'NEM', cardX + cardWidth * 0.75, cardY + 70, {
+    font: '600 32px "Inter", Arial, sans-serif',
+    color: labelColor,
+  });
+  const humidity = data.humidity ?? 0;
+  drawText(ctx, `${humidity}%`, cardX + cardWidth * 0.75, cardY + 150, {
+    font: '700 68px "Inter", Arial, sans-serif',
+    color: valueColor,
+  });
+
+  ctx.save();
+  ctx.strokeStyle = 'rgba(156, 163, 175, 0.45)';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(dividerX, cardY + 50);
+  ctx.lineTo(dividerX, cardY + cardHeight - 50);
+  ctx.stroke();
+  ctx.restore();
 
   return canvas.toDataURL('image/png');
 }
