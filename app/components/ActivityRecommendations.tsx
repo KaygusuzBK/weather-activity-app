@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { HiLightBulb } from 'react-icons/hi';
 import type { CurrentWeather } from '../types/weather';
 import AnimatedIcon from './ui/animated-icon';
@@ -26,48 +24,30 @@ const typeColors: Record<ActivityRecommendation['type'], string> = {
 };
 
 export default function ActivityRecommendations({ weather }: ActivityRecommendationsProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
   if (!weather) return null;
 
   const recommendations = getActivityRecommendations(weather);
-  const topRecommendations = recommendations.slice(0, 2);
-  const allRecommendations = recommendations;
 
   if (recommendations.length === 0) return null;
 
   return (
-    <div className="mt-2 sm:mt-3 flex-shrink-0">
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between gap-2 p-1.5 sm:p-2 rounded-lg border backdrop-blur-md transition-all"
-        style={{
-          backgroundColor: 'rgba(213, 216, 181, 0.2)',
-          borderColor: 'rgba(213, 216, 181, 0.3)',
-        }}
-      >
-        <div className="flex items-center gap-1.5">
-          <AnimatedIcon hover pulse>
-            <HiLightBulb className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: '#809A6F' }} />
-          </AnimatedIcon>
-          <span className="text-xs font-bold" style={{ color: '#D5D8B5' }}>
-            Öneriler
-          </span>
-        </div>
-        <AnimatedIcon hover bounce={!isExpanded}>
-          {isExpanded ? (
-            <FiChevronUp className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: '#D5D8B5' }} />
-          ) : (
-            <FiChevronDown className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: '#D5D8B5' }} />
-          )}
+    <div className="mt-2 sm:mt-3 flex-shrink-0 flex flex-col min-h-0">
+      {/* Başlık */}
+      <div className="flex items-center gap-1.5 mb-1.5 sm:mb-2">
+        <AnimatedIcon hover pulse>
+          <HiLightBulb className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: '#809A6F' }} />
         </AnimatedIcon>
-      </button>
+        <span className="text-xs sm:text-sm font-bold" style={{ color: '#D5D8B5' }}>
+          Öneriler
+        </span>
+      </div>
 
-      <div className={`mt-1.5 space-y-1.5 overflow-y-auto transition-all ${isExpanded ? 'max-h-[200px]' : 'max-h-0'}`}>
-        {allRecommendations.map((rec, index) => (
+      {/* Scroll edilebilir öneriler listesi */}
+      <div className="space-y-1.5 overflow-y-auto max-h-[200px] sm:max-h-[250px] pr-1">
+        {recommendations.map((rec, index) => (
           <div
             key={index}
-            className="p-1.5 sm:p-2 rounded-lg border backdrop-blur-md"
+            className="p-1.5 sm:p-2 rounded-lg border backdrop-blur-md flex-shrink-0"
             style={{
               backgroundColor: 'rgba(213, 216, 181, 0.15)',
               borderColor: typeColors[rec.type],
@@ -99,45 +79,6 @@ export default function ActivityRecommendations({ weather }: ActivityRecommendat
           </div>
         ))}
       </div>
-
-      {!isExpanded && topRecommendations.length > 0 && (
-        <div className="mt-1.5 space-y-1.5">
-          {topRecommendations.map((rec, index) => (
-            <div
-              key={index}
-              className="p-1.5 sm:p-2 rounded-lg border backdrop-blur-md"
-              style={{
-                backgroundColor: 'rgba(213, 216, 181, 0.15)',
-                borderColor: typeColors[rec.type],
-                borderWidth: '1.5px',
-              }}
-            >
-              <div className="flex items-start gap-1.5 sm:gap-2">
-                <span className="text-base sm:text-lg flex-shrink-0">{rec.icon}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <span
-                      className="text-xs font-bold px-1.5 py-0.5 rounded-full"
-                      style={{
-                        backgroundColor: typeColors[rec.type],
-                        color: '#2C2C2C',
-                      }}
-                    >
-                      {typeLabels[rec.type]}
-                    </span>
-                  </div>
-                  <h4 className="text-xs font-bold mb-0.5" style={{ color: '#D5D8B5' }}>
-                    {rec.title}
-                  </h4>
-                  <p className="text-xs leading-tight" style={{ color: '#D5D8B5', opacity: 0.9 }}>
-                    {rec.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
