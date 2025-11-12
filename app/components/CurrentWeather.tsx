@@ -78,22 +78,22 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
   const countryName = city?.country || weather.sys.country || location?.country || '';
 
   return (
-    <div ref={containerRef} className="h-full rounded-2xl sm:rounded-3xl p-3 sm:p-4 md:p-5 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #809A6F, #A25B5B)' }}>
+    <div ref={containerRef} className="h-full rounded-2xl sm:rounded-3xl p-4 sm:p-4 md:p-5 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #809A6F, #A25B5B)' }}>
       {/* Animated background pattern */}
       <div className="absolute inset-0 opacity-15">
         <div className="absolute top-0 left-0 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#CC9C75' }}></div>
         <div className="absolute bottom-0 right-0 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#D5D8B5' }}></div>
       </div>
 
-      <div className="relative z-10 h-full flex flex-col">
+      <div className="relative z-10 h-full flex flex-col overflow-y-auto">
         {/* Location */}
-        <div className="mb-2 sm:mb-3 flex items-center justify-center gap-2 relative">
-          <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="mb-3 sm:mb-4 flex items-center justify-center gap-2 relative flex-shrink-0">
+          <div className="flex items-center gap-2 sm:gap-2">
             <AnimatedIcon hover pulse>
-              <HiLocationMarker className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" style={{ color: '#D5D8B5' }} />
+              <HiLocationMarker className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#D5D8B5' }} />
             </AnimatedIcon>
             <div className="text-center">
-              <h2 className="text-lg sm:text-xl md:text-2xl font-black drop-shadow-lg" style={{ color: '#D5D8B5' }}>
+              <h2 className="text-xl sm:text-xl md:text-2xl font-black drop-shadow-lg" style={{ color: '#D5D8B5' }}>
                 {cityName}
               </h2>
               {countryName && (
@@ -101,7 +101,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
               )}
             </div>
           </div>
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2 pr-0.5">
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
             <WeatherAmbience weather={weather} />
             <ShareButton weather={weather} city={city} location={location} elementRef={containerRef} />
             {city && (
@@ -114,14 +114,14 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
                   }
                   window.dispatchEvent(new Event('favoritesUpdated'));
                 }}
-                className="p-1.5 sm:p-2 rounded-full hover:bg-opacity-20 transition-all shrink-0"
+                className="p-2 sm:p-2 rounded-full hover:bg-opacity-20 transition-all shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center"
                 style={{ backgroundColor: 'rgba(213, 216, 181, 0.1)' }}
               >
                 <AnimatedIcon hover scale={isFavorite(city)}>
                   {isFavorite(city) ? (
-                    <IoHeart className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: '#D5D8B5' }} />
+                    <IoHeart className="w-5 h-5 sm:w-5 sm:h-5" style={{ color: '#D5D8B5' }} />
                   ) : (
-                    <IoHeartOutline className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: '#D5D8B5' }} />
+                    <IoHeartOutline className="w-5 h-5 sm:w-5 sm:h-5" style={{ color: '#D5D8B5' }} />
                   )}
                 </AnimatedIcon>
               </button>
@@ -130,21 +130,21 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
         </div>
 
         {/* Main Temperature */}
-        <div className="flex-1 flex flex-col justify-center items-center mb-3 sm:mb-4 min-h-0">
-          <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-2 sm:mb-3">
+        <div className="flex-shrink-0 flex flex-col justify-center items-center mb-4 sm:mb-4">
+          <div className="flex items-center justify-center gap-3 sm:gap-3 md:gap-4 mb-2 sm:mb-3">
             <img
               src={`https://openweathermap.org/img/wn/${weatherIcon}@4x.png`}
               alt={weatherDescription}
-              className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 drop-shadow-2xl shrink-0"
+              className="w-20 h-20 sm:w-20 sm:h-20 md:w-24 md:h-24 drop-shadow-2xl shrink-0"
             />
             <div>
-              <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black drop-shadow-2xl mb-1" style={{ color: '#D5D8B5' }}>
+              <div className="text-6xl sm:text-6xl md:text-7xl lg:text-8xl font-black drop-shadow-2xl mb-1" style={{ color: '#D5D8B5' }}>
                 {temperature}°
               </div>
-              <div className="text-sm sm:text-base md:text-lg font-bold capitalize" style={{ color: '#D5D8B5', opacity: 0.9 }}>
+              <div className="text-base sm:text-base md:text-lg font-bold capitalize" style={{ color: '#D5D8B5', opacity: 0.9 }}>
                 {weatherDescription}
               </div>
-              <div className="text-xs sm:text-sm mt-0.5" style={{ color: '#D5D8B5', opacity: 0.7 }}>
+              <div className="text-sm sm:text-sm mt-0.5" style={{ color: '#D5D8B5', opacity: 0.7 }}>
                 Hissedilen: {feelsLike}°
               </div>
             </div>
@@ -152,45 +152,45 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-2 sm:gap-2.5 md:gap-3 justify-items-center">
-          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
+        <div className="grid grid-cols-2 gap-3 sm:gap-2.5 md:gap-3 justify-items-center flex-shrink-0 mb-3 sm:mb-4">
+          <div className="rounded-xl sm:rounded-2xl p-3 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center justify-center gap-2 sm:gap-2 mb-1.5">
               <AnimatedIcon hover pulse>
-                <FiDroplet className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" style={{ color: '#809A6F' }} />
+                <FiDroplet className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#809A6F' }} />
               </AnimatedIcon>
-              <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Nem</span>
+              <span className="text-sm sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Nem</span>
             </div>
-            <div className="text-xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{humidity}%</div>
+            <div className="text-2xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{humidity}%</div>
           </div>
 
-          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
+          <div className="rounded-xl sm:rounded-2xl p-3 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center justify-center gap-2 sm:gap-2 mb-1.5">
               <AnimatedIcon hover rotate>
-                <FiWind className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" style={{ color: '#809A6F' }} />
+                <FiWind className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#809A6F' }} />
               </AnimatedIcon>
-              <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Rüzgar</span>
+              <span className="text-sm sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Rüzgar</span>
             </div>
-            <div className="text-xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{windSpeed} km/h</div>
+            <div className="text-2xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{windSpeed} km/h</div>
           </div>
 
-          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
+          <div className="rounded-xl sm:rounded-2xl p-3 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center justify-center gap-2 sm:gap-2 mb-1.5">
               <AnimatedIcon hover>
-                <FiActivity className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" style={{ color: '#A25B5B' }} />
+                <FiActivity className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#A25B5B' }} />
               </AnimatedIcon>
-              <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Basınç</span>
+              <span className="text-sm sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Basınç</span>
             </div>
-            <div className="text-xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{pressure} hPa</div>
+            <div className="text-2xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>{pressure} hPa</div>
           </div>
 
-          <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
-            <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
+          <div className="rounded-xl sm:rounded-2xl p-3 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
+            <div className="flex items-center justify-center gap-2 sm:gap-2 mb-1.5">
               <AnimatedIcon hover bounce>
-                <FiEye className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" style={{ color: '#CC9C75' }} />
+                <FiEye className="w-5 h-5 sm:w-5 sm:h-5 shrink-0" style={{ color: '#CC9C75' }} />
               </AnimatedIcon>
-              <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Görüş</span>
+              <span className="text-sm sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Görüş</span>
             </div>
-            <div className="text-xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>
+            <div className="text-2xl sm:text-2xl md:text-3xl font-black text-center" style={{ color: '#D5D8B5' }}>
               {visibility} {visibility !== 'N/A' ? 'km' : ''}
             </div>
           </div>

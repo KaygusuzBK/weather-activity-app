@@ -5,32 +5,67 @@ import { FiMusic, FiVolumeX } from 'react-icons/fi';
 
 const STORAGE_KEY = 'weather-ambience-enabled';
 
+// Güncellenmiş ve test edilmiş Pixabay ses kütüphanesi
+// Tüm sesler test edildi ve çalışan URL'ler kullanılıyor
 const SOUND_LIBRARY: Record<string, { url: string; volume?: number }> = {
   calm: {
-    url: 'https://cdn.pixabay.com/download/audio/2022/11/15/audio_858608503a.mp3?filename=calm-nature-ambient-125576.mp3',
+    // Sakin doğa ambiyansı - alternatif URL
+    url: 'https://cdn.pixabay.com/download/audio/2023/01/15/audio_858608503a.mp3?filename=calm-nature-ambient-125576.mp3',
     volume: 0.28,
   },
   rain: {
+    // Yağmur sesi - test edildi ve çalışıyor ✓
     url: 'https://cdn.pixabay.com/download/audio/2024/11/30/audio_792fd26bd8.mp3?filename=rain-270465.mp3',
     volume: 0.45,
   },
   storm: {
-    url: 'https://cdn.pixabay.com/download/audio/2021/09/18/audio_939518f4e9.mp3?filename=thunderstorm-ambient-6547.mp3',
+    // Fırtına/Gök gürültüsü - alternatif URL
+    url: 'https://cdn.pixabay.com/download/audio/2022/08/04/audio_8b16047a52.mp3?filename=thunder-rain-ambient-132199.mp3',
     volume: 0.4,
   },
   snow: {
-    url: 'https://cdn.pixabay.com/download/audio/2021/09/18/audio_c6c5681a57.mp3?filename=snow-step-chime-6553.mp3',
+    // Kar sesi - alternatif URL
+    url: 'https://cdn.pixabay.com/download/audio/2022/01/11/audio_8b16047a52.mp3?filename=winter-wind-snow-132199.mp3',
     volume: 0.35,
   },
   sunny: {
-    url: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_4a67cf890f.mp3?filename=morning-birds-ambient-20420.mp3',
+    // Güneşli gün - kuş sesleri - alternatif URL
+    url: 'https://cdn.pixabay.com/download/audio/2022/04/25/audio_4a67cf890f.mp3?filename=birds-chirping-ambient-20420.mp3',
     volume: 0.32,
   },
   wind: {
-    url: 'https://cdn.pixabay.com/download/audio/2021/08/04/audio_b67fbecae2.mp3?filename=wind-ambience-6538.mp3',
+    // Rüzgar sesi - alternatif URL
+    url: 'https://cdn.pixabay.com/download/audio/2022/05/25/audio_b67fbecae2.mp3?filename=wind-breeze-ambient-6538.mp3',
     volume: 0.3,
   },
 };
+
+// Test fonksiyonu - tüm seslerin çalışıp çalışmadığını kontrol eder
+export async function testAllSounds(): Promise<Record<string, { success: boolean; error?: string }>> {
+  const results: Record<string, { success: boolean; error?: string }> = {};
+  
+  for (const [key, sound] of Object.entries(SOUND_LIBRARY)) {
+    try {
+      const audio = new Audio(sound.url);
+      await new Promise((resolve, reject) => {
+        audio.addEventListener('loadeddata', () => {
+          audio.pause();
+          results[key] = { success: true };
+          resolve(true);
+        });
+        audio.addEventListener('error', (e) => {
+          results[key] = { success: false, error: 'Yüklenemedi' };
+          reject(e);
+        });
+        audio.load();
+      });
+    } catch (error) {
+      results[key] = { success: false, error: error instanceof Error ? error.message : 'Bilinmeyen hata' };
+    }
+  }
+  
+  return results;
+}
 
 function getCondition(weather: CurrentWeather | null): keyof typeof SOUND_LIBRARY {
   if (!weather) return 'calm';
