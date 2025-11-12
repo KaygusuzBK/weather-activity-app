@@ -91,9 +91,9 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
   const feelsLike = Math.round(weather.main.feels_like);
 
   return (
-    <div ref={containerRef} className="lg:hidden">
+    <div ref={containerRef} className="lg:hidden w-full">
       {/* Location Header - Compact */}
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <AnimatedIcon hover pulse>
             <HiLocationMarker className="w-4 h-4 shrink-0" style={{ color: '#809A6F' }} />
@@ -132,9 +132,9 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
         </div>
       </div>
 
-      {/* 6 Days Horizontal Scroll - Bigger and More Distinct */}
+      {/* 6 Days Horizontal Scroll - NO CARDS, just simple items */}
       <div className="mb-4 overflow-x-auto pb-3 scrollbar-hide -mx-3 px-3">
-        <div className="flex gap-2.5 min-w-max">
+        <div className="flex gap-3 min-w-max">
           {allDays.map((day, index) => {
             const date = new Date(day.date);
             const isToday = index === 0;
@@ -143,19 +143,16 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
             return (
               <div
                 key={day.date}
-                className={`flex flex-col items-center gap-2.5 p-4 rounded-3xl shrink-0 ${
-                  isToday ? 'min-w-[110px]' : 'min-w-[100px]'
+                className={`flex flex-col items-center justify-center gap-2 p-3 shrink-0 ${
+                  isToday ? 'min-w-[95px]' : 'min-w-[85px]'
                 }`}
                 style={{
-                  background: isToday 
-                    ? 'linear-gradient(135deg, #809A6F 0%, #A25B5B 100%)'
-                    : 'linear-gradient(135deg, rgba(128, 154, 111, 0.15) 0%, rgba(162, 91, 91, 0.15) 100%)',
-                  border: isToday ? 'none' : '2px solid rgba(128, 154, 111, 0.3)',
-                  boxShadow: isToday ? '0 4px 12px rgba(128, 154, 111, 0.3)' : 'none',
+                  backgroundColor: isToday ? '#809A6F' : 'transparent',
+                  borderRadius: '16px',
                 }}
               >
                 <div 
-                  className={`font-bold ${isToday ? 'text-sm' : 'text-xs'}`}
+                  className={`font-bold ${isToday ? 'text-xs' : 'text-xs'}`}
                   style={{ color: isToday ? '#D5D8B5' : '#2C2C2C', opacity: isToday ? 1 : 0.8 }}
                 >
                   {dayName}
@@ -163,17 +160,17 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
                 <img
                   src={`https://openweathermap.org/img/wn/${day.weather.icon}@${isToday ? '4x' : '2x'}.png`}
                   alt={day.weather.description}
-                  className={isToday ? 'w-16 h-16' : 'w-14 h-14'}
+                  className={isToday ? 'w-16 h-16' : 'w-12 h-12'}
                 />
                 <div className="text-center">
                   <div 
-                    className={`font-black ${isToday ? 'text-2xl' : 'text-xl'}`}
+                    className={`font-black ${isToday ? 'text-xl' : 'text-lg'}`}
                     style={{ color: isToday ? '#D5D8B5' : '#2C2C2C' }}
                   >
                     {day.temp_max}°
                   </div>
                   <div 
-                    className={isToday ? 'text-sm' : 'text-xs'}
+                    className="text-xs"
                     style={{ color: isToday ? '#D5D8B5' : '#2C2C2C', opacity: isToday ? 0.9 : 0.7 }}
                   >
                     {day.temp_min}°

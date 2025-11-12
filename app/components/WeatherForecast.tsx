@@ -46,7 +46,7 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
   const dayNames = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
 
   return (
-    <div className="rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #CC9C75, #D5D8B5)' }}>
+    <div className="hidden lg:block rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #CC9C75, #D5D8B5)' }}>
       {/* Animated background pattern */}
       <div className="absolute inset-0 opacity-15">
         <div className="absolute top-0 right-0 w-72 h-72 rounded-full blur-3xl" style={{ backgroundColor: '#809A6F' }}></div>
