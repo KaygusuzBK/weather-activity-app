@@ -124,7 +124,7 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
             <HiLocationMarker className="w-4 h-4 shrink-0" style={{ color: '#809A6F' }} />
           </AnimatedIcon>
           <div>
-            <h2 className="text-base font-black" style={{ color: '#2C2C2C' }}>
+            <h2 className="text-base font-black text-gray-800 dark:text-gray-200">
               {cityName}
             </h2>
           </div>
@@ -182,8 +182,11 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
                 }}
               >
                 <div 
-                  className={`font-bold ${isToday ? 'text-xs' : 'text-xs'}`}
-                  style={{ color: isToday ? '#D5D8B5' : '#2C2C2C', opacity: isToday ? 1 : 0.8 }}
+                  className={`font-bold text-xs ${
+                    isToday 
+                      ? 'text-[#D5D8B5]' 
+                      : 'text-gray-800 dark:text-gray-200 opacity-80'
+                  }`}
                 >
                   {dayName}
                 </div>
@@ -194,14 +197,16 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
                 />
                 <div className="text-center">
                   <div 
-                    className={`font-black ${isToday ? 'text-xl' : 'text-lg'}`}
-                    style={{ color: isToday ? '#D5D8B5' : '#2C2C2C' }}
+                    className={`font-black ${isToday ? 'text-xl text-[#D5D8B5]' : 'text-lg text-gray-800 dark:text-gray-200'}`}
                   >
                     {formatTemp(day.temp_max)}
                   </div>
                   <div 
-                    className="text-xs"
-                    style={{ color: isToday ? '#D5D8B5' : '#2C2C2C', opacity: isToday ? 0.9 : 0.7 }}
+                    className={`text-xs ${
+                      isToday 
+                        ? 'text-[#D5D8B5] opacity-90' 
+                        : 'text-gray-700 dark:text-gray-300 opacity-70'
+                    }`}
                   >
                     {formatTemp(day.temp_min)}
                   </div>
@@ -219,18 +224,18 @@ export default function MobileWeatherView({ city, location }: MobileWeatherViewP
             <AnimatedIcon hover>
               <FiSun className="w-4 h-4" style={{ color: '#809A6F' }} />
             </AnimatedIcon>
-            <span className="text-xs font-bold" style={{ color: '#2C2C2C' }}>UV Index</span>
+            <span className="text-xs font-bold text-gray-800 dark:text-gray-200">UV Index</span>
           </div>
-          <div className="text-xl font-black" style={{ color: '#2C2C2C' }}>{uvIndex}</div>
+          <div className="text-xl font-black text-gray-800 dark:text-gray-200">{uvIndex}</div>
         </div>
         <div className="flex-1 rounded-xl p-3" style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)' }}>
           <div className="flex items-center gap-2 mb-1">
             <AnimatedIcon hover>
               <FiSunrise className="w-4 h-4" style={{ color: '#809A6F' }} />
             </AnimatedIcon>
-            <span className="text-xs font-bold" style={{ color: '#2C2C2C' }}>Güneş</span>
+            <span className="text-xs font-bold text-gray-800 dark:text-gray-200">Güneş</span>
           </div>
-          <div className="text-xs font-black" style={{ color: '#2C2C2C' }}>
+          <div className="text-xs font-black text-gray-800 dark:text-gray-200">
             <div>{sunriseTime}</div>
             <div className="opacity-70">{sunsetTime}</div>
           </div>

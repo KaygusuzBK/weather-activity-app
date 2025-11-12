@@ -35,9 +35,9 @@ export default function HourlyForecast({ city, location }: HourlyForecastProps) 
         <div className="flex gap-3 min-w-max">
           {[...Array(8)].map((_, i) => (
             <div key={i} className="flex flex-col items-center gap-2 p-3 rounded-xl min-w-[70px] shrink-0 animate-pulse" style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)' }}>
-              <div className="h-4 w-12 bg-gray-300 rounded"></div>
-              <div className="h-12 w-12 bg-gray-300 rounded-full"></div>
-              <div className="h-6 w-10 bg-gray-300 rounded"></div>
+              <div className="h-4 w-12 bg-gray-300 dark:bg-gray-600 rounded"></div>
+              <div className="h-12 w-12 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+              <div className="h-6 w-10 bg-gray-300 dark:bg-gray-600 rounded"></div>
             </div>
           ))}
         </div>
@@ -51,7 +51,7 @@ export default function HourlyForecast({ city, location }: HourlyForecastProps) 
 
   return (
     <div>
-      <h3 className="text-sm font-bold mb-2" style={{ color: '#2C2C2C' }}>
+      <h3 className="text-sm font-bold mb-2 text-gray-800 dark:text-gray-200">
         24 Saatlik Tahmin
       </h3>
       <div className="overflow-x-auto pb-2 scrollbar-hide -mx-3 px-3">
@@ -69,7 +69,7 @@ export default function HourlyForecast({ city, location }: HourlyForecastProps) 
                   backgroundColor: index === 0 ? 'rgba(128, 154, 111, 0.2)' : 'rgba(128, 154, 111, 0.1)',
                 }}
               >
-                <div className="text-xs font-bold" style={{ color: '#2C2C2C', opacity: 0.8 }}>
+                <div className="text-xs font-bold text-gray-700 dark:text-gray-300 opacity-80">
                   {timeLabel}
                 </div>
                 <img
@@ -78,11 +78,11 @@ export default function HourlyForecast({ city, location }: HourlyForecastProps) 
                   className="w-10 h-10"
                 />
                 <div className="text-center">
-                  <div className="text-base font-black" style={{ color: '#2C2C2C' }}>
+                  <div className="text-base font-black text-gray-800 dark:text-gray-200">
                     {formatTemp(item.main.temp)}
                   </div>
                   {item.pop > 0 && (
-                    <div className="text-xs" style={{ color: '#2C2C2C', opacity: 0.7 }}>
+                    <div className="text-xs text-gray-700 dark:text-gray-300 opacity-70">
                       {Math.round(item.pop * 100)}%
                     </div>
                   )}

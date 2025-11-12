@@ -37,7 +37,7 @@ export default function ActivityRecommendations({ weather }: ActivityRecommendat
         <AnimatedIcon hover pulse>
           <HiLightBulb className="w-4 h-4 sm:w-4 sm:h-4" style={{ color: '#809A6F' }} />
         </AnimatedIcon>
-        <span className="text-sm sm:text-sm font-bold lg:text-base" style={{ color: '#2C2C2C' }}>
+        <span className="text-sm sm:text-sm font-bold lg:text-base text-gray-800 dark:text-gray-200">
           Öneriler
         </span>
       </div>
@@ -59,19 +59,18 @@ export default function ActivityRecommendations({ weather }: ActivityRecommendat
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5 mb-1">
                   <span
-                    className="text-xs font-bold px-2 py-1 rounded-full"
+                    className="text-xs font-bold px-2 py-1 rounded-full text-gray-800 dark:text-gray-200"
                     style={{
                       backgroundColor: typeColors[rec.type],
-                      color: '#2C2C2C',
                     }}
                   >
                     {typeLabels[rec.type]}
                   </span>
                 </div>
-                <h4 className="text-sm font-bold mb-1" style={{ color: '#2C2C2C' }}>
+                <h4 className="text-sm font-bold mb-1 text-gray-800 dark:text-gray-200">
                   {rec.title}
                 </h4>
-                <p className="text-xs sm:text-xs leading-relaxed" style={{ color: '#2C2C2C', opacity: 0.8 }}>
+                <p className="text-xs sm:text-xs leading-relaxed text-gray-700 dark:text-gray-300 opacity-80">
                   {rec.description}
                 </p>
               </div>

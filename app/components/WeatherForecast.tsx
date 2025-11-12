@@ -64,7 +64,7 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
       </div>
 
       <div className="relative z-10 flex flex-col">
-        <h2 className="text-lg sm:text-xl md:text-2xl font-black mb-3 sm:mb-4 drop-shadow-lg shrink-0 text-center" style={{ color: '#2C2C2C' }}>
+        <h2 className="text-lg sm:text-xl md:text-2xl font-black mb-3 sm:mb-4 drop-shadow-lg shrink-0 text-center text-gray-800 dark:text-gray-200">
           5 Günlük Tahmin
         </h2>
         
@@ -91,8 +91,8 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
                 <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3 sm:gap-3 md:gap-4">
                     <div className="text-center min-w-[70px] sm:min-w-[70px] md:min-w-[80px]">
-                      <div className="text-sm sm:text-sm font-bold mb-0.5" style={{ color: '#2C2C2C', opacity: 0.9 }}>{dayName}</div>
-                      <div className="text-xs" style={{ color: '#2C2C2C', opacity: 0.7 }}>
+                      <div className="text-sm sm:text-sm font-bold mb-0.5 text-gray-800 dark:text-gray-200 opacity-90">{dayName}</div>
+                      <div className="text-xs text-gray-700 dark:text-gray-300 opacity-70">
                         {date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
                       </div>
                     </div>
@@ -104,29 +104,29 @@ export default function WeatherForecast({ city, location }: WeatherForecastProps
                     />
                     
                     <div className="text-center">
-                      <div className="text-lg sm:text-lg md:text-xl lg:text-2xl font-black mb-0.5" style={{ color: '#2C2C2C' }}>
+                      <div className="text-lg sm:text-lg md:text-xl lg:text-2xl font-black mb-0.5 text-gray-800 dark:text-gray-200">
                         {formatTemp(day.temp_max)} / {formatTemp(day.temp_min)}
                       </div>
-                      <div className="text-xs sm:text-sm capitalize truncate max-w-[120px] sm:max-w-none" style={{ color: '#2C2C2C', opacity: 0.8 }}>
+                      <div className="text-xs sm:text-sm capitalize truncate max-w-[120px] sm:max-w-none text-gray-700 dark:text-gray-300 opacity-80">
                         {day.weather.description}
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-center gap-4 sm:gap-3 md:gap-4 text-sm sm:text-sm" style={{ color: '#2C2C2C', opacity: 0.8 }}>
+                  <div className="flex items-center justify-center gap-4 sm:gap-3 md:gap-4 text-sm sm:text-sm text-gray-700 dark:text-gray-300 opacity-80">
                     {day.pop > 0 && (
                       <div className="text-center min-w-[50px] sm:min-w-[45px] md:min-w-[50px]">
-                        <div className="text-xs mb-0.5" style={{ color: '#2C2C2C', opacity: 0.6 }}>Yağış</div>
-                        <div className="font-bold text-sm">{Math.round(day.pop * 100)}%</div>
+                        <div className="text-xs mb-0.5 text-gray-600 dark:text-gray-400 opacity-60">Yağış</div>
+                        <div className="font-bold text-sm text-gray-800 dark:text-gray-200">{Math.round(day.pop * 100)}%</div>
                       </div>
                     )}
                     <div className="text-center min-w-[50px] sm:min-w-[45px] md:min-w-[50px]">
-                      <div className="text-xs mb-0.5" style={{ color: '#2C2C2C', opacity: 0.6 }}>Nem</div>
-                      <div className="font-bold text-sm">{day.humidity}%</div>
+                      <div className="text-xs mb-0.5 text-gray-600 dark:text-gray-400 opacity-60">Nem</div>
+                      <div className="font-bold text-sm text-gray-800 dark:text-gray-200">{day.humidity}%</div>
                     </div>
                     <div className="text-center min-w-[55px] sm:min-w-[50px] md:min-w-[55px]">
-                      <div className="text-xs mb-0.5" style={{ color: '#2C2C2C', opacity: 0.6 }}>Rüzgar</div>
-                      <div className="font-bold text-sm">{Math.round(day.wind_speed * 3.6)} km/h</div>
+                      <div className="text-xs mb-0.5 text-gray-600 dark:text-gray-400 opacity-60">Rüzgar</div>
+                      <div className="font-bold text-sm text-gray-800 dark:text-gray-200">{Math.round(day.wind_speed * 3.6)} km/h</div>
                     </div>
                   </div>
                 </div>
