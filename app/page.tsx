@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import CurrentWeather from './components/CurrentWeather';
 import WeatherForecast from './components/WeatherForecast';
+import MobileWeatherView from './components/MobileWeatherView';
 import CurrentWeatherSkeleton from './components/CurrentWeatherSkeleton';
 import WeatherForecastSkeleton from './components/WeatherForecastSkeleton';
 import CitiesMarquee from './components/CitiesMarquee';
@@ -89,8 +90,31 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Current Weather and Forecast - Single column on mobile */}
-        <div className="flex-1 min-h-0 flex flex-col lg:grid lg:grid-cols-2 gap-4 sm:gap-4 pb-4">
+        {/* Mobile View - Only visible on mobile */}
+        <div className="lg:hidden flex-1 min-h-0 pb-4">
+          {locationLoading && !selectedCity ? (
+            <CurrentWeatherSkeleton />
+          ) : locationError && !selectedCity && !location ? (
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center p-6 rounded-2xl" style={{ backgroundColor: 'rgba(162, 91, 91, 0.2)' }}>
+                <p className="text-lg font-semibold mb-2" style={{ color: '#A25B5B' }}>
+                  Konum Tespit Edilemedi
+                </p>
+                <p className="text-sm mb-4" style={{ color: '#2C2C2C' }}>
+                  {locationError}
+                </p>
+                <p className="text-xs" style={{ color: '#2C2C2C', opacity: 0.7 }}>
+                  Lütfen bir şehir arayın veya konum izni verin.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <MobileWeatherView city={selectedCity} location={location} />
+          )}
+        </div>
+
+        {/* Desktop View - Only visible on desktop */}
+        <div className="hidden lg:flex flex-1 min-h-0 lg:grid lg:grid-cols-2 gap-4 pb-4">
           {locationLoading && !selectedCity ? (
             <>
               <CurrentWeatherSkeleton />

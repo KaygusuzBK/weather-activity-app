@@ -37,7 +37,7 @@ export default function ActivityRecommendations({ weather }: ActivityRecommendat
         <AnimatedIcon hover pulse>
           <HiLightBulb className="w-4 h-4 sm:w-4 sm:h-4" style={{ color: '#809A6F' }} />
         </AnimatedIcon>
-        <span className="text-sm sm:text-sm font-bold" style={{ color: '#D5D8B5' }}>
+        <span className="text-sm sm:text-sm font-bold lg:text-base" style={{ color: '#2C2C2C' }}>
           Öneriler
         </span>
       </div>
@@ -49,7 +49,7 @@ export default function ActivityRecommendations({ weather }: ActivityRecommendat
             key={index}
             className="p-2.5 sm:p-2 rounded-lg border backdrop-blur-md flex-shrink-0"
             style={{
-              backgroundColor: 'rgba(213, 216, 181, 0.15)',
+              backgroundColor: 'rgba(128, 154, 111, 0.1)',
               borderColor: typeColors[rec.type],
               borderWidth: '1.5px',
             }}
@@ -68,10 +68,10 @@ export default function ActivityRecommendations({ weather }: ActivityRecommendat
                     {typeLabels[rec.type]}
                   </span>
                 </div>
-                <h4 className="text-sm font-bold mb-1" style={{ color: '#D5D8B5' }}>
+                <h4 className="text-sm font-bold mb-1" style={{ color: '#2C2C2C' }}>
                   {rec.title}
                 </h4>
-                <p className="text-xs sm:text-xs leading-relaxed" style={{ color: '#D5D8B5', opacity: 0.9 }}>
+                <p className="text-xs sm:text-xs leading-relaxed" style={{ color: '#2C2C2C', opacity: 0.8 }}>
                   {rec.description}
                 </p>
               </div>
