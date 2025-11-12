@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CurrentWeather from './components/CurrentWeather';
 import WeatherForecast from './components/WeatherForecast';
 import CurrentWeatherSkeleton from './components/CurrentWeatherSkeleton';
@@ -11,22 +11,34 @@ import FavoritesAndRecent from './components/FavoritesAndRecent';
 import NotificationSettings from './components/NotificationSettings';
 import { useLocation } from './hooks/useLocation';
 import type { City } from './data/popular-cities';
+import { popularCities } from './data/popular-cities';
 import { addRecentCity } from './lib/storage';
 import { HiLocationMarker } from 'react-icons/hi';
 import AnimatedIcon from './components/ui/animated-icon';
 
 export default function Home() {
   const { location, loading: locationLoading, error: locationError } = useLocation();
-  const [selectedCity, setSelectedCity] = useState<City | null>(null);
+  const defaultCity = popularCities[0];
+  const [selectedCity, setSelectedCity] = useState<City | null>(defaultCity);
+  const [usingDefaultCity, setUsingDefaultCity] = useState(true);
 
   const handleCitySelect = (city: City) => {
     setSelectedCity(city);
+    setUsingDefaultCity(false);
     addRecentCity(city);
   };
 
   const handleCurrentLocation = () => {
     setSelectedCity(null);
+    setUsingDefaultCity(false);
   };
+
+  useEffect(() => {
+    if (location && usingDefaultCity) {
+      setSelectedCity(null);
+      setUsingDefaultCity(false);
+    }
+  }, [location, usingDefaultCity]);
 
   return (
     <div className="h-screen overflow-hidden flex flex-col" style={{ backgroundColor: '#D5D8B5' }}>
