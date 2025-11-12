@@ -19,7 +19,9 @@ import {
   captureElementScreenshot,
   createWidgetScreenshot,
   downloadScreenshot,
+  createInstagramStoryScreenshot,
 } from '../lib/screenshot';
+import { useNotifications } from '../hooks/useNotifications';
 
 interface ShareButtonProps {
   weather: CurrentWeather | null;
@@ -34,6 +36,26 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
   const shareMenuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [menuPosition, setMenuPosition] = useState<{ top: number; left: number } | null>(null);
+  const { sendNotification, settings } = useNotifications();
+
+  const notify = useCallback(
+    (title: string, message: string, type: 'success' | 'error' = 'success') => {
+      const prefix = type === 'error' ? '⚠️ ' : '✅ ';
+      sendNotification(prefix + title, { body: message });
+
+      if (
+        typeof window !== 'undefined' &&
+        (!('Notification' in window) || Notification.permission !== 'granted' || !settings.enabled)
+      ) {
+        if (type === 'error') {
+          window.alert(message);
+        } else {
+          console.info(message);
+        }
+      }
+    },
+    [sendNotification, settings.enabled]
+  );
 
   // Click outside to close
   useEffect(() => {
@@ -99,17 +121,33 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
   };
 
   const handleNativeShare = async () => {
-    const success = await shareNative(shareData);
-    if (success) {
-      setIsOpen(false);
+    try {
+      const success = await shareNative(shareData);
+      if (success) {
+        setIsOpen(false);
+        notify('Paylaşım Hazır', 'Yerel paylaşım paneli açıldı.');
+      } else {
+        notify('Paylaşım Başlatılamadı', 'Tarayıcınız yerel paylaşımı desteklemiyor.', 'error');
+      }
+    } catch (error) {
+      console.error('Native share error:', error);
+      notify('Paylaşım Başarısız', 'Yerel paylaşım açılamadı.', 'error');
     }
   };
 
   const handleCopyLink = async () => {
-    const success = await copyToClipboard(shareUrl);
-    if (success) {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+    try {
+      const success = await copyToClipboard(shareUrl);
+      if (success) {
+        setCopied(true);
+        notify('Kopyalandı', 'Paylaşılabilir link panoya kopyalandı.');
+        setTimeout(() => setCopied(false), 2000);
+      } else {
+        notify('Kopyalama Başarısız', 'Link kopyalanamadı. Lütfen tekrar deneyin.', 'error');
+      }
+    } catch (error) {
+      console.error('Copy link error:', error);
+      notify('Kopyalama Başarısız', 'Link kopyalanamadı. Lütfen tekrar deneyin.', 'error');
     }
   };
 
@@ -132,14 +170,40 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
 
       downloadScreenshot(dataUrl, `hava-durumu-${cityName}-${Date.now()}.png`);
       setIsOpen(false);
+      notify('Screenshot İndirildi', 'Görsel indirildi, sosyal medyada paylaşabilirsiniz.');
     } catch (error) {
       console.error('Screenshot error:', error);
+      notify('Screenshot Alınamadı', 'Lütfen sayfayı yenileyip tekrar deneyin.', 'error');
+    }
+  };
+
+  const handleInstagramStory = async () => {
+    try {
+      const storyDataUrl = await createInstagramStoryScreenshot(
+        {
+          city: cityName,
+          temperature,
+          description: description,
+          icon: icon,
+        },
+        {
+          element: elementRef?.current ?? undefined,
+        }
+      );
+
+      downloadScreenshot(storyDataUrl, `weather-instagram-story-${Date.now()}.png`);
+      setIsOpen(false);
+      notify('Instagram Story Hazır', 'Görsel indirildi. Instagram hikayelerinde paylaşabilirsiniz.');
+    } catch (error) {
+      console.error('Instagram story screenshot error:', error);
+      notify('Instagram Story Oluşturulamadı', 'Lütfen tekrar deneyin.', 'error');
     }
   };
 
   const handleSocialShare = (url: string) => {
     window.open(url, '_blank', 'width=600,height=400');
     setIsOpen(false);
+    notify('Paylaşım Penceresi Açıldı', 'Sosyal medya paylaşım penceresi yeni sekmede açıldı.');
   };
 
   return (
@@ -226,6 +290,17 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
                     <FiDownload className="w-4 h-4" />
                   </AnimatedIcon>
                   <span className="text-sm">Screenshot İndir</span>
+                </button>
+
+                <button
+                  onClick={handleInstagramStory}
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
+                  style={{ backgroundColor: 'rgba(128, 154, 111, 0.12)', color: '#2C2C2C' }}
+                >
+                  <AnimatedIcon hover>
+                    <FiDownload className="w-4 h-4" />
+                  </AnimatedIcon>
+                  <span className="text-sm">Instagram Story</span>
                 </button>
 
                 <div className="pt-1 border-t" style={{ borderColor: '#CC9C75' }}>
