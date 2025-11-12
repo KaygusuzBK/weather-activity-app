@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { FiShare2, FiLink2, FiDownload, FiX } from 'react-icons/fi';
 import { FaTwitter, FaFacebook, FaWhatsapp } from 'react-icons/fa';
+import { createPortal } from 'react-dom';
 import type { CurrentWeather } from '../types/weather';
 import AnimatedIcon from './ui/animated-icon';
 import type { City } from '../data/popular-cities';
@@ -31,13 +32,21 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const shareMenuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [menuPosition, setMenuPosition] = useState<{ top: number; left: number } | null>(null);
 
   // Click outside to close
   useEffect(() => {
     if (!isOpen) return;
 
     const handleClickOutside = (e: MouseEvent) => {
-      if (shareMenuRef.current && !shareMenuRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      if (
+        shareMenuRef.current &&
+        !shareMenuRef.current.contains(target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(target)
+      ) {
         setIsOpen(false);
       }
     };
@@ -47,6 +56,31 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen]);
+
+  const updateMenuPosition = useCallback(() => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    setMenuPosition({
+      top: rect.bottom + window.scrollY + 8,
+      left: rect.right + window.scrollX,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    updateMenuPosition();
+
+    const handleResize = () => updateMenuPosition();
+    const handleScroll = () => updateMenuPosition();
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleScroll, true);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll, true);
+    };
+  }, [isOpen, updateMenuPosition]);
 
   if (!weather) return null;
 
@@ -109,115 +143,130 @@ export default function ShareButton({ weather, city, location, elementRef }: Sha
   };
 
   return (
-    <div className="relative" ref={shareMenuRef}>
+    <div className="relative">
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded-full transition-all hover:scale-110"
+        ref={buttonRef}
+        onClick={() => {
+          if (!isOpen) {
+            updateMenuPosition();
+          }
+          setIsOpen((prev) => !prev);
+        }}
+        className="p-2 sm:p-2.5 rounded-full transition-all hover:scale-110 shadow-lg border border-white/30"
         style={{
-          backgroundColor: 'rgba(128, 154, 111, 0.2)',
+          background: 'linear-gradient(135deg, rgba(213, 216, 181, 0.9), rgba(204, 156, 117, 0.8))',
           color: '#2C2C2C',
         }}
         title="Paylaş"
       >
         <AnimatedIcon hover>
-          <FiShare2 className="w-4 h-4 sm:w-5 sm:h-5" />
+          <FiShare2 className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: '#2C2C2C' }} />
         </AnimatedIcon>
       </button>
 
-      {isOpen && (
-        <div
-          className="absolute bottom-full right-0 mb-2 p-2 rounded-xl shadow-lg z-50 min-w-[200px]"
-          style={{
-            backgroundColor: '#D5D8B5',
-            border: '1px solid #CC9C75',
-          }}
-        >
-          <div className="flex items-center justify-between mb-2 pb-2 border-b" style={{ borderColor: '#CC9C75' }}>
-            <span className="text-sm font-bold" style={{ color: '#2C2C2C' }}>Paylaş</span>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-1 rounded hover:bg-opacity-20"
-              style={{ color: '#2C2C2C' }}
+      {isOpen && menuPosition && typeof document !== 'undefined'
+        ? createPortal(
+            <div
+              ref={shareMenuRef}
+              className="p-2 rounded-xl shadow-lg min-w-[220px]"
+              style={{
+                position: 'fixed',
+                top: menuPosition.top,
+                left: menuPosition.left,
+                transform: 'translateX(-100%)',
+                backgroundColor: '#D5D8B5',
+                border: '1px solid #CC9C75',
+                zIndex: 9999,
+              }}
             >
-              <AnimatedIcon hover>
-                <FiX className="w-4 h-4" />
-              </AnimatedIcon>
-            </button>
-          </div>
+              <div className="flex items-center justify-between mb-2 pb-2 border-b" style={{ borderColor: '#CC9C75' }}>
+                <span className="text-sm font-bold" style={{ color: '#2C2C2C' }}>Paylaş</span>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="p-1 rounded hover:bg-opacity-20"
+                  style={{ color: '#2C2C2C' }}
+                >
+                  <AnimatedIcon hover>
+                    <FiX className="w-4 h-4" />
+                  </AnimatedIcon>
+                </button>
+              </div>
 
-          <div className="space-y-1">
-            {'share' in navigator && (
-              <button
-                onClick={handleNativeShare}
-                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
-                style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)', color: '#2C2C2C' }}
-              >
-                <AnimatedIcon hover>
-                  <FiShare2 className="w-4 h-4" />
-                </AnimatedIcon>
-                <span className="text-sm">Paylaş (Yerel)</span>
-              </button>
-            )}
+              <div className="space-y-1">
+                {'share' in navigator && (
+                  <button
+                    onClick={handleNativeShare}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
+                    style={{ backgroundColor: 'rgba(128, 154, 111, 0.12)', color: '#2C2C2C' }}
+                  >
+                    <AnimatedIcon hover>
+                      <FiShare2 className="w-4 h-4" />
+                    </AnimatedIcon>
+                    <span className="text-sm">Paylaş (Yerel)</span>
+                  </button>
+                )}
 
-            <button
-              onClick={handleCopyLink}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
-              style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)', color: '#2C2C2C' }}
-            >
-              <AnimatedIcon hover>
-                <FiLink2 className="w-4 h-4" />
-              </AnimatedIcon>
-              <span className="text-sm">{copied ? 'Kopyalandı!' : 'Linki Kopyala'}</span>
-            </button>
+                <button
+                  onClick={handleCopyLink}
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
+                  style={{ backgroundColor: 'rgba(128, 154, 111, 0.12)', color: '#2C2C2C' }}
+                >
+                  <AnimatedIcon hover>
+                    <FiLink2 className="w-4 h-4" />
+                  </AnimatedIcon>
+                  <span className="text-sm">{copied ? 'Kopyalandı!' : 'Linki Kopyala'}</span>
+                </button>
 
-            <button
-              onClick={handleScreenshot}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
-              style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)', color: '#2C2C2C' }}
-            >
-              <AnimatedIcon hover>
-                <FiDownload className="w-4 h-4" />
-              </AnimatedIcon>
-              <span className="text-sm">Screenshot İndir</span>
-            </button>
+                <button
+                  onClick={handleScreenshot}
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
+                  style={{ backgroundColor: 'rgba(128, 154, 111, 0.12)', color: '#2C2C2C' }}
+                >
+                  <AnimatedIcon hover>
+                    <FiDownload className="w-4 h-4" />
+                  </AnimatedIcon>
+                  <span className="text-sm">Screenshot İndir</span>
+                </button>
 
-            <div className="pt-1 border-t" style={{ borderColor: '#CC9C75' }}>
-              <button
-                onClick={() => handleSocialShare(getTwitterShareUrl(shareData))}
-                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
-                style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)', color: '#2C2C2C' }}
-              >
-                <AnimatedIcon hover>
-                  <FaTwitter className="w-4 h-4" />
-                </AnimatedIcon>
-                <span className="text-sm">Twitter</span>
-              </button>
+                <div className="pt-1 border-t" style={{ borderColor: '#CC9C75' }}>
+                  <button
+                    onClick={() => handleSocialShare(getTwitterShareUrl(shareData))}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
+                    style={{ backgroundColor: 'rgba(128, 154, 111, 0.12)', color: '#2C2C2C' }}
+                  >
+                    <AnimatedIcon hover>
+                      <FaTwitter className="w-4 h-4" />
+                    </AnimatedIcon>
+                    <span className="text-sm">Twitter</span>
+                  </button>
 
-              <button
-                onClick={() => handleSocialShare(getFacebookShareUrl(shareData))}
-                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
-                style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)', color: '#2C2C2C' }}
-              >
-                <AnimatedIcon hover>
-                  <FaFacebook className="w-4 h-4" />
-                </AnimatedIcon>
-                <span className="text-sm">Facebook</span>
-              </button>
+                  <button
+                    onClick={() => handleSocialShare(getFacebookShareUrl(shareData))}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
+                    style={{ backgroundColor: 'rgba(128, 154, 111, 0.12)', color: '#2C2C2C' }}
+                  >
+                    <AnimatedIcon hover>
+                      <FaFacebook className="w-4 h-4" />
+                    </AnimatedIcon>
+                    <span className="text-sm">Facebook</span>
+                  </button>
 
-              <button
-                onClick={() => handleSocialShare(getWhatsAppShareUrl(shareData))}
-                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
-                style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)', color: '#2C2C2C' }}
-              >
-                <AnimatedIcon hover>
-                  <FaWhatsapp className="w-4 h-4" />
-                </AnimatedIcon>
-                <span className="text-sm">WhatsApp</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+                  <button
+                    onClick={() => handleSocialShare(getWhatsAppShareUrl(shareData))}
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-opacity-20 transition-all text-left"
+                    style={{ backgroundColor: 'rgba(128, 154, 111, 0.12)', color: '#2C2C2C' }}
+                  >
+                    <AnimatedIcon hover>
+                      <FaWhatsapp className="w-4 h-4" />
+                    </AnimatedIcon>
+                    <span className="text-sm">WhatsApp</span>
+                  </button>
+                </div>
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
     </div>
   );
 }

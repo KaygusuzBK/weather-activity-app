@@ -89,7 +89,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
         <div className="mb-2 sm:mb-3 flex items-center justify-center gap-2 relative">
           <div className="flex items-center gap-1.5 sm:gap-2">
             <AnimatedIcon hover pulse>
-              <HiLocationMarker className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#D5D8B5' }} />
+              <HiLocationMarker className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" style={{ color: '#D5D8B5' }} />
             </AnimatedIcon>
             <div className="text-center">
               <h2 className="text-lg sm:text-xl md:text-2xl font-black drop-shadow-lg" style={{ color: '#D5D8B5' }}>
@@ -100,7 +100,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
               )}
             </div>
           </div>
-          <div className="absolute right-0 flex items-center gap-2">
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2 pr-0.5">
             <ShareButton weather={weather} city={city} location={location} elementRef={containerRef} />
             {city && (
               <button
@@ -112,7 +112,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
                   }
                   window.dispatchEvent(new Event('favoritesUpdated'));
                 }}
-                className="p-1.5 sm:p-2 rounded-full hover:bg-opacity-20 transition-all flex-shrink-0"
+                className="p-1.5 sm:p-2 rounded-full hover:bg-opacity-20 transition-all shrink-0"
                 style={{ backgroundColor: 'rgba(213, 216, 181, 0.1)' }}
               >
                 <AnimatedIcon hover scale={isFavorite(city)}>
@@ -133,7 +133,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
             <img
               src={`https://openweathermap.org/img/wn/${weatherIcon}@4x.png`}
               alt={weatherDescription}
-              className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 drop-shadow-2xl flex-shrink-0"
+              className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 drop-shadow-2xl shrink-0"
             />
             <div>
               <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black drop-shadow-2xl mb-1" style={{ color: '#D5D8B5' }}>
@@ -154,7 +154,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
           <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
               <AnimatedIcon hover pulse>
-                <FiDroplet className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
+                <FiDroplet className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" style={{ color: '#809A6F' }} />
               </AnimatedIcon>
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Nem</span>
             </div>
@@ -164,7 +164,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
           <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
               <AnimatedIcon hover rotate>
-                <FiWind className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
+                <FiWind className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" style={{ color: '#809A6F' }} />
               </AnimatedIcon>
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Rüzgar</span>
             </div>
@@ -174,7 +174,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
           <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
               <AnimatedIcon hover>
-                <FiActivity className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#A25B5B' }} />
+                <FiActivity className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" style={{ color: '#A25B5B' }} />
               </AnimatedIcon>
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Basınç</span>
             </div>
@@ -184,7 +184,7 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
           <div className="rounded-xl sm:rounded-2xl p-2 sm:p-3 border backdrop-blur-md w-full" style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', borderColor: 'rgba(213, 216, 181, 0.3)' }}>
             <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
               <AnimatedIcon hover bounce>
-                <FiEye className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" style={{ color: '#CC9C75' }} />
+                <FiEye className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" style={{ color: '#CC9C75' }} />
               </AnimatedIcon>
               <span className="text-xs sm:text-sm font-medium" style={{ color: '#D5D8B5', opacity: 0.8 }}>Görüş</span>
             </div>
