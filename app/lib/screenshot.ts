@@ -316,6 +316,109 @@ function drawWeatherDecor(ctx: CanvasRenderingContext2D, category: string, width
   }
 }
 
+function drawStoryIcon(
+  ctx: CanvasRenderingContext2D,
+  category: string,
+  centerX: number,
+  centerY: number
+) {
+  const drawCloud = (x: number, y: number, width: number, height: number, color: string) => {
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.ellipse(x - width * 0.2, y, width * 0.35, height * 0.55, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + width * 0.05, y - height * 0.25, width * 0.45, height * 0.65, 0, 0, Math.PI * 2);
+    ctx.ellipse(x + width * 0.35, y, width * 0.4, height * 0.6, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, y + height * 0.15, width * 0.55, height * 0.55, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  };
+
+  ctx.save();
+  ctx.translate(centerX, centerY);
+  ctx.scale(1.1, 1.1);
+
+  switch (category) {
+    case 'sunny': {
+      const radius = 120;
+      const sunGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, radius);
+      sunGradient.addColorStop(0, '#FFF6C7');
+      sunGradient.addColorStop(1, '#FFC857');
+      ctx.fillStyle = sunGradient;
+      ctx.beginPath();
+      ctx.arc(0, 0, radius * 0.85, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = 'rgba(255, 224, 140, 0.9)';
+      ctx.lineWidth = 14;
+      for (let i = 0; i < 12; i++) {
+        const angle = (Math.PI * 2 * i) / 12;
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
+        ctx.lineTo(Math.cos(angle) * (radius + 60), Math.sin(angle) * (radius + 60));
+        ctx.stroke();
+      }
+      break;
+    }
+
+    case 'rain': {
+      drawCloud(0, 20, 220, 120, 'rgba(246, 248, 255, 0.95)');
+      ctx.fillStyle = '#3B82F6';
+      const dropPositions = [-80, -30, 20, 70];
+      dropPositions.forEach((x) => {
+        ctx.beginPath();
+        ctx.moveTo(x, 100);
+        ctx.quadraticCurveTo(x - 14, 140, x, 160);
+        ctx.quadraticCurveTo(x + 14, 140, x, 100);
+        ctx.fill();
+      });
+      break;
+    }
+
+    case 'snow': {
+      drawCloud(0, 30, 220, 120, 'rgba(246, 248, 255, 0.95)');
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.lineWidth = 6;
+      const flakePositions = [-70, -10, 50];
+      flakePositions.forEach((x, index) => {
+        const y = 140 + index * 20;
+        ctx.save();
+        ctx.translate(x, y);
+        for (let i = 0; i < 6; i++) {
+          ctx.rotate(Math.PI / 3);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(0, 36);
+          ctx.stroke();
+        }
+        ctx.restore();
+      });
+      break;
+    }
+
+    case 'cloudy': {
+      drawCloud(-40, 0, 200, 120, 'rgba(255, 255, 255, 0.85)');
+      drawCloud(50, 30, 220, 130, 'rgba(237, 241, 255, 0.9)');
+      break;
+    }
+
+    default: {
+      const sunGradient = ctx.createRadialGradient(-50, -60, 0, -50, -60, 100);
+      sunGradient.addColorStop(0, '#FFE9A3');
+      sunGradient.addColorStop(1, '#FFB347');
+      ctx.fillStyle = sunGradient;
+      ctx.beginPath();
+      ctx.arc(-50, -60, 85, 0, Math.PI * 2);
+      ctx.fill();
+
+      drawCloud(30, 20, 220, 120, 'rgba(246, 248, 255, 0.94)');
+      break;
+    }
+  }
+
+  ctx.restore();
+}
+
 export async function createInstagramStoryScreenshot(
   data: BaseScreenshotData,
   _options?: { element?: HTMLElement | null }
@@ -382,14 +485,7 @@ export async function createInstagramStoryScreenshot(
   ctx.fill();
   ctx.restore();
 
-  try {
-    const iconUrl = `https://openweathermap.org/img/wn/${data.icon}@4x.png`;
-    const iconImage = await loadImage(iconUrl);
-    const iconSize = 220;
-    ctx.drawImage(iconImage, iconCircleX - iconSize / 2, iconCircleY - iconSize / 2, iconSize, iconSize);
-  } catch (error) {
-    console.warn('Weather icon yüklenemedi:', error);
-  }
+  drawStoryIcon(ctx, theme.category, iconCircleX, iconCircleY);
 
   drawText(ctx, `${Math.round(data.temperature)}°`, width / 2, height * 0.69, {
     font: '900 220px "Inter", Arial, sans-serif',
