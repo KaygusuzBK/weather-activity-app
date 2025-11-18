@@ -24,7 +24,6 @@ export default function UnitToggle() {
   useEffect(() => {
     if (!mounted || typeof window === 'undefined') return;
     
-    // Context'ten unit'i dinle
     const handleUnitChange = () => {
       try {
         const savedUnit = localStorage.getItem('temperatureUnit') as 'celsius' | 'fahrenheit' | null;
@@ -61,12 +60,8 @@ export default function UnitToggle() {
 
   if (!mounted) {
     return (
-      <div className="px-3 py-1.5 rounded-full font-medium text-sm shrink-0 min-w-[60px] flex items-center justify-center" style={{
-        backgroundColor: 'rgba(128, 154, 111, 0.2)',
-        color: '#2C2C2C',
-        border: '1px solid rgba(128, 154, 111, 0.3)',
-      }}>
-        <span className="font-bold">°C</span>
+      <div className="px-4 py-2 rounded-xl bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl border border-white/20 dark:border-gray-700/20 shadow-lg">
+        <span className="font-bold text-indigo-600 dark:text-indigo-400">°C</span>
       </div>
     );
   }
@@ -74,18 +69,14 @@ export default function UnitToggle() {
   return (
     <button
       onClick={toggleUnit}
-      className="px-3 py-1.5 rounded-full font-medium transition-all text-sm shrink-0 min-w-[60px]"
-      style={{
-        backgroundColor: 'rgba(128, 154, 111, 0.2)',
-        color: '#2C2C2C',
-        border: '1px solid rgba(128, 154, 111, 0.3)',
-      }}
+      className="px-4 py-2 rounded-xl bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl border border-white/20 dark:border-gray-700/20 hover:bg-white/60 dark:hover:bg-gray-700/60 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
       aria-label={`Sıcaklık birimi: ${unit === 'celsius' ? 'Fahrenheit\'a geç' : 'Celsius\'a geç'}`}
     >
       <AnimatedIcon hover>
-        <span className="font-bold">{unit === 'celsius' ? '°C' : '°F'}</span>
+        <span className="font-bold text-indigo-600 dark:text-indigo-400">
+          {unit === 'celsius' ? '°C' : '°F'}
+        </span>
       </AnimatedIcon>
     </button>
   );
 }
-

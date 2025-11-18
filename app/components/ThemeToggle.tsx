@@ -81,8 +81,8 @@ export default function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="p-2 rounded-full shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center" style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)' }}>
-        <FiMoon className="w-5 h-5" style={{ color: '#809A6F' }} />
+      <div className="p-2.5 rounded-xl bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl border border-white/20 dark:border-gray-700/20 shadow-lg">
+        <FiMoon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
       </div>
     );
   }
@@ -90,18 +90,16 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-full hover:bg-opacity-20 transition-all shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center"
-      style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)' }}
+      className="p-2.5 rounded-xl bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl border border-white/20 dark:border-gray-700/20 hover:bg-white/60 dark:hover:bg-gray-700/60 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
       aria-label={theme === 'light' ? 'Dark mode aç' : 'Light mode aç'}
     >
       <AnimatedIcon hover rotate>
         {theme === 'light' ? (
-          <FiMoon className="w-5 h-5" style={{ color: '#809A6F' }} />
+          <FiMoon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
         ) : (
-          <FiSun className="w-5 h-5" style={{ color: '#809A6F' }} />
+          <FiSun className="w-5 h-5 text-amber-500 dark:text-amber-400" />
         )}
       </AnimatedIcon>
     </button>
   );
 }
-

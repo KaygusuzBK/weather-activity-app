@@ -30,15 +30,12 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
   useEffect(() => {
     loadData();
 
-    // Storage event listener for cross-component updates
     const handleStorageChange = () => {
       loadData();
     };
 
-    // Listen to both native storage events and custom events
     window.addEventListener('storage', handleStorageChange);
     
-    // Custom event listener for same-tab updates
     const handleCustomStorage = () => {
       loadData();
     };
@@ -58,7 +55,6 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
   const handleToggleFavorite = (city: City, e: React.MouseEvent) => {
     e.stopPropagation();
     
-    // Optimistic update
     const wasFavorite = isFavorite(city);
     const updatedFavorites = wasFavorite
       ? favorites.filter(c => !(c.name === city.name && c.country === city.country))
@@ -66,7 +62,6 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
     
     setFavorites(updatedFavorites);
     
-    // Actual update
     try {
       if (wasFavorite) {
         removeFavorite(city);
@@ -75,7 +70,6 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
       }
       loadData();
     } catch (error) {
-      // Rollback on error
       loadData();
       console.error('Favorite toggle error:', error);
     }
@@ -84,18 +78,15 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
   const handleRemoveRecent = (city: City, e: React.MouseEvent) => {
     e.stopPropagation();
     
-    // Optimistic update
     const updated = recentCities.filter(
       c => !(c.name === city.name && c.country === city.country)
     );
     setRecentCities(updated);
     
-    // Actual update
     try {
       removeRecentCity(city);
       loadData();
     } catch (error) {
-      // Rollback on error
       loadData();
       console.error('Remove recent error:', error);
     }
@@ -103,62 +94,48 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
 
   return (
     <div className="w-full">
-      {/* Tabs and Content in one compact row */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
-        {/* Tabs as compact buttons */}
-        <div className="flex gap-1.5 shrink-0">
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
+        {/* Tabs - Ultra compact */}
+        <div className="flex gap-1 shrink-0">
           <button
             onClick={() => setActiveTab('favorites')}
-            className="px-2 py-1 rounded-full font-medium transition-all text-xs shrink-0"
-            style={{
-              backgroundColor: activeTab === 'favorites' ? '#809A6F' : 'rgba(128, 154, 111, 0.2)',
-              color: activeTab === 'favorites' ? '#D5D8B5' : '#2C2C2C',
-            }}
+            className={`px-2 py-1 rounded-lg font-semibold transition-all text-[10px] backdrop-blur-xl border shadow-sm ${
+              activeTab === 'favorites'
+                ? 'bg-indigo-600 dark:bg-indigo-500 text-white border-indigo-500/50 dark:border-indigo-400/50'
+                : 'bg-white/40 dark:bg-gray-800/40 text-gray-700 dark:text-gray-200 border-white/20 dark:border-gray-700/20'
+            }`}
           >
-            <AnimatedIcon hover>
-              <IoHeart className="w-3 h-3 inline mr-1" />
-            </AnimatedIcon>
-            <span className="hidden sm:inline">Favoriler</span>
-            <span className="sm:hidden">({favorites.length})</span>
-            <span className="hidden sm:inline">({favorites.length})</span>
+            <IoHeart className="w-2.5 h-2.5 inline mr-0.5" />
+            <span className="hidden sm:inline text-[10px]">Fav</span>
+            <span className="text-[10px]">({favorites.length})</span>
           </button>
           <button
             onClick={() => setActiveTab('recent')}
-            className="px-2 py-1 rounded-full font-medium transition-all text-xs shrink-0"
-            style={{
-              backgroundColor: activeTab === 'recent' ? '#809A6F' : 'rgba(128, 154, 111, 0.2)',
-              color: activeTab === 'recent' ? '#D5D8B5' : '#2C2C2C',
-            }}
+            className={`px-2 py-1 rounded-lg font-semibold transition-all text-[10px] backdrop-blur-xl border shadow-sm ${
+              activeTab === 'recent'
+                ? 'bg-indigo-600 dark:bg-indigo-500 text-white border-indigo-500/50 dark:border-indigo-400/50'
+                : 'bg-white/40 dark:bg-gray-800/40 text-gray-700 dark:text-gray-200 border-white/20 dark:border-gray-700/20'
+            }`}
           >
-            <AnimatedIcon hover>
-              <FiClock className="w-3 h-3 inline mr-1" />
-            </AnimatedIcon>
-            <span className="hidden sm:inline">Son Görüntülenen</span>
-            <span className="sm:hidden">({recentCities.length})</span>
-            <span className="hidden sm:inline">({recentCities.length})</span>
+            <FiClock className="w-2.5 h-2.5 inline mr-0.5" />
+            <span className="hidden sm:inline text-[10px]">Son</span>
+            <span className="text-[10px]">({recentCities.length})</span>
           </button>
         </div>
 
-        {/* Content */}
-        <div className="flex gap-2 shrink-0">
+        {/* Content - Ultra compact */}
+        <div className="flex gap-1.5 shrink-0">
           {showCurrentLocation && onCurrentLocation && (
             <div
               onClick={onCurrentLocation}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-full border-2 cursor-pointer transition-all min-w-fit shrink-0"
-              style={{
-                backgroundColor: selectedCity === null
-                  ? '#809A6F'
-                  : 'rgba(213, 216, 181, 0.3)',
-                borderColor: '#809A6F',
-                color: selectedCity === null
-                  ? '#D5D8B5'
-                  : '#2C2C2C',
-              }}
+              className={`flex items-center gap-1 px-2 py-1 rounded-lg cursor-pointer transition-all backdrop-blur-xl border shadow-sm ${
+                selectedCity === null
+                  ? 'bg-indigo-600 dark:bg-indigo-500 text-white border-indigo-500/50 dark:border-indigo-400/50'
+                  : 'bg-white/40 dark:bg-gray-800/40 text-gray-700 dark:text-gray-200 border-white/20 dark:border-gray-700/20'
+              }`}
             >
-              <AnimatedIcon hover pulse>
-                <HiLocationMarker className="w-3 h-3" />
-              </AnimatedIcon>
-              <span className="font-medium text-xs hidden sm:inline">Konumum</span>
+              <HiLocationMarker className="w-3 h-3" />
+              <span className="font-semibold text-[10px] hidden sm:inline">Konum</span>
             </div>
           )}
           {activeTab === 'favorites' ? (
@@ -167,30 +144,23 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
                 <div
                   key={`${city.name}-${city.country}`}
                   onClick={() => onCitySelect(city)}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-full border-2 cursor-pointer transition-all min-w-fit shrink-0"
-                  style={{
-                    backgroundColor: selectedCity?.name === city.name && selectedCity?.country === city.country
-                      ? '#809A6F'
-                      : 'rgba(213, 216, 181, 0.3)',
-                    borderColor: '#809A6F',
-                    color: selectedCity?.name === city.name && selectedCity?.country === city.country
-                      ? '#D5D8B5'
-                      : '#2C2C2C',
-                  }}
+                  className={`flex items-center gap-1 px-2 py-1 rounded-lg cursor-pointer transition-all backdrop-blur-xl border shadow-sm ${
+                    selectedCity?.name === city.name && selectedCity?.country === city.country
+                      ? 'bg-indigo-600 dark:bg-indigo-500 text-white border-indigo-500/50 dark:border-indigo-400/50'
+                      : 'bg-white/40 dark:bg-gray-800/40 text-gray-700 dark:text-gray-200 border-white/20 dark:border-gray-700/20'
+                  }`}
                 >
-                  <span className="text-sm">{city.emoji || '📍'}</span>
-                  <span className="font-medium text-xs">{city.name}</span>
+                  <span className="text-xs">{city.emoji || '📍'}</span>
+                  <span className="font-semibold text-[10px]">{city.name}</span>
                   <button
                     onClick={(e) => handleToggleFavorite(city, e)}
-                    className="ml-0.5 hover:scale-110 transition-transform"
+                    className="hover:scale-110 transition-transform"
                   >
-                    <AnimatedIcon hover scale={isFavorite(city)}>
-                      {isFavorite(city) ? (
-                        <IoHeart className="w-3 h-3" />
-                      ) : (
-                        <IoHeartOutline className="w-3 h-3" />
-                      )}
-                    </AnimatedIcon>
+                    {isFavorite(city) ? (
+                      <IoHeart className="w-2.5 h-2.5" />
+                    ) : (
+                      <IoHeartOutline className="w-2.5 h-2.5" />
+                    )}
                   </button>
                 </div>
               ))
@@ -201,26 +171,19 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
                 <div
                   key={`${city.name}-${city.country}`}
                   onClick={() => onCitySelect(city)}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-full border-2 cursor-pointer transition-all min-w-fit shrink-0"
-                  style={{
-                    backgroundColor: selectedCity?.name === city.name && selectedCity?.country === city.country
-                      ? '#809A6F'
-                      : 'rgba(213, 216, 181, 0.3)',
-                    borderColor: '#809A6F',
-                    color: selectedCity?.name === city.name && selectedCity?.country === city.country
-                      ? '#D5D8B5'
-                      : '#2C2C2C',
-                  }}
+                  className={`flex items-center gap-1 px-2 py-1 rounded-lg cursor-pointer transition-all backdrop-blur-xl border shadow-sm ${
+                    selectedCity?.name === city.name && selectedCity?.country === city.country
+                      ? 'bg-indigo-600 dark:bg-indigo-500 text-white border-indigo-500/50 dark:border-indigo-400/50'
+                      : 'bg-white/40 dark:bg-gray-800/40 text-gray-700 dark:text-gray-200 border-white/20 dark:border-gray-700/20'
+                  }`}
                 >
-                  <span className="text-sm">{city.emoji || '📍'}</span>
-                  <span className="font-medium text-xs">{city.name}</span>
+                  <span className="text-xs">{city.emoji || '📍'}</span>
+                  <span className="font-semibold text-[10px]">{city.name}</span>
                   <button
                     onClick={(e) => handleRemoveRecent(city, e)}
-                    className="ml-0.5 hover:scale-110 transition-transform opacity-50 hover:opacity-100"
+                    className="hover:scale-110 transition-transform opacity-50 hover:opacity-100"
                   >
-                    <AnimatedIcon hover>
-                      <FiX className="w-3 h-3" />
-                    </AnimatedIcon>
+                    <FiX className="w-2.5 h-2.5" />
                   </button>
                 </div>
               ))
@@ -231,4 +194,3 @@ export default function FavoritesAndRecent({ onCitySelect, onCurrentLocation, se
     </div>
   );
 }
-

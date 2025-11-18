@@ -20,28 +20,23 @@ function CityWeatherCard({ city }: CityWeatherCardProps) {
   }
 
   return (
-    <div
-      className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 rounded-full border min-w-fit transition-colors"
-      style={{ backgroundColor: 'rgba(213, 216, 181, 0.2)', backdropFilter: 'blur(8px)', borderColor: 'rgba(213, 216, 181, 0.3)' }}
-      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(213, 216, 181, 0.3)'}
-      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(213, 216, 181, 0.2)'}
-    >
-      <span className="text-lg sm:text-xl">{city.emoji}</span>
-      <div className="flex flex-col">
-        <span className="font-bold text-xs" style={{ color: '#2C2C2C' }}>{city.name}</span>
+    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/20 dark:bg-gray-800/20 backdrop-blur-md border border-white/30 dark:border-gray-700/30 min-w-fit transition-all hover:bg-white/30 dark:hover:bg-gray-800/30">
+      <span className="text-sm">{city.emoji}</span>
+      <div className="flex items-center gap-1">
+        <span className="font-bold text-[10px] text-white">{city.name}</span>
         {weather ? (
-          <span className="text-xs" style={{ color: '#2C2C2C', opacity: 0.8 }}>
-            {Math.round(weather.main.temp)}°C
+          <span className="text-[10px] text-white/80">
+            {Math.round(weather.main.temp)}°
           </span>
         ) : (
-          <span className="text-xs" style={{ color: '#2C2C2C', opacity: 0.5 }}>...</span>
+          <span className="text-[10px] text-white/50">...</span>
         )}
       </div>
       {weather && (
         <img
           src={`https://openweathermap.org/img/wn/${weather.weather[0]?.icon}.png`}
           alt={weather.weather[0]?.description}
-          className="w-5 h-5 sm:w-6 sm:h-6"
+          className="w-4 h-4"
         />
       )}
     </div>
@@ -49,12 +44,11 @@ function CityWeatherCard({ city }: CityWeatherCardProps) {
 }
 
 export default function CitiesMarquee() {
-  // Duplicate cities for seamless scroll
   const duplicatedCities = [...popularCities, ...popularCities];
 
   return (
-    <div className="w-full py-2 sm:py-2.5 overflow-hidden relative" style={{ background: 'linear-gradient(to right, #809A6F, #A25B5B, #CC9C75)' }}>
-      <div className="flex animate-scroll gap-4 sm:gap-6 md:gap-8 whitespace-nowrap">
+    <div className="w-full py-1.5 overflow-hidden relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 dark:from-indigo-700 dark:via-purple-700 dark:to-pink-700">
+      <div className="flex animate-scroll gap-2 whitespace-nowrap">
         {duplicatedCities.map((city, index) => (
           <CityWeatherCard key={`${city.name}-${index}`} city={city} />
         ))}
@@ -62,4 +56,3 @@ export default function CitiesMarquee() {
     </div>
   );
 }
-

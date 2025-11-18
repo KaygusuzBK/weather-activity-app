@@ -59,7 +59,7 @@ export default function CitySearch({ onCitySelect }: CitySearchProps) {
       }
     };
 
-    const timeoutId = setTimeout(searchCities, 300); // Debounce
+    const timeoutId = setTimeout(searchCities, 300);
     return () => clearTimeout(timeoutId);
   }, [query]);
 
@@ -69,7 +69,7 @@ export default function CitySearch({ onCitySelect }: CitySearchProps) {
       country: result.country,
       lat: result.lat,
       lon: result.lon,
-      emoji: '📍', // Default emoji
+      emoji: '📍',
     };
     
     addRecentCity(city);
@@ -79,11 +79,11 @@ export default function CitySearch({ onCitySelect }: CitySearchProps) {
   };
 
   return (
-    <div ref={searchRef} className="relative w-full max-w-md mx-auto">
+    <div ref={searchRef} className="relative w-full">
       <div className="relative">
-        <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+        <div className="absolute left-4 top-1/2 transform -translate-y-1/2 pointer-events-none z-10">
           <AnimatedIcon hover pulse>
-            <FiSearch className="w-5 h-5" style={{ color: '#809A6F' }} />
+            <FiSearch className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
           </AnimatedIcon>
         </div>
         <input
@@ -92,12 +92,7 @@ export default function CitySearch({ onCitySelect }: CitySearchProps) {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.length >= 2 && setShowResults(true)}
           placeholder="Şehir ara..."
-          className="w-full pl-10 pr-10 py-2 sm:py-2.5 rounded-full border-2 focus:outline-none focus:ring-2 transition-all text-sm sm:text-base"
-          style={{
-            backgroundColor: 'rgba(213, 216, 181, 0.3)',
-            borderColor: '#809A6F',
-            color: '#2C2C2C',
-          }}
+          className="w-full pl-12 pr-12 py-2.5 rounded-xl bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl border border-white/20 dark:border-gray-700/20 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 shadow-lg"
         />
         {query && (
           <button
@@ -106,27 +101,19 @@ export default function CitySearch({ onCitySelect }: CitySearchProps) {
               setResults([]);
               setShowResults(false);
             }}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 hover:scale-110 transition-transform"
           >
             <AnimatedIcon hover>
-              <FiX className="w-5 h-5" style={{ color: '#809A6F' }} />
+              <FiX className="w-5 h-5 text-gray-600 dark:text-gray-400" />
             </AnimatedIcon>
           </button>
         )}
       </div>
 
       {showResults && (
-        <div
-          className="absolute z-50 w-full mt-2 rounded-2xl border-2 overflow-hidden shadow-xl"
-          style={{
-            backgroundColor: '#D5D8B5',
-            borderColor: '#809A6F',
-            maxHeight: '400px',
-            overflowY: 'auto',
-          }}
-        >
+        <div className="absolute z-50 w-full mt-2 rounded-2xl bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl border border-white/20 dark:border-gray-700/20 overflow-hidden shadow-2xl max-h-96 overflow-y-auto">
           {loading ? (
-            <div className="p-4 text-center" style={{ color: '#2C2C2C' }}>
+            <div className="p-4 text-center text-gray-600 dark:text-gray-400 animate-pulse">
               Aranıyor...
             </div>
           ) : results.length > 0 ? (
@@ -135,24 +122,17 @@ export default function CitySearch({ onCitySelect }: CitySearchProps) {
                 <button
                   key={`${result.name}-${result.country}-${index}`}
                   onClick={() => handleSelect(result)}
-                  className="w-full px-4 py-3 text-left hover:bg-opacity-50 transition-colors flex items-center gap-3"
-                  style={{ backgroundColor: 'rgba(128, 154, 111, 0.1)' }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(128, 154, 111, 0.2)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(128, 154, 111, 0.1)';
-                  }}
+                  className="w-full px-4 py-3 text-left hover:bg-indigo-50 dark:hover:bg-gray-700/50 transition-all duration-200 flex items-center gap-3 group"
                 >
                   <AnimatedIcon hover pulse>
-                    <HiLocationMarker className="w-5 h-5 flex-shrink-0" style={{ color: '#809A6F' }} />
+                    <HiLocationMarker className="w-5 h-5 flex-shrink-0 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform" />
                   </AnimatedIcon>
                   <div className="flex-1 min-w-0">
-                    <div className="font-semibold truncate" style={{ color: '#2C2C2C' }}>
+                    <div className="font-semibold truncate text-gray-800 dark:text-gray-100">
                       {result.name}
                       {result.state && `, ${result.state}`}
                     </div>
-                    <div className="text-sm truncate" style={{ color: '#2C2C2C', opacity: 0.7 }}>
+                    <div className="text-sm truncate text-gray-600 dark:text-gray-400">
                       {result.country}
                     </div>
                   </div>
@@ -160,7 +140,7 @@ export default function CitySearch({ onCitySelect }: CitySearchProps) {
               ))}
             </div>
           ) : query.length >= 2 ? (
-            <div className="p-4 text-center" style={{ color: '#2C2C2C', opacity: 0.7 }}>
+            <div className="p-4 text-center text-gray-600 dark:text-gray-400">
               Sonuç bulunamadı
             </div>
           ) : null}
@@ -169,4 +149,3 @@ export default function CitySearch({ onCitySelect }: CitySearchProps) {
     </div>
   );
 }
-
