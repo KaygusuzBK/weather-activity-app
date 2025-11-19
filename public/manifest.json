@@ -1,6 +1,6 @@
 {
-  "name": "Weather Activity App",
-  "short_name": "Weather App",
+  "name": "Hava Durumu",
+  "short_name": "Hava Durumu",
   "description": "Modern hava durumu uygulaması - aktivite önerileri ve bildirimlerle",
   "start_url": "/",
   "display": "standalone",
@@ -9,13 +9,59 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/favicon.ico",
-      "sizes": "any",
-      "type": "image/x-icon"
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "48x48",
+      "type": "image/png"
     }
   ],
-  "categories": ["weather", "productivity"],
+  "categories": ["weather", "productivity", "lifestyle"],
   "screenshots": [],
-  "shortcuts": []
+  "shortcuts": [
+    {
+      "name": "Hava Durumu",
+      "short_name": "Hava",
+      "description": "Hava durumunu hızlıca kontrol et",
+      "url": "/",
+      "icons": [
+        {
+          "src": "/icon.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
 }
 

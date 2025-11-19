@@ -21,6 +21,17 @@ export const metadata: Metadata = {
   title: "Hava Durumu",
   description: "Bulunduğunuz konumun hava durumu ve 5 günlük tahmin - Aktivite önerileri ve bildirimlerle",
   manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/icon.png", sizes: "any" },
+      { url: "/icon.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: [{ url: "/icon.png" }],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -45,9 +56,15 @@ export default function RootLayout({
     <html lang="tr">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="apple-touch-icon" href="/favicon.ico" />
+        <link rel="icon" href="/icon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/icon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icon.png" />
+        <link rel="apple-touch-icon" sizes="167x167" href="/icon.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/icon.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/icon.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Hava Durumu" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

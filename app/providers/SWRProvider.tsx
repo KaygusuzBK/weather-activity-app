@@ -12,13 +12,22 @@ export default function SWRProvider({ children }: SWRProviderProps) {
     <SWRConfig
       value={{
         revalidateOnFocus: false,
-        revalidateOnReconnect: true,
-        revalidateIfStale: true,
-        dedupingInterval: 2000,
-        errorRetryCount: 3,
-        errorRetryInterval: 1000,
+        revalidateOnReconnect: false,
+        revalidateIfStale: false,
+        dedupingInterval: 10000, // 10 saniye - aynı request'i tekrar atmaz
+        errorRetryCount: 2, // 3'ten 2'ye düşürüldü
+        errorRetryInterval: 2000, // 1 saniye yerine 2 saniye
+        shouldRetryOnError: (error) => {
+          // 4xx hatalarında retry yapma
+          if (error?.status >= 400 && error?.status < 500) {
+            return false;
+          }
+          return true;
+        },
         onError: (error) => {
-          console.error('SWR Error:', error);
+          if (process.env.NODE_ENV === 'development') {
+            console.error('SWR Error:', error);
+          }
         },
         fetcher: async (url: string) => {
           const response = await fetch(url);

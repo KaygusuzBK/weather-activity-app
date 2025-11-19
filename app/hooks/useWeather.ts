@@ -15,7 +15,7 @@ interface UseWeatherOptions {
  * SWR ile current weather fetching hook
  */
 export function useCurrentWeather({ lat, lon, enabled = true }: UseWeatherOptions) {
-  const cacheKey = lat && lon ? `weather-${lat}-${lon}` : null;
+  const cacheKey = lat && lon ? `weather-${lat.toFixed(2)}-${lon.toFixed(2)}` : null;
 
   const { data, error, isLoading, mutate } = useSWR<CurrentWeather>(
     enabled && cacheKey ? cacheKey : null,
@@ -25,13 +25,6 @@ export function useCurrentWeather({ lat, lon, enabled = true }: UseWeatherOption
       // Önce cache'den kontrol et
       const cached = getCache<CurrentWeather>(cacheKey!);
       if (cached) {
-        // Background'da fresh data fetch et
-        weatherAPI.getCurrentWeather(lat, lon, false).then((freshData) => {
-          setCache(cacheKey!, freshData);
-          mutate(freshData, false); // Revalidate without triggering loading
-        }).catch(() => {
-          // Hata olursa cached data'yı kullan
-        });
         return cached;
       }
 
@@ -39,12 +32,13 @@ export function useCurrentWeather({ lat, lon, enabled = true }: UseWeatherOption
     },
     {
       revalidateOnFocus: false,
-      revalidateOnReconnect: true,
-      revalidateIfStale: true,
-      dedupingInterval: 2000,
-      errorRetryCount: 3,
-      errorRetryInterval: 1000,
-      refreshInterval: 5 * 60 * 1000, // 5 minutes
+      revalidateOnReconnect: false,
+      revalidateIfStale: false,
+      dedupingInterval: 10000,
+      errorRetryCount: 2,
+      errorRetryInterval: 2000,
+      refreshInterval: 10 * 60 * 1000, // 10 dakika (5'ten 10'a çıkarıldı)
+      keepPreviousData: true,
     }
   );
 
@@ -60,7 +54,7 @@ export function useCurrentWeather({ lat, lon, enabled = true }: UseWeatherOption
  * SWR ile forecast fetching hook
  */
 export function useForecast({ lat, lon, enabled = true }: UseWeatherOptions) {
-  const cacheKey = lat && lon ? `forecast-${lat}-${lon}` : null;
+  const cacheKey = lat && lon ? `forecast-${lat.toFixed(2)}-${lon.toFixed(2)}` : null;
 
   const { data, error, isLoading, mutate } = useSWR(
     enabled && cacheKey ? cacheKey : null,
@@ -70,13 +64,6 @@ export function useForecast({ lat, lon, enabled = true }: UseWeatherOptions) {
       // Önce cache'den kontrol et
       const cached = getCache(cacheKey!);
       if (cached) {
-        // Background'da fresh data fetch et
-        weatherAPI.getForecast(lat, lon, false).then((freshData) => {
-          setCache(cacheKey!, freshData);
-          mutate(freshData, false);
-        }).catch(() => {
-          // Hata olursa cached data'yı kullan
-        });
         return cached;
       }
 
@@ -84,12 +71,13 @@ export function useForecast({ lat, lon, enabled = true }: UseWeatherOptions) {
     },
     {
       revalidateOnFocus: false,
-      revalidateOnReconnect: true,
-      revalidateIfStale: true,
-      dedupingInterval: 2000,
-      errorRetryCount: 3,
-      errorRetryInterval: 1000,
-      refreshInterval: 5 * 60 * 1000, // 5 minutes
+      revalidateOnReconnect: false,
+      revalidateIfStale: false,
+      dedupingInterval: 10000,
+      errorRetryCount: 2,
+      errorRetryInterval: 2000,
+      refreshInterval: 10 * 60 * 1000, // 10 dakika
+      keepPreviousData: true,
     }
   );
 
@@ -105,7 +93,7 @@ export function useForecast({ lat, lon, enabled = true }: UseWeatherOptions) {
  * SWR ile hourly forecast fetching hook
  */
 export function useHourlyForecast({ lat, lon, enabled = true }: UseWeatherOptions) {
-  const cacheKey = lat && lon ? `hourly-${lat}-${lon}` : null;
+  const cacheKey = lat && lon ? `hourly-${lat.toFixed(2)}-${lon.toFixed(2)}` : null;
 
   const { data, error, isLoading, mutate } = useSWR<ForecastItem[]>(
     enabled && cacheKey ? cacheKey : null,
@@ -115,13 +103,6 @@ export function useHourlyForecast({ lat, lon, enabled = true }: UseWeatherOption
       // Önce cache'den kontrol et
       const cached = getCache<ForecastItem[]>(cacheKey!);
       if (cached) {
-        // Background'da fresh data fetch et
-        weatherAPI.getHourlyForecast(lat, lon, false).then((freshData) => {
-          setCache(cacheKey!, freshData);
-          mutate(freshData, false);
-        }).catch(() => {
-          // Hata olursa cached data'yı kullan
-        });
         return cached;
       }
 
@@ -129,12 +110,13 @@ export function useHourlyForecast({ lat, lon, enabled = true }: UseWeatherOption
     },
     {
       revalidateOnFocus: false,
-      revalidateOnReconnect: true,
-      revalidateIfStale: true,
-      dedupingInterval: 2000,
-      errorRetryCount: 3,
-      errorRetryInterval: 1000,
-      refreshInterval: 5 * 60 * 1000, // 5 minutes
+      revalidateOnReconnect: false,
+      revalidateIfStale: false,
+      dedupingInterval: 10000,
+      errorRetryCount: 2,
+      errorRetryInterval: 2000,
+      refreshInterval: 10 * 60 * 1000, // 10 dakika
+      keepPreviousData: true,
     }
   );
 
