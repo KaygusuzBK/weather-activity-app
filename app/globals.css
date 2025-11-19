@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@theme {
+  /* Dark mode strategy - class based */
+  --color-scheme: light dark;
+}
+
+@variant dark (.dark &);
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

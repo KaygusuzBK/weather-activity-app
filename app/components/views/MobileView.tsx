@@ -117,10 +117,10 @@ export default function MobileView({
                                             <UnitToggle />
                                         </div>
                                     </div>
+                                    <div className="h-px bg-gray-300 dark:bg-gray-700" />
+                                    <NotificationSettings inline={true} />
                                 </div>
                             </div>
-
-                            <NotificationSettings />
                         </div>
                     </BlurFade>
                 )}

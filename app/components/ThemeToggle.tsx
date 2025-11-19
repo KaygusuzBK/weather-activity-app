@@ -7,19 +7,7 @@ import { useTheme } from '../contexts/ThemeContext';
 
 export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
-  
-  // ThemeContext'ten tema ve toggle fonksiyonunu al
-  let theme: 'light' | 'dark' = 'light';
-  let toggleTheme = () => {};
-  
-  try {
-    const themeContext = useTheme();
-    theme = themeContext.theme;
-    toggleTheme = themeContext.toggleTheme;
-  } catch (e) {
-    // Context yoksa fallback
-    console.warn('ThemeContext not available');
-  }
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
