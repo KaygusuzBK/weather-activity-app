@@ -48,7 +48,7 @@ export default function DesktopView({
             </div>
 
             {/* Main Content */}
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="relative z-10 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 {/* Compact Header - All in one line */}
                 <div className="flex flex-col sm:flex-row items-center gap-3 mb-4">
                     {/* Logo - Compact */}
@@ -114,18 +114,28 @@ export default function DesktopView({
                     </MagicCard>
                 )}
 
-                {/* Weather Display */}
+                {/* Weather Display - Bento Box Layout */}
                 {locationLoading && !selectedCity ? (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <CurrentWeatherSkeleton />
-                        <div className="hidden lg:block">
+                    <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 xl:gap-6">
+                        {/* Main Weather - Takes 7 columns on XL */}
+                        <div className="xl:col-span-7">
+                            <CurrentWeatherSkeleton />
+                        </div>
+                        {/* Forecast - Takes 5 columns on XL */}
+                        <div className="xl:col-span-5">
                             <WeatherForecastSkeleton />
                         </div>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <CurrentWeather city={selectedCity} location={location} />
-                        <WeatherForecast city={selectedCity} location={location} />
+                    <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 xl:gap-6">
+                        {/* Main Weather Card - Larger, takes 7 columns */}
+                        <div className="xl:col-span-7 animate-in fade-in slide-in-from-left duration-700">
+                            <CurrentWeather city={selectedCity} location={location} />
+                        </div>
+                        {/* Forecast Card - Takes 5 columns */}
+                        <div className="xl:col-span-5 animate-in fade-in slide-in-from-right duration-700 delay-150">
+                            <WeatherForecast city={selectedCity} location={location} />
+                        </div>
                     </div>
                 )}
             </div>

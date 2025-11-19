@@ -119,23 +119,25 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
   const uvIndex = hour >= 10 && hour <= 16 ? Math.min(11, Math.round(5 + (weather.main.temp / 10))) : Math.max(0, Math.round(3 - Math.abs(hour - 13) / 2));
 
   return (
-    <div ref={containerRef} className="w-full">
+    <div ref={containerRef} className="w-full h-full">
       <MagicCard 
-        gradientSize={300}
+        gradientSize={400}
         gradientColor="#6366f1"
-        gradientOpacity={0.3}
+        gradientOpacity={0.4}
       >
-        <div className="bg-gradient-to-br from-indigo-500/90 to-purple-600/90 dark:from-indigo-600/90 dark:to-purple-700/90 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-gray-700/20 p-4 sm:p-5 shadow-2xl">
+        <div className="bg-gradient-to-br from-indigo-500/95 via-purple-500/95 to-pink-600/95 dark:from-indigo-600/95 dark:via-purple-600/95 dark:to-pink-700/95 backdrop-blur-xl rounded-3xl border border-white/30 dark:border-gray-700/30 p-5 sm:p-6 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-[1.01] h-full flex flex-col">
           {/* Header */}
-          <div className="flex items-start justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <HiLocationMarker className="w-4 h-4 text-white/90" />
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 bg-white/20 backdrop-blur-sm rounded-xl">
+                <HiLocationMarker className="w-5 h-5 text-white drop-shadow-lg" />
+              </div>
               <div>
-                <h2 className="text-lg font-black text-white drop-shadow-lg">
+                <h2 className="text-xl font-black text-white drop-shadow-lg">
                   {cityName}
                 </h2>
                 {countryName && (
-                  <p className="text-[10px] text-white/80">{countryName}</p>
+                  <p className="text-xs text-white/90 font-medium">{countryName}</p>
                 )}
               </div>
             </div>
@@ -154,12 +156,12 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
                     setIsFavorited(!isFavorited);
                     window.dispatchEvent(new Event('favoritesUpdated'));
                   }}
-                  className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm transition-all duration-300 border border-white/20"
+                  className="p-2 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-sm transition-all duration-300 border border-white/30 hover:scale-110 active:scale-95"
                 >
                   {isFavorited ? (
-                    <IoHeart className="w-4 h-4 text-pink-300" />
+                    <IoHeart className="w-5 h-5 text-pink-200 animate-pulse" />
                   ) : (
-                    <IoHeartOutline className="w-4 h-4 text-white" />
+                    <IoHeartOutline className="w-5 h-5 text-white" />
                   )}
                 </button>
               )}
@@ -167,20 +169,24 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
           </div>
 
           {/* Main Temperature Display */}
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <img
-              src={`https://openweathermap.org/img/wn/${weatherIcon}@4x.png`}
-              alt={weatherDescription}
-              className="w-24 h-24 sm:w-28 sm:h-28 drop-shadow-2xl"
-            />
+          <div className="flex items-center justify-center gap-6 mb-6 relative">
+            <div className="absolute inset-0 bg-white/5 backdrop-blur-sm rounded-2xl -z-10"></div>
+            <div className="relative">
+              <img
+                src={`https://openweathermap.org/img/wn/${weatherIcon}@4x.png`}
+                alt={weatherDescription}
+                className="w-28 h-28 sm:w-32 sm:h-32 drop-shadow-2xl hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-white/10 rounded-full blur-2xl"></div>
+            </div>
             <div>
-              <div className="text-5xl sm:text-6xl font-black text-white drop-shadow-2xl">
+              <div className="text-6xl sm:text-7xl font-black text-white drop-shadow-2xl mb-2 tracking-tight">
                 {temperature}°
               </div>
-              <div className="text-base font-bold capitalize text-white/90 mt-1">
+              <div className="text-lg font-bold capitalize text-white/95 mb-1">
                 {weatherDescription}
               </div>
-              <div className="text-xs text-white/70 mt-0.5">
+              <div className="text-sm text-white/80 px-3 py-1 bg-white/15 rounded-full inline-block backdrop-blur-sm">
                 Hissedilen: {feelsLike}°
               </div>
             </div>
@@ -192,47 +198,55 @@ export default function CurrentWeather({ city, location }: CurrentWeatherProps) 
           </div>
 
           {/* Weather Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-            <MagicCard gradientSize={150} gradientColor="#8b5cf6" gradientOpacity={0.4}>
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-2.5 border border-white/20 hover:bg-white/15 transition-all">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <WiHumidity className="w-5 h-5 text-blue-200" />
-                  <span className="text-[10px] font-medium text-white/80">Nem</span>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+            <MagicCard gradientSize={150} gradientColor="#8b5cf6" gradientOpacity={0.5}>
+              <div className="bg-white/15 backdrop-blur-md rounded-2xl p-3 border border-white/30 hover:bg-white/20 hover:scale-105 transition-all duration-300 group cursor-pointer">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <div className="p-1.5 bg-blue-400/30 rounded-lg group-hover:scale-110 transition-transform">
+                    <WiHumidity className="w-5 h-5 text-blue-100" />
+                  </div>
+                  <span className="text-xs font-semibold text-white/90">Nem</span>
                 </div>
-                <div className="text-xl font-black text-white">{humidity}%</div>
+                <div className="text-2xl font-black text-white">{humidity}%</div>
               </div>
             </MagicCard>
 
-            <MagicCard gradientSize={150} gradientColor="#8b5cf6" gradientOpacity={0.4}>
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-2.5 border border-white/20 hover:bg-white/15 transition-all">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <FiWind className="w-4 h-4 text-cyan-200" />
-                  <span className="text-[10px] font-medium text-white/80">Rüzgar</span>
+            <MagicCard gradientSize={150} gradientColor="#8b5cf6" gradientOpacity={0.5}>
+              <div className="bg-white/15 backdrop-blur-md rounded-2xl p-3 border border-white/30 hover:bg-white/20 hover:scale-105 transition-all duration-300 group cursor-pointer">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <div className="p-1.5 bg-cyan-400/30 rounded-lg group-hover:scale-110 transition-transform">
+                    <FiWind className="w-4 h-4 text-cyan-100" />
+                  </div>
+                  <span className="text-xs font-semibold text-white/90">Rüzgar</span>
                 </div>
-                <div className="text-xl font-black text-white">{windSpeed}</div>
-                <div className="text-[9px] text-white/70">km/h</div>
+                <div className="text-2xl font-black text-white">{windSpeed}</div>
+                <div className="text-[10px] text-white/80 font-medium">km/h</div>
               </div>
             </MagicCard>
 
-            <MagicCard gradientSize={150} gradientColor="#8b5cf6" gradientOpacity={0.4}>
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-2.5 border border-white/20 hover:bg-white/15 transition-all">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <FiEye className="w-4 h-4 text-purple-200" />
-                  <span className="text-[10px] font-medium text-white/80">Görüş</span>
+            <MagicCard gradientSize={150} gradientColor="#8b5cf6" gradientOpacity={0.5}>
+              <div className="bg-white/15 backdrop-blur-md rounded-2xl p-3 border border-white/30 hover:bg-white/20 hover:scale-105 transition-all duration-300 group cursor-pointer">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <div className="p-1.5 bg-purple-400/30 rounded-lg group-hover:scale-110 transition-transform">
+                    <FiEye className="w-4 h-4 text-purple-100" />
+                  </div>
+                  <span className="text-xs font-semibold text-white/90">Görüş</span>
                 </div>
-                <div className="text-xl font-black text-white">{visibility}</div>
-                <div className="text-[9px] text-white/70">km</div>
+                <div className="text-2xl font-black text-white">{visibility}</div>
+                <div className="text-[10px] text-white/80 font-medium">km</div>
               </div>
             </MagicCard>
 
-            <MagicCard gradientSize={150} gradientColor="#8b5cf6" gradientOpacity={0.4}>
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-2.5 border border-white/20 hover:bg-white/15 transition-all">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <WiBarometer className="w-5 h-5 text-amber-200" />
-                  <span className="text-[10px] font-medium text-white/80">Basınç</span>
+            <MagicCard gradientSize={150} gradientColor="#8b5cf6" gradientOpacity={0.5}>
+              <div className="bg-white/15 backdrop-blur-md rounded-2xl p-3 border border-white/30 hover:bg-white/20 hover:scale-105 transition-all duration-300 group cursor-pointer">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <div className="p-1.5 bg-amber-400/30 rounded-lg group-hover:scale-110 transition-transform">
+                    <WiBarometer className="w-5 h-5 text-amber-100" />
+                  </div>
+                  <span className="text-xs font-semibold text-white/90">Basınç</span>
                 </div>
-                <div className="text-xl font-black text-white">{pressure}</div>
-                <div className="text-[9px] text-white/70">hPa</div>
+                <div className="text-2xl font-black text-white">{pressure}</div>
+                <div className="text-[10px] text-white/80 font-medium">hPa</div>
               </div>
             </MagicCard>
           </div>
