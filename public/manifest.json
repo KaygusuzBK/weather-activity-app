@@ -1,67 +1,28 @@
 {
   "name": "Hava Durumu",
-  "short_name": "Hava Durumu",
+  "short_name": "Hava",
   "description": "Modern hava durumu uygulaması - aktivite önerileri ve bildirimlerle",
-  "start_url": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#D5D8B5",
-  "theme_color": "#809A6F",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
   "orientation": "portrait-primary",
   "icons": [
     {
       "src": "/icon.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icon.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     },
     {
       "src": "/icon.png",
       "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon.png",
-      "sizes": "144x144",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon.png",
-      "sizes": "96x96",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon.png",
-      "sizes": "72x72",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon.png",
-      "sizes": "48x48",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "categories": ["weather", "productivity", "lifestyle"],
-  "screenshots": [],
-  "shortcuts": [
-    {
-      "name": "Hava Durumu",
-      "short_name": "Hava",
-      "description": "Hava durumunu hızlıca kontrol et",
-      "url": "/",
-      "icons": [
-        {
-          "src": "/icon.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    }
-  ]
+  "prefer_related_applications": false
 }
 

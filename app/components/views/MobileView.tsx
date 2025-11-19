@@ -11,6 +11,7 @@ import FavoritesAndRecent from "../FavoritesAndRecent";
 import NotificationSettings from "../NotificationSettings";
 import ThemeToggle from "../ThemeToggle";
 import UnitToggle from "../UnitToggle";
+import InstallButton from "../InstallButton";
 import { City } from "../../data/popular-cities";
 import { MagicCard } from "../ui/magic-card";
 
@@ -119,6 +120,8 @@ export default function MobileView({
                                     </div>
                                     <div className="h-px bg-gray-300 dark:bg-gray-700" />
                                     <NotificationSettings inline={true} />
+                                    <div className="h-px bg-gray-300 dark:bg-gray-700" />
+                                    <InstallButton />
                                 </div>
                             </div>
                         </div>

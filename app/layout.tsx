@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ServiceWorkerRegistration from "./components/ServiceWorkerRegistration";
+import InstallPrompt from "./components/InstallPrompt";
 import SWRProvider from "./providers/SWRProvider";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -44,7 +45,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#809A6F",
+  themeColor: "#6366f1",
 };
 
 export default function RootLayout({
@@ -85,6 +86,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ServiceWorkerRegistration />
+        <InstallPrompt />
         <ErrorBoundary>
           <SWRProvider>
             <ThemeProvider>
