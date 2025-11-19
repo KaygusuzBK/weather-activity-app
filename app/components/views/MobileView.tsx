@@ -102,19 +102,23 @@ export default function MobileView({
                         <div className="space-y-4 pt-4">
                             <h2 className="text-2xl font-bold text-center dark:text-white">Ayarlar</h2>
 
-                            <MagicCard className="p-4">
-                                <div className="space-y-6">
-                                    <div className="flex items-center justify-between">
-                                        <span className="font-medium dark:text-gray-200">Tema</span>
-                                        <ThemeToggle />
+                            <div className="bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-2xl border border-white/20 dark:border-gray-700/20 p-5 shadow-xl">
+                                <div className="space-y-5">
+                                    <div className="flex items-center justify-between gap-4">
+                                        <span className="font-semibold text-gray-800 dark:text-gray-200 text-base">Tema</span>
+                                        <div className="flex-shrink-0">
+                                            <ThemeToggle />
+                                        </div>
                                     </div>
-                                    <div className="h-px bg-gray-200 dark:bg-gray-800" />
-                                    <div className="flex items-center justify-between">
-                                        <span className="font-medium dark:text-gray-200">Birim</span>
-                                        <UnitToggle />
+                                    <div className="h-px bg-gray-300 dark:bg-gray-700" />
+                                    <div className="flex items-center justify-between gap-4">
+                                        <span className="font-semibold text-gray-800 dark:text-gray-200 text-base">Birim</span>
+                                        <div className="flex-shrink-0">
+                                            <UnitToggle />
+                                        </div>
                                     </div>
                                 </div>
-                            </MagicCard>
+                            </div>
 
                             <NotificationSettings />
                         </div>
@@ -123,19 +127,35 @@ export default function MobileView({
             </div>
 
             {/* Bottom Dock Navigation */}
-            <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center pointer-events-none">
-                <div className="pointer-events-auto">
-                    <Dock magnification={60} distance={100} className="bg-white/80 dark:bg-black/80 border-gray-200 dark:border-gray-800 shadow-2xl">
-                        <DockIcon onClick={() => setActiveTab("home")} className={activeTab === "home" ? "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "text-gray-500 dark:text-gray-400"}>
+            <div className="fixed bottom-0 left-0 right-0 z-50 pb-safe">
+                <div className="flex justify-center pb-6 px-4">
+                    <Dock 
+                        magnification={60} 
+                        distance={100} 
+                        className="bg-white/90 dark:bg-black/90 border-gray-200 dark:border-gray-800 shadow-2xl backdrop-blur-xl"
+                    >
+                        <DockIcon 
+                            onClick={() => setActiveTab("home")} 
+                            className={activeTab === "home" ? "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "text-gray-500 dark:text-gray-400"}
+                        >
                             <Home className="w-6 h-6" />
                         </DockIcon>
-                        <DockIcon onClick={() => setActiveTab("search")} className={activeTab === "search" ? "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "text-gray-500 dark:text-gray-400"}>
+                        <DockIcon 
+                            onClick={() => setActiveTab("search")} 
+                            className={activeTab === "search" ? "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "text-gray-500 dark:text-gray-400"}
+                        >
                             <Search className="w-6 h-6" />
                         </DockIcon>
-                        <DockIcon onClick={() => setActiveTab("saved")} className={activeTab === "saved" ? "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "text-gray-500 dark:text-gray-400"}>
+                        <DockIcon 
+                            onClick={() => setActiveTab("saved")} 
+                            className={activeTab === "saved" ? "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "text-gray-500 dark:text-gray-400"}
+                        >
                             <Heart className="w-6 h-6" />
                         </DockIcon>
-                        <DockIcon onClick={() => setActiveTab("settings")} className={activeTab === "settings" ? "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "text-gray-500 dark:text-gray-400"}>
+                        <DockIcon 
+                            onClick={() => setActiveTab("settings")} 
+                            className={activeTab === "settings" ? "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400" : "text-gray-500 dark:text-gray-400"}
+                        >
                             <Settings className="w-6 h-6" />
                         </DockIcon>
                     </Dock>
