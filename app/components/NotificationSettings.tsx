@@ -38,7 +38,7 @@ export default function NotificationSettings({ inline = false }: NotificationSet
     return (
       <div className="flex items-center justify-between gap-4">
         <span className="font-semibold text-gray-800 dark:text-gray-200 text-base">Bildirimler</span>
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <button
             onClick={handleToggle}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${

@@ -35,13 +35,13 @@ export default function MobileView({
     const [activeTab, setActiveTab] = useState<"home" | "search" | "saved" | "settings">("home");
 
     return (
-        <div className="flex flex-col h-[100dvh] bg-gradient-to-b from-blue-50 to-white dark:from-gray-950 dark:to-black overflow-hidden relative">
+        <div className="flex flex-col h-dvh bg-linear-to-b from-blue-50 to-white dark:from-gray-950 dark:to-black overflow-hidden relative">
             {/* Content Area */}
             <div className="flex-1 overflow-y-auto pb-24 p-4 scrollbar-hide">
                 <div className="mt-2 mb-6 flex items-center justify-center">
                     <div className="flex items-center gap-2 px-4 py-1.5 bg-white/40 dark:bg-gray-800/40 backdrop-blur-xl rounded-full border border-white/20 dark:border-gray-700/20 shadow-sm">
                         <CloudSun className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                        <span className="text-sm font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                        <span className="text-sm font-bold bg-linear-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
                             Hava Durumu
                         </span>
                     </div>
@@ -107,14 +107,14 @@ export default function MobileView({
                                 <div className="space-y-5">
                                     <div className="flex items-center justify-between gap-4">
                                         <span className="font-semibold text-gray-800 dark:text-gray-200 text-base">Tema</span>
-                                        <div className="flex-shrink-0">
+                                        <div className="shrink-0">
                                             <ThemeToggle />
                                         </div>
                                     </div>
                                     <div className="h-px bg-gray-300 dark:bg-gray-700" />
                                     <div className="flex items-center justify-between gap-4">
                                         <span className="font-semibold text-gray-800 dark:text-gray-200 text-base">Birim</span>
-                                        <div className="flex-shrink-0">
+                                        <div className="shrink-0">
                                             <UnitToggle />
                                         </div>
                                     </div>
